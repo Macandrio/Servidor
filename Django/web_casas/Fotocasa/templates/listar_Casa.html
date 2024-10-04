@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Casas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        article {
+            background-color: #e7f3e9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        article p {
+            margin: 5px 0;
+        }
+
+        article strong {
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="/">Django Inmobiliaria</a>
+    </header>
+
+    <div class="container">
+        <h1>Listado de Casas</h1>
+        {% for casa in Casa_mostrar %}
+        <article>
+            <h2>Casa</h2>
+            <p><strong>Dirección:</strong> {{ casa.direccion }}</p>
+            <p><strong>Precio:</strong> ${{ casa.precio }}</p>
+            <p><strong>vendedor:</strong> ${{ casa.vendedor }}</p>
+            <p><strong>Compradores:</strong> ${{ casa.comprador }}</p>
+        </article>
+        {% endfor %}
+    </div>
+
+    <footer>
+        Proyecto de Inmobiliaria
+    </footer>
+
+</body>
+</html>
