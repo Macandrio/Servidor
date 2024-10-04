@@ -1,17 +1,92 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>colaboraradores</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listado de Colaboradores</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        header a {
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #4CAF50;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        article {
+            background-color: #e7f3e9;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        article p {
+            margin: 5px 0;
+        }
+
+        article strong {
+            color: #333;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
 </head>
 <body>
+
     <header>
-        <a href="/"  >Django Protectora</a> 
+        <a href="/">Django Protectora</a>
     </header>
-        
-    {% for colaborar in colaborador_mostrar %}
+
+    <div class="container">
+        <h1>Listado de Colaboradores</h1>
+        {% for colaborador in colaborador_mostrar %}
         <article>
-            <nombre>Nombre : {{ colaborar.nombre }}</nombre>
+            <h2>Colaborador</h2>
+            <p><strong>Nombre:</strong> {{ colaborador.nombre }}</p>
+            <p><strong>Cargo:</strong> {{ colaborador.cargo }}</p>
+            <p><strong>Fecha de Entrada:</strong> {{ colaborador.fecha_entrada_protectora }}</p>
         </article>
-    {% endfor %}
+        {% endfor %}
+    </div>
+
+    <footer>
+        Proyecto de Inmobiliaria
+    </footer>
+
 </body>
 </html>
