@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>animales</title>
+</head>
+<body>
+    <header>
+        <a href="/"  >Django Protectora</a> 
+    </header>
+        
+    {% for animales in Animales_mostrar %}
+        <article>
+            <nombre>Nombre : {{ animales.nombre }}</nombre>
+        </article>
+    {% endfor %}
+</body>
+</html>

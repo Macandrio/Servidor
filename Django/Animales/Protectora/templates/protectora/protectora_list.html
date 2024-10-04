@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Protectora</title>
+</head>
+<body>
+    <header>
+        <a href="/"  >Django Protectora</a> 
+    </header>
+        
+    {% for protectora in Protectora_mostrar %}
+        <article>
+            <nombre>Nombre : {{ protectora.nombre }}</nombre>
+        </article>
+    {% endfor %}
+</body>
+</html>

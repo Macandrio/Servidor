@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>colaboraradores</title>
+</head>
+<body>
+    <header>
+        <a href="/"  >Django Protectora</a> 
+    </header>
+        
+    {% for colaborar in colaborador_mostrar %}
+        <article>
+            <nombre>Nombre : {{ colaborar.nombre }}</nombre>
+        </article>
+    {% endfor %}
+</body>
+</html>
