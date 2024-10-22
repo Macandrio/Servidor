@@ -1,73 +1,126 @@
 from django.db import models
-from django.utils import timezone
 
-class Usuario(models.Model):
+# Modelo Aeropuerto
+class Aeropuerto(models.Model):
     nombre = models.CharField(max_length=100)
-    correo_electronico = models.EmailField(unique=True)
-    contrasena = models.CharField(max_length=100)
-    fecha_registro = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return self.nombre
-    
-
-class Proyecto(models.Model):
-    nombre = models.CharField(max_length=200)
-    descripcion = models.TextField()
-    duracion_estimada = models.FloatField()
-    fecha_inicio = models.DateField()
-    fecha_finalizacion = models.DateField(null=True, blank=True)
-    #<----------Relaciones--------->
-    creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='proyectos_creados')
-    proyecto_asignados = models.ManyToManyField(Usuario, related_name='proyectos_asignados')
-
+    ciudad = models.CharField(max_length=100)
+    pais = models.CharField(max_length=100)
+    codigo_iata = models.CharField(max_length=3)  
 
     def __str__(self):
         return self.nombre
 
-class Etiqueta(models.Model):
-    nombre = models.CharField(max_length=100, unique=True)
+
+# Modelo Vuelo
+class Vuelo(models.Model):
+    numero_vuelo = models.CharField(max_length=10)
+    hora_salida = models.DateTimeField()
+    hora_llegada = models.DateTimeField()
+    aeropuerto = models.ForeignKey(Aeropuerto, on_delete=models.CASCADE)  # Relación ManyToOne
+    estado = models.CharField(max_length=20)  
+
+    def __str__(self):
+        return self.numero_vuelo
+
+
+# Modelo Pasajero
+class Pasajero(models.Model):
+    nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    email = models.EmailField()
+    telefono = models.CharField(max_length=15)
+    fecha_nacimiento = models.DateField()  
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
+
+
+# Modelo Equipaje (OneToOne con Pasajero)
+class Equipaje(models.Model):
+    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)  # Relación OneToOne
+    peso = models.FloatField()
+    dimensiones = models.CharField(max_length=50)
+    tipo_material = models.CharField(max_length=30)  
+
+    def __str__(self):
+        return f"Equipaje de {self.pasajero.nombre} {self.pasajero.apellido}"
+
+
+# Modelo Aerolínea
+class Aerolinea(models.Model):
+    nombre = models.CharField(max_length=100)
+    codigo = models.CharField(max_length=10)
+    pais = models.CharField(max_length=100)
+    fecha_fundacion = models.DateField()  
 
     def __str__(self):
         return self.nombre
 
-class Tarea(models.Model):
-    ESTADO_OPCIONES = [
-        ('Pendiente', 'Pendiente'),
-        ('Progreso', 'Progreso'),
-        ('Completada', 'Completada'),
-    ]
-    
-    titulo = models.CharField(max_length=200)
-    descripcion = models.TextField()
-    prioridad = models.IntegerField()
-    estado = models.CharField(max_length=10, choices=ESTADO_OPCIONES, default='Pendiente')
-    completada = models.BooleanField(default=False)
-    fecha_creacion = models.DateField(default=timezone.now)
-    hora_vencimiento = models.TimeField()
-    #<----------Relaciones--------->
-    creador = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='tareas_creadas')
-    usuario_asignados = models.ManyToManyField(Usuario, related_name='usuario_asignados')
-    etiquetas = models.ManyToManyField(Etiqueta)
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE)
-    
+
+# Tabla intermedia Vuelo_Aerolinea
+class VueloAerolinea(models.Model):
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToMany con atributos extras
+    aerolinea = models.ForeignKey(Aerolinea, on_delete=models.CASCADE)
+    fecha_operacion = models.DateTimeField()
+    estado = models.CharField(max_length=50)
+    precio = models.FloatField()  
 
     def __str__(self):
-        return self.titulo
+        return f"Vuelo {self.vuelo.numero_vuelo} operado por {self.aerolinea.nombre}"
 
-class AsignacionTarea(models.Model):
-    observaciones = models.TextField()
-    fecha_asignacion = models.DateTimeField(default=timezone.now)
 
-    def __str__(self):
-        return f'{self.tarea.titulo} asignada a {self.usuario.nombre}'
-
-class Comentario(models.Model):
-    contenido = models.TextField()
-    fecha_comentario = models.DateTimeField(default=timezone.now)
-    
-    autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    tarea = models.OneToOneField(Tarea, on_delete=models.CASCADE)
+# Modelo Reserva
+class Reserva(models.Model):
+    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
+    fecha_reserva = models.DateTimeField()
+    estado = models.CharField(max_length=50)
+    metodo_pago = models.CharField(max_length=50)  
 
     def __str__(self):
-        return f'Comentario de {self.autor.nombre} en {self.tarea.titulo}'
+        return f"Reserva de {self.pasajero.nombre} {self.pasajero.apellido} para vuelo {self.vuelo.numero_vuelo}"
+
+
+# Modelo Empleado
+class Empleado(models.Model):
+    nombre = models.CharField(max_length=100)
+    apellido = models.CharField(max_length=100)
+    cargo = models.CharField(max_length=100)
+    aeropuerto = models.OneToOneField(Aeropuerto, on_delete=models.CASCADE)  # Relación OneToOne
+    fecha_contratacion = models.DateField()  
+
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}, {self.cargo} en {self.aeropuerto.nombre}"
+
+
+# Modelo Silla (para Vuelo)
+class Silla(models.Model):
+    numero = models.IntegerField()
+    clase = models.CharField(max_length=20)
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
+    precio = models.FloatField()  
+
+    def __str__(self):
+        return f"Silla {self.numero} ({self.clase}) en vuelo {self.vuelo.numero_vuelo}"
+
+
+# Modelo Servicio
+class Servicio(models.Model):
+    tipo_servicio = models.CharField(max_length=100)
+    costo = models.FloatField()
+    aeropuerto = models.ForeignKey(Aeropuerto, on_delete=models.CASCADE)  # Relación ManyToOne
+    duracion = models.IntegerField()  
+
+    def __str__(self):
+        return self.tipo_servicio
+
+
+# Modelo Ruta
+class Ruta(models.Model):
+    origen = models.ForeignKey(Aeropuerto, related_name='rutas_origen', on_delete=models.CASCADE)
+    destino = models.ForeignKey(Aeropuerto, related_name='rutas_destino', on_delete=models.CASCADE)
+    duracion = models.IntegerField()
+    distancia = models.FloatField()  
+
+    def __str__(self):
+        return f"Ruta de {self.origen.nombre} a {self.destino.nombre}"
