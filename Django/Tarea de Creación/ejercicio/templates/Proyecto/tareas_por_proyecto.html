@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Proyectos</title>
+    <title>Tareas del Proyecto</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,27 +100,22 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Proyectos</h1>
-        {% for proyectoo in dame_proyecto %}
-        <article>
-            <h2>Proyecto</h2>
-            <p><strong>Nombre:</strong> {{ proyectoo.nombre }}</p>
-            <p><strong>Descripcion:</strong> {{ proyectoo.descripcion }}</p>
-            <p><strong>Duracion:</strong> {{ proyectoo.duracion }}</p>
-            <p><strong>Fecha comienzo:</strong> {{ proyectoo.fecha_inicio }}</p>
-            <p><strong>fecha final:</strong> {{ proyectoo.fecha_fin }}</p>
-            <p><strong>Creador:</strong> {{ proyectoo.creador }}</p>
-            <p><strong>Colaborador:</strong> {{ proyectoo.colaboradores }}</p>
-
-        </article>
-        {% endfor %}
-        <div class="refresh">
-            <a href="{% url 'dame_proyecto' %}">Refrescar la Lista</a>
-        </div>
+        <h1>Tareas del Proyecto</h1>
+        <ul>
+            {% for tarea in tareas %}
+                <article>
+                    <h3>Título: {{ tarea.titulo }}</h3>
+                    <p><strong>Descripción:</strong> {{ tarea.descripcion }}</p>
+                    <p><strong>Prioridad:</strong> {{ tarea.prioridad }}</p>
+                    <p><strong>Estado:</strong> {{ tarea.estado }}</p>
+                    <p><strong>Fecha de Creación:</strong> {{ tarea.fecha_creacion }}</p>
+                </article>
+            {% endfor %}
+        </ul>
     </div>
 
     <footer>
-        &copy; 2024 - proyectos
+        &copy; 2024 - Sistema de Proyectos
     </footer>
 
 </body>

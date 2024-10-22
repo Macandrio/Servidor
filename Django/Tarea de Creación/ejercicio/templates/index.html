@@ -86,7 +86,13 @@
         <h2>Páginas del Sistema del Alumnos</h2> <!-- Cambiado de h1 a h2 -->
         <div class="link-list">
             <div class="link-item">
-                <a href="{% url 'dame_proyecto' %}">Todos los Proyectos</a>
+                <a href="{% url 'lista_proyectos' %}">Ver Proyectos</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'tareas_por_proyecto' 6 %}">Ver Tareas</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'asignacion_tarea' 1 %}">Ver Asignacion de la Tarea</a>
             </div>
         </div>
 
