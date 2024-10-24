@@ -27,5 +27,5 @@ def asignacion_tarea(request, tarea_id):
 
 #todas las tareas que tengan un texto en concreto en las observaciones a la hora de asignarlas a un usuario.
 def texto_observaciones(request,texto_observaciones):
-    asignaciontarea = AsignacionTarea.objects.filter(observaciones = texto_observaciones).select_related("tarea")
+    asignaciontarea = AsignacionTarea.objects.filter(observaciones = texto_observaciones).select_related("tarea").select_related("usuario")
     return render(request, 'Asignacion/texto_observacion.html', {'asignaciontarea': asignaciontarea})
