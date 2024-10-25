@@ -9,5 +9,6 @@ urlpatterns = [
     path('asignaciones/<int:tarea_id>/', views.asignacion_tarea, name='asignacion_tarea'),  # URL para obtener asignaciones por tarea
     path("asignaciones/<str:texto_observaciones>/tarea", views.texto_observaciones,name="texto_observaciones"),
     path("tarea/proyecto/<int:fecha_inicio>/<int:fecha_final>", views.tarea_completada,name="tarea_completada"),
+    path("usuario/comentario/<int:proyecto_id>", views.usuario_comentario,name="usuario_comentario"),
 
 ]

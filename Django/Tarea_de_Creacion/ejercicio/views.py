@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import F
 from .models import (
     Usuario,Proyecto,Tarea,
     AsignacionTarea,Etiqueta,Comentario
@@ -38,6 +39,14 @@ def tarea_completada(request,fecha_inicio,fecha_final):
     return render(request, 'Tarea/tarea_completada.html', {'tareas': tareas})
 
 # 7. Crear una URL que obtenga el último usuario que ha comentado en una tarea de un proyecto en concreto.
-def usuario_comentario(request):
-    usuario = Usuario.objects.select_related("comentario")
-    usuario = Usuario.objects.order_by("-comentario__fecha_comentario")[:1].get()
+def usuario_comentario(request,proyecto_id):
+    usuario = usuario.filter(comentarios_creador__tarea__proyecto=proyecto_id).order_by("-comentarios_creador__fecha_comentario")[:1].get()
+
+    return render(request, 'usuario/usuario_comentario.html', {'usuario': usuario})
+
+# 8. todos los comentarios de una tarea que empiecen por la palabra que se pase en la URL y que el año del comentario sea uno en concreto
+def comentario_tarea(request,comentario_palabra, comentario_año):
+    comentarios = Comentario.objects.select_related("comentarios_tarea")
+    comentario = comentario.objects.filter(comentarios_tarea = F(comentario_palabra) , comentario_año__year = fecha_comentario)
+    
+    return render(request, 'usuario/usuario_comentario.html', {'comentarios': comentarios})
