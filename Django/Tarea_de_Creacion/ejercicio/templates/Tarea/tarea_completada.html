@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asignaciones de Tareas</title>
+    <title>Tareas</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -37,22 +37,21 @@
 <body>
 
     <header>
-        <h1>Asignaciones de Tareas</h1>
+        <h1>Tareas</h1>
     </header>
 
     <div class="container">
-        <h2>Tareas Asignadas:</h2>
+        <h2>Tareas Completadas:</h2>
         <ul>
-            {% for asignacion in asignaciontarea %}
-            <strong>Proyecto:</strong> {{ asignacion.tarea.id }}<br>
+            {% for tarea in tareas %}
                 <li>
-                    <strong>Usuario:</strong> {{ asignacion.usuario.nombre }}<br>
-                    <strong>Tarea:</strong> {{ asignacion.observaciones }}<br>
-                    <strong>Fecha de Asignación:</strong> {{ asignacion.fecha_asignacion }}<br>
-                    <strong>Observacion:</strong> {{ asignacion.observaciones }}<br>
+                    <strong>ID:</strong> {{ tarea.id }}<br>
+                    <strong>Fecha Inicio:</strong> {{ tarea.proyectos.fecha_inicio }}<br>
+                    <strong>Fecha Final:</strong> {{ tarea.proyectos.fecha_final }}<br>
+                    <strong>Estado:</strong> {{ tarea.estado }}<br>
                 </li>
             {% empty %}
-                <li>No hay asignaciones para esta tarea.</li>
+                <li>No hay tarea completadas.</li>
             {% endfor %}
         </ul>
     </div>
