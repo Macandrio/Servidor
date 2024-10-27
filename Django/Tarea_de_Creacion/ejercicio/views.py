@@ -44,9 +44,41 @@ def usuario_comentario(request,proyecto_id):
 
     return render(request, 'usuario/usuario_comentario.html', {'usuario': usuario})
 
-# 8. todos los comentarios de una tarea que empiecen por la palabra que se pase en la URL y que el año del comentario sea uno en concreto
-def comentario_tarea(request,comentario_palabra, comentario_año):
-    comentarios = Comentario.objects.select_related("comentarios_tarea")
-    comentario = comentario.objects.filter(comentarios_tarea = F(comentario_palabra) , comentario_año__year = fecha_comentario)
+# 8. Todos los comentarios de una tarea que empiecen por la palabra que se pase en la URL y que el año del comentario sea uno en concreto.
+def comentarios_por_palabra_y_anio(request, tarea_id, palabra, anio):
+    comentarios = Comentario.objects.filter(
+        tarea_id = tarea_id,
+        contenido__istartswith=palabra,
+        fecha_comentario__year=anio
+    ).select_related("autor").all()
     
-    return render(request, 'usuario/usuario_comentario.html', {'comentarios': comentarios})
+    return render(request, 'Comentario/comentarios_por_palabra_y_anio.html', {'comentarios': comentarios})
+
+# 9. Obtener todas las etiquetas que se han usado en todas las tareas de un proyecto.
+def etiquetas_por_proyecto(request, proyecto_id):
+    etiquetas = Etiqueta.objects.filter(
+        tarea__proyecto_id=proyecto_id
+    ).distinct()  # Utilizamos distinct() para evitar etiquetas repetidas.
+    
+    return render(request, 'Etiqueta/etiquetas_por_proyecto.html', {'etiquetas': etiquetas})
+
+# 10. Crear una URL que muestre todos los usuarios que no están asignados a una tarea.
+#def usuarios_no_asignados(request):
+#    usuarios = Usuario.objects.exclude(colaboradores_tarea__isnull=False).all()
+#    return render(request, 'Usuario/usuarios_no_asignados.html', {'usuarios': usuarios})
+
+# ejercicio/views.py
+
+from django.shortcuts import render
+
+def handler_404(request, exception):
+    return render(request, '404.html', status=404)
+
+def handler_500(request):
+    return render(request, '500.html', status=500)
+
+def handler_403(request, exception):
+    return render(request, '403.html', status=403)
+
+def handler_400(request, exception):
+    return render(request, '400.html', status=400)

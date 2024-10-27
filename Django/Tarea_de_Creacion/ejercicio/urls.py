@@ -1,4 +1,6 @@
-from django.urls import path,re_path
+from django.urls import path
+from django.conf.urls import handler404, handler500, handler403, handler400
+
 from .import views
 
 urlpatterns = [
@@ -9,6 +11,14 @@ urlpatterns = [
     path('asignaciones/<int:tarea_id>/', views.asignacion_tarea, name='asignacion_tarea'),  # URL para obtener asignaciones por tarea
     path("asignaciones/<str:texto_observaciones>/tarea", views.texto_observaciones,name="texto_observaciones"),
     path("tarea/proyecto/<int:fecha_inicio>/<int:fecha_final>", views.tarea_completada,name="tarea_completada"),
-    path("usuario/comentario/<int:proyecto_id>", views.usuario_comentario,name="usuario_comentario"),
+    path('tarea/<int:tarea_id>/comentarios/<str:palabra>/<int:anio>/', views.comentarios_por_palabra_y_anio, name='comentarios_por_palabra_y_anio'),
+    path('proyecto/<int:proyecto_id>/etiquetas/', views.etiquetas_por_proyecto, name='etiquetas_por_proyecto'),
+    #path('usuarios/no-asignados/', views.usuarios_no_asignados, name='usuarios_no_asignados'),
 
 ]
+
+# Manejar errores
+handler404 = 'ejercicio.views.handler_404'
+handler500 = 'ejercicio.views.handler_500'
+handler403 = 'ejercicio.views.handler_403'
+handler400 = 'ejercicio.views.handler_400'

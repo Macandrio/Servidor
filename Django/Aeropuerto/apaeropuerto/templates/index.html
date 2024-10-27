@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio - Sistema de Gestión de Ejercicio</title>
+    <title>Inicio - Sistema de Gestión de Aeropuertos</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -79,42 +79,46 @@
 <body>
 
     <header>
-        <h1><a href="/">Sistema de Gestión de Alumnos</a></h1>
+        <h1><a href="/">Sistema de Gestión de Aeropuertos</a></h1>
     </header>
 
     <div class="container">
-        <h2>Páginas del Sistema del Alumnos</h2> <!-- Cambiado de h1 a h2 -->
+        <h2>Páginas del Sistema del Aeropuerto</h2> <!-- Cambiado de h1 a h2 -->
         <div class="link-list">
             <div class="link-item">
-                <a href="{% url 'dame_proyecto' %}">Ver Proyectos</a>
+                <a href="{% url 'lista_aeropuerto' %}">Aeropuertos</a>
             </div>
             <div class="link-item">
-                <a href="{% url 'tareas_por_proyecto' 17 %}">Ver Tareas</a>
+                <a href="{% url 'lista_vuelo' %}">Vuelos</a>
             </div>
             <div class="link-item">
-                <a href="{% url 'asignacion_tarea' 33 %}">Ver Asignacion de la Tarea</a>
+                <a href="{% url 'lista_pasajero' %}">Pasajeros</a>
             </div>
             <div class="link-item">
-                <a href="{% url 'texto_observaciones' 'pepe' %}">Ver Observacion de la Tarea</a>
+                <a href="{% url 'lista_equipaje' %}">Equipajes</a>
             </div>
             <div class="link-item">
-                <a href="{% url 'tarea_completada' 2000 2024  %}">Ver Tarea Completada</a>
+                <a href="{% url 'lista_aerolineas' %}">Aerolíneas</a>  
             </div>
             <div class="link-item">
-                <a href="{% url 'comentarios_por_palabra_y_anio' 1 'la' 2024 %}">Ver Ultimo Comentario</a>
+                <a href="{% url 'lista_vuelos_aerolineas' %}">Vuelos de Aerolínea</a>  
             </div>
             <div class="link-item">
-                <a href="{% url 'etiquetas_por_proyecto' 22 %}">Ver etiqueta del proyecto</a>
+                <a href="{% url 'lista_reserva' %}">Reservas</a>
             </div>
-        <!-- Cambiado de h1 a h2 
             <div class="link-item">
-                <a href="{% url 'usuarios_no_asignados' %}">Ver Usuario no asignado</a>
-            </div> 
-        -->
+                <a href="{% url 'lista_empleado' %}">Empleados</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'lista_silla' %}">Sillas</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'lista_servicio' %}">Servicios</a>
+            </div>
         </div>
 
     <footer>
-        &copy; 2024 - Sistema de Alumnos
+        &copy; 2024 - Sistema de Aeropuertos
     </footer>
 
 </body>
