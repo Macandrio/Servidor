@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
-    VueloAerolinea, Reserva, Empleado, Silla, Servicio
+    VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
 )
 
 def index(request):
@@ -47,14 +47,29 @@ def lista_empleado(request):
     empleados = Empleado.objects.all()
     return render(request, 'empleado_list.html', {'empleados': empleados})
 
-# Vista para listar Sillas
+# Vista para listar Asientos
 def lista_silla(request):
-    sillas = Silla.objects.all()
+    sillas = Asiento.objects.all()
     return render(request, 'silla_list.html', {'sillas': sillas})
 
 # Vista para listar Servicios
 def lista_servicio(request):
     servicios = Servicio.objects.all()
     return render(request, 'servicio_list.html', {'servicios': servicios})
+
+# Vista para listar ContactoAeropuerto
+def lista_ContactoAeropuerto(request):
+    contactoAero = ContactoAeropuerto.objects.all()
+    return render(request, 'lista_ContactoAeropuerto_listar.html', {'serviccontactoAeroios': contactoAero})
+
+# Vista para listar EstadisticasVuelo
+def lista_EstadisticasVuelo(request):
+    estadisticas = EstadisticasVuelo.objects.all()
+    return render(request, 'estadisticas_list.html', {'estadisticas': estadisticas})
+
+# Vista para listar PerfilPasajero
+def lista_PerfilPasajero(request):
+    perfilpasajero = PerfilPasajero.objects.all()
+    return render(request, 'perfilpasajero_list.html', {'perfilpasajero': perfilpasajero})
 
 

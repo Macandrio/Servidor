@@ -1,7 +1,8 @@
 from django.db import models
 from django.utils  import timezone
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxLengthValidator, RegexValidator
+from django.core.validators import MaxValueValidator, RegexValidator
+
 
 
 
@@ -52,10 +53,12 @@ class Aeropuerto(models.Model):
     
 #Modelo ContactoAeropuerto
 class ContactoAeropuerto(models.Model):
-    aeropuerto = models.OneToOneField(Aeropuerto, on_delete=models.CASCADE)
     nombre_contacto = models.CharField(max_length=100)
     telefono_contacto = models.CharField(max_length=15, blank=True)
     email_contacto = models.EmailField(blank=True)
+    años_trabajados = models.IntegerField(verbose_name="Años Trabajado", default=0)
+
+    aeropuerto = models.OneToOneField(Aeropuerto, on_delete=models.CASCADE) #OneToOne
 
     def __str__(self):
         return f"Contacto de {self.aeropuerto.nombre}"
@@ -91,11 +94,14 @@ class Vuelo(models.Model):
     estado  = models.BooleanField(db_column='Volando') #boolean
     duracion = models.DurationField(editable=False)  # Duración del vuelo
 
-    origen = models.ManyToManyField(Aeropuerto , related_name='vuelos_de_origen') # ManyToMany
-    destino = models.ManyToManyField(Aeropuerto ,related_name='vuelos_de_destino') #ManyToMany
-    aerolinea = models.ManyToManyField(Aerolinea , through='VueloAerolinea') # tabla intermedia
+    origen = models.ForeignKey(Aeropuerto , on_delete=models.CASCADE ,related_name='vuelos_de_origen') # ManyToOne
+    destino = models.ForeignKey(Aeropuerto , on_delete=models.CASCADE ,related_name='vuelos_de_destino') #ManyToOne
+    aerolinea = models.ManyToManyField(Aerolinea , through='VueloAerolinea') # tabla ManyToMany intermedia
 
-    
+    def clean(self):
+        # Verificar que el aeropuerto de origen y destino no sean el mismo
+        if self.origen == self.destino:
+            raise ValidationError("El aeropuerto de origen y destino no pueden ser el mismo.")
 
     def save(self, *args, **kwargs):
         # Calcular la duración como la diferencia entre hora_llegada y hora_salida
@@ -105,13 +111,11 @@ class Vuelo(models.Model):
 
 # Modelo EstadisticasVuelo
 class EstadisticasVuelo(models.Model):
-    vuelo = models.OneToOneField(Vuelo, on_delete=models.CASCADE)
     numero_asientos_vendidos = models.IntegerField(default=0)
     numero_cancelaciones = models.IntegerField(default=0)
     feedback_pasajeros = models.TextField(blank=True)
 
-    def __str__(self):
-        return f"Estadísticas de Vuelo {self.vuelo.id}"
+    vuelo = models.OneToOneField(Vuelo, on_delete=models.CASCADE) #OneToOne
 
 
 # Modelo Pasajero
@@ -130,14 +134,7 @@ class Pasajero(models.Model):
     nombre = models.CharField(max_length=20)
     apellido = models.CharField(max_length=20, blank=True)  # Permitir valores vacíos
     email = models.EmailField(validators=[validar_dominio_email])
-    telefono = models.CharField(
-        max_length=9,
-        validators=[
-            MaxLengthValidator(9),
-            RegexValidator(regex=r'^\d{9}$', message='El número de teléfono debe tener exactamente 9 dígitos.')
-        ],
-        blank=True  # Permitir que este campo esté vacío si es necesario
-    )
+    telefono = models.IntegerField(validators=[ MaxValueValidator(999999999)],blank=True )
     fecha_nacimiento = models.DateField(null=True)  
     vuelo = models.ManyToManyField(Vuelo, related_name='vuelo_pasajero') # Relación Many To Many
     
@@ -146,15 +143,16 @@ class Pasajero(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
     
-#Modelo OnetoOne Pasajero       
+#Modelo PerfilPasajero       
 class PerfilPasajero(models.Model):
-    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)
     direccion = models.CharField(max_length=255, blank=True)
-    documento_identidad = models.CharField(max_length=20, unique=True)
+    documento_identidad = models.CharField(max_length=9, unique=True)
     nacionalidad = models.CharField(max_length=50, blank=True)
 
+    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)# Relación OneToOne
+
     def __str__(self):
-        return f"Perfil de {self.pasajero.nombre} {self.pasajero.apellido}"
+        return "DNI" + self.documento_identidad
 
     
 # Modelo Equipaje
@@ -163,10 +161,7 @@ class Equipaje(models.Model):
     dimensiones = models.CharField(max_length=50)
     tipo_material = models.CharField(max_length=30)
     color = models.CharField(max_length=50)
-    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)  # Relación OneToOne
-
-    def __str__(self):
-        return f"Equipaje de {self.pasajero.nombre} {self.pasajero.apellido}"
+    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
 
 
 
@@ -204,20 +199,18 @@ class Reserva(models.Model):
         ('paypal', 'PayPal'),
     ]
     fecha_reserva = models.DateTimeField(default=timezone.now)  # Valor por defecto: fecha y hora actuales
-    estado = models.CharField(max_length=50,help_text="Introduce Como va el avion durante el vuelo")
+    codigo_descueto = models.CharField(max_length=100)
     metodo_pago = models.CharField(max_length=10, 
                                    choices=METODO_PAGO_CHOICES,
                                    default= 'tarjeta')
     estado_de_pago = models.BooleanField(default=False)
+
     pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
     vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
 
-    def __str__(self):
-        return f"Reserva de {self.pasajero.nombre} {self.pasajero.apellido}"
 
-
-# Modelo Silla (para Vuelo)
-class Silla(models.Model):
+# Modelo Asiento (para Vuelo)
+class Asiento(models.Model):
     tipos_clase_avion = [
     ("E", "Economy"),
     ("B", "Business"),
@@ -231,16 +224,20 @@ class Silla(models.Model):
     ("C", "Charter")
     ]
 
+    lugar = [
+        ("P", "Pasillo"),
+        ("M", "Medio"),
+        ("V", "Ventana")
+    ]
+
     clase = models.CharField(max_length=1,choices=tipos_clase_avion,default='E')
-    precio = models.DecimalField(max_digits=5,decimal_places=2)
-    posicion = models.CharField(max_length=100)
-    estado = models.BooleanField()
+    precio = models.DecimalField(max_digits=6,decimal_places=2)
+    posicion = models.CharField(max_length=1, choices=lugar)
+    sistema_entretenimiento = models.BooleanField()
 
     vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
     pasajero = models.ForeignKey(Pasajero,on_delete=models.CASCADE)  # Relación ManyToOne 
 
-    def __str__(self):
-        return f"Silla {self.numero} ({self.clase})"
 
 
 # Modelo Servicio

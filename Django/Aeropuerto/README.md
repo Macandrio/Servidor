@@ -6,32 +6,68 @@ sera una pagina donde se controlara toda la informacion de un aeropuerto
 -------------------------------------------------------------------------------------------------------------------------------------------
 Aeropuerto
     Atributos: 4
-        Nombre (varchar ,maximo de caracteres 2, choices para que solo pueda elegir entre varios nombres , por defecto que ponga ES)
+        Nombre (varchar ,maximo de caracteres 100, Definimos el nombre de la tabla admin)
         Ciudad (varchar ,maximo de caracteres 2, choices para que solo pueda elegir entre varias ciudades , por defecto que ponga ES)
         País (varchar , maximo de caracteres 2, choices para que solo pueda elegir entre varios paises , por defecto que ponga ES)
-        capacidad maxima (Entero, este campo por defecto es 150)
+        capacidad maxima (Entero, este campo por defecto es 150 aviones)
+
+        Funcion:
+            str: para que en el admi aparezca el nombre
+
+ContactoAeropuerto
+    Atributos: 4
+        nombre_contacto (varchar , maximo caracteres 100)
+        telefono_contacto (varchar , maximo caracteres 100)
+        email_contacto(email , se puede dejar en blanco)
+        años_trabajado (Entero, el nombre se pone años trabajo , por defecto 0 años)
+        
+        Relacion: 
+            Aeropuerto(OneToOne)
+
+        Funcion: 
+            str: Devuelve el nombre del contacto en el admin f para concadenar
+
+Aerolinea
+    Atributos: 4
+        nombre (varchar de 100 caracterex max, nombre que mostrara en el formulario en vez de nombre aerolinea operadora)
+        codigo (varchar, maximo 10 caracteres)
+        fecha_fundacion (dia y hora , guarda automaticamente la fecha y hora al crear un registro)
+        pais (varchar, maximo 2 caracteres , chices para que elija uno de los paises proporcionados, por defecto sera españa)
+
+        Relacion : 1
+            aerolinea(ManyToMany)
+        
+        Funcion: 
+            str: Devuelve el nombre en el admin
+
 
 Vuelo
     Atributos: 5
-        numero_vuelo_dia (Entero, nombra a la columna como veces_volado_dia, pone un error si se queda en blanco)
-        hora_salida (dia y hora)
-        hora_llegada (dia y hora)
-        volando (si esta volando o no)
+        hora_salida (dia y hora , no se puede dejar en blanco y sae un mensaje de error)
+        hora_llegada (dia y hora , no se puede dejar en blanco y sae un mensaje de error)
+        estado (si esta volando o no , nombre de la columna en la base de datos Volando)
         duracion(duracion , no se puede editar)
 
         Relacion:
-            origen (Many To Many)
-            destino (Many To Many)
+            origen (ManyToOne)
+            destino (ManyToOne)
+            aerolinea (ManyToMany)
 
         Funcion:
             Clean => Verifica que el aeropuerto destino y origen no coincida
             save => calcula la duracion del vuelo
 
+EstadisticasVuelo
+    Atributos: 
+        numero_asientos_vendidos = (Entero, por defecto 0)
+        numero_cancelaciones(Enteros , por defecto 0)
+        feedback_pasajeros (varchar , se puede dejar en blanco)
+
+        Relacion:
+            Vuelo(OneToOne)
+
 
 Pasajero
-    Funcion:
-        Valida si el dominio esta bien o no escrito y te pone un erro si no esta bien escrito
-
     Atributos: 5
         nombre (varchar,maximo 20 caracteres)
         apellido (varchar, maximo 20 caracteres, hacepta valores vacios)
@@ -40,69 +76,63 @@ Pasajero
         fecha de nacimiento (Dia y hora, puede ser nulo)
 
         Relacion:2
-            Vuelo(relacion Muchos a Uno)
+            Vuelo(ManyToMany)
+
+        Funcion:
+            str: muestra el nombre y apellido en el admin
+            Valida si el dominio esta bien o no escrito y te pone un erro si no esta bien escrito
+
+PerfilPasajero
+    Atributos:
+        direccion (varchar , maximo de caracteres 255, se puede dejar en blanco)
+        documento_identidad (varchar , maximo de caracteres 9, es unico no puede a ver mas de uno)
+        nacionalidad (varchar , maximo de caracteres 50, se puede dejar en blanco)
+
+        Relaciones:
+            pasajero (OneToOne)
+
+        Funcion
+            str (muestra Dni en el admin)
 
 Equipage
     Atributos: 4
         peso (decimales)
-        dimensiones (varchar)
-        tipo de material (varchar)
+        dimensiones (varchar maximo 100 caracteres)
+        tipo de material (varchar),maximo 100 caracteres
         color (varchar)
 
         Relacion: 2
-            pasajero (Relacion Uno a Uno)
-            vuelo (Muchos a Uno)
+            pasajero (ManyToOne)
 
-Aerolinea
-    Atributos: 4
-        nombre (varchar de 100 caracterex max, nombre que mostrara en el formulario en vez de nombre aerolinea operadora)
-        codigo (varchar, maximo 10 caracteres)
-        fecha fundacion (dia y hora , guarda automaticamente la fecha y hora al crear un registro)
-        pais (varchar, maximo 2 caracteres , chices para que elija uno de los paises proporcionados, por defecto sera españa)
-
-        Relacion : 1
-            aerolinea(muchos a muchos)
 
 VueloAerolinea (Tabla intermedia)
     Atributos: 5
-        id (clave foranea) atributo estra
-        fecha operacion(dia y hora)
+        fecha operacion(dia y hora, se puede poner nulo)
         esatdo (texto)
         clase(varchar , choices para elegir una clase)
         numero de aviones volando (Enteros,por defecto 5)
-
+        insidencias (varchar , maximo caracteres 100)
         Relaciones: 2
-            vuelo(Muchos a Uno)
-            aerolinea(Muchos a Uno)
+            vuelo(ManyToOne)
+            aerolinea(ManyToOne)
 
 Reserva
     Atributo
         fecha de la reserva (por defecto es la fechqa de creacion)
         estado (varchar maximo 50 caracteres, introduce una ayuda)
         metodo de pago (varchar, choise para elegir metodo, por defecto targeta)
-        estado de pago (verdad o falso , por defecto falso)
+        codigo de descuento (varchar de 100 caracteres)
 
         Relacion
-            pasajero(ForeignKey ) relacion mucho a uno
-            vuelo(ForeignKey) relacion mucho a uno
+            pasajero(ManyToOne)
+            vuelo(ManyToOne)
 
-Empleado
-    Atributo
-        nombre (varchar, maximo 100 caracteres)
-        apellido (varchar, maximo 100 caracteres)
-        cargo (varchar,maximo 2 caracteres, choices para saber si es jefe o empleado)
-        fecha_contratacion (dia y hora)
-
-        Relacion
-            aeropuerto (Muchos a Uno)
-            vuelo (muchos a muchos)
-
-Silla
+Asiento
     Atributos
-        numero (Entero)
         clase (varchar , maximo 1 caracter, choices para elegir la clase y por defecto Economico)
         precio (decimales, ,maximo 5 digitos, 2 decimales)
-        posicion (Enteros)
+        posicion (varchar , maximo caracteres 1, choices para elegir la posicion)
+        sistema_entretenimiento(hay tv o no)
 
         Relacion
             vuelo (Muchos a Uno)
@@ -116,9 +146,26 @@ Servicio
         añadido del servicio (varchar, maximo 100 caracter)
 
         Relacion
-            aeropuerto (Uno a Uno)
-            vuelo (Muchos a Uno)
-            pasajeros (muchos a muchos)
+            aeropuerto (ManyToMany)
+        
+        Fucnio:
+            str (tipo de servicio que se muestra en el admi)
+
+Empleado
+    Atributo
+        nombre (varchar, maximo 100 caracteres)
+        apellido (varchar, maximo 100 caracteres)
+        cargo (varchar,maximo 2 caracteres, choices para saber si es jefe o empleado)
+        fecha_contratacion (dia y hora)
+
+        Relacion
+            Servicio(ManyToMany)
+        
+        Funcion:
+           str: Devuelve nombre apellido y cargo la f es para concadenar  
+
+
+
 
 Ruta
     Atributos:
@@ -159,7 +206,15 @@ Ruta
 
     Debe entregarse el enlace de git.
 
+-------------------------------------------------------------------------------------------------------------------
+ManyToOne = Vuelo(origen) , Vuelo(destino) , Equipaje(pasajero) , Reserva(pasajero) , Reserva(Vuelo)
+ManyToMany = Aerolínea(Aeropuerto) , Vuelo(Aerolinea) , Pasajero(vuelo)
+OneToOne = ContactoAeropuerto(Aeropuerto) , EstadisticasVuelo(Vuelo), PerfilPasajero(pasajero)
 
+
+
+
+-------------------------------------------------------------------------------------------------------------------
 
 comandos 
 
