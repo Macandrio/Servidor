@@ -111,9 +111,12 @@ class Vuelo(models.Model):
 
 # Modelo EstadisticasVuelo
 class EstadisticasVuelo(models.Model):
+    fecha_estadisticas = models.DateField(auto_now_add=True)  # Fecha en que se registraron las estadísticas
     numero_asientos_vendidos = models.IntegerField(default=0)
     numero_cancelaciones = models.IntegerField(default=0)
+
     feedback_pasajeros = models.TextField(blank=True)
+
 
     vuelo = models.OneToOneField(Vuelo, on_delete=models.CASCADE) #OneToOne
 
@@ -148,6 +151,7 @@ class PerfilPasajero(models.Model):
     direccion = models.CharField(max_length=255, blank=True)
     documento_identidad = models.CharField(max_length=9, unique=True)
     nacionalidad = models.CharField(max_length=50, blank=True)
+    vivienda = models.CharField(max_length=50, blank=True)
 
     pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)# Relación OneToOne
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Reservas</title>
+    <title>Listado de Sillas</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,20 +100,18 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Reservas</h1>
-        {% for reserva in reservas %}
-        <article>
-            <h2>Reserva</h2>
-            <p><strong>ID:</strong> {{ reserva.id }}</p>
-            <p><strong>Pasajero:</strong> {{ reserva.pasajero.nombre }} {{ reserva.pasajero.apellido }}</p>
-            <p><strong>Vuelo:</strong> {{ reserva.vuelo.numero_vuelo }}</p>
-            <p><strong>Fecha Reserva:</strong> {{ reserva.fecha_reserva }}</p>
-            <p><strong>Estado:</strong> {{ reserva.estado }}</p>
-            <p><strong>Pago:</strong> {{ reserva.metodo_pago }}</p>
-        </article>
+        <h1>Contacto del aeropuerto</h1>
+        {% for contactoaero in contactoAero %}
+            <article>
+                <p><strong>Aeropuerto:</strong> {{ contactoaero.aeropuerto.id }}</p>
+                <p><strong>Nombre de contacto</strong> {{ contactoaero.nombre_contacto }}</p>
+                <p><strong>Telefono contacto:</strong> {{ contactoaero.telefono_contacto }}</p>
+                <p><strong>Email contacto:</strong> {{ contactoaero.email_contacto }}</p>
+                <p><strong>Años trabajados:</strong> {{ contactoaero.años_trabajados }}</p>
+            </article>
         {% endfor %}
         <div class="refresh">
-            <a href="{% url 'lista_reserva' %}">Refrescar la Lista</a>
+            <a href="{% url 'lista_silla' %}">Refrescar la Lista</a>
         </div>
     </div>
 

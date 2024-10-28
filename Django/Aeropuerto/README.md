@@ -59,6 +59,7 @@ Vuelo
 
 EstadisticasVuelo
     Atributos: 
+        fecha_estadisticas (Dato , se pone automaticamente la fecha de creacion si no pones nada)
         numero_asientos_vendidos = (Entero, por defecto 0)
         numero_cancelaciones(Enteros , por defecto 0)
         feedback_pasajeros (varchar , se puede dejar en blanco)
@@ -87,7 +88,7 @@ PerfilPasajero
         direccion (varchar , maximo de caracteres 255, se puede dejar en blanco)
         documento_identidad (varchar , maximo de caracteres 9, es unico no puede a ver mas de uno)
         nacionalidad (varchar , maximo de caracteres 50, se puede dejar en blanco)
-
+        vivienda (varchar , maximo de caracteres 50, se puede dejar en blanco)
         Relaciones:
             pasajero (OneToOne)
 

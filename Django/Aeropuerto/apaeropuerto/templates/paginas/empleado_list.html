@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Aeropuertos</title>
+    <title>Listado de Empleados</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         header {
             background-color: #3498db;
             color: white;
@@ -100,19 +100,19 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Aeropuertos</h1>
-        {% for aeropuerto in aeropuertos %}
+        <h1>Listado de Empleados</h1>
+        {% for empleado in empleados %}
         <article>
-            <h2>Aeropuerto</h2>
-            <p><strong>ID:</strong> {{ aeropuerto.id }}</p>
-            <p><strong>Nombre:</strong> {{ aeropuerto.nombre }}</p>
-            <p><strong>Ciudad:</strong> {{ aeropuerto.ciudades }}</p>
-            <p><strong>País:</strong> {{ aeropuerto.pais }}</p>
-            <p><strong>Capacidad máxima:</strong> {{ aeropuerto.capacidad_maxima|default:150 }}</p>
+            <h2>Empleado</h2>
+            <p><strong>ID:</strong> {{ empleado.id }}</p>
+            <p><strong>Nombre:</strong> {{ empleado.nombre }}</p>
+            <p><strong>Apellido:</strong> {{ empleado.apellido }}</p>
+            <p><strong>Cargo:</strong> {{ empleado.cargo }}</p>
+            <p><strong>Fecha de contratacion:</strong> {{ empleado.fecha_contratacion }}</p>
         </article>
         {% endfor %}
         <div class="refresh">
-            <a href="{% url 'lista_aeropuerto' %}">Refrescar la Lista</a>
+            <a href="{% url 'lista_empleado' %}">Refrescar la Lista</a>
         </div>
     </div>
 

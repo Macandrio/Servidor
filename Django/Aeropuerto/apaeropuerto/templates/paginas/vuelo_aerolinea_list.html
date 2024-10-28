@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Pasajeros</title>
+    <title>Listado de Vuelos por Aerolínea</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,23 +100,19 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Pasajeros</h1>
-        {% for pasajero in pasajeros %}
+        <h1>Listado de Vuelos por Aerolínea</h1>
+        {% for vuelo_aerolinea in vuelos_aerolineas %}
         <article>
-            <h2>Pasajero</h2>
-            <p><strong>ID:</strong> {{ pasajero.id }}</p> <!-- ID del pasajero -->
-            <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p> <!-- Nombre del pasajero -->
-            <p><strong>Apellido:</strong> {% if pasajero.apellido %} {{ pasajero.apellido }} {% else %} No disponible {% endif %}</p> <!-- Apellido del pasajero -->
-            <p><strong>Correo:</strong> {{ pasajero.email }}</p> <!-- Correo del pasajero -->
-            <p><strong>Teléfono:</strong> {% if pasajero.telefono %} {{ pasajero.telefono }} {% else %} No disponible {% endif %}</p> <!-- Teléfono del pasajero -->
-            <p><strong>Fecha de Nacimiento:</strong> {% if pasajero.fecha_nacimiento %} {{ pasajero.fecha_nacimiento }} {% else %} No disponible {% endif %}</p> <!-- Fecha de nacimiento del pasajero -->
-            <p><strong>Vuelo:</strong> {{ pasajero.vuelo.id }}</p> <!-- ID del pasajero -->
-            <p><strong>Del Aeropuerto:</strong> {{ pasajero.aeropuerto }}</p> <!-- Nombre del pasajero -->
+            <h2>Vuelo Aerolínea</h2>
+            <p><strong>ID:</strong> {{ vuelo_aerolinea.id }}</p>
+            <p><strong>Aerolinea:</strong> {{vuelo_aerolinea.aerolinea.nombre }}</p>
+            <p><strong>Vuelo:</strong> {{vuelo_aerolinea.vuelo.id }}</p>
+            <p><strong>Fecha Operación:</strong> {{ vuelo_aerolinea.fecha_operacion }}</p>
+            <p><strong>Estado:</strong> {{ vuelo_aerolinea.estado }}</p>
+            <p><strong>Clase:</strong> {{ vuelo_aerolinea.clase }}</p>
+            <p><strong>Incidencias:</strong> {{ vuelo_aerolinea.incidencias }}</p>
         </article>
         {% endfor %}
-        <div class="refresh">
-            <a href="{% url 'lista_pasajero' %}">Refrescar la Lista</a>
-        </div>
     </div>
 
     <footer>

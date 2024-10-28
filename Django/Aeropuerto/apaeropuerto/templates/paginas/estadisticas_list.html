@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Vuelos</title>
+    <title>Estadisticas</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,22 +100,19 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Vuelos</h1>
-        {% for vuelo in vuelos %}
-        <article>
-            <h2>Vuelo</h2>
-            <p><strong>Id:</strong> {{ vuelo.id }}</p>
-            <p><strong>Origen:</strong> {{ vuelo.origen }}</p>
-            <p><strong>Destino:</strong> {{ vuelo.destino }}</p>
-            <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
-            <p><strong>Hora de Llegada:</strong> {{ vuelo.hora_llegada }}</p>
-            <p><strong>Aeropuerto:</strong> {{ vuelo.aeropuerto.nombre }}</p>
-            <p><strong>Estado:</strong> {% if vuelo.volando %} Volando {% else %} No Volando {% endif %}</p>
-            <p><strong>Duración:</strong> {{ vuelo.duracion }}</p> <!-- Duración no editable -->
-        </article>
+        <h1>Listado de Estadísticas de Vuelo</h1>
+        {% for estadistica in estadisticas %}
+            <article>
+                <h2>Estadística de Vuelo {{ forloop.counter }}</h2>
+                <p><strong>Vuelo:</strong> {{ estadistica.vuelo.id }}</p>
+                <p><strong>Fecha estadistica Vuelo:</strong> {{ estadistica.fecha_estadisticas }}</p>
+                <p><strong>Número de Asientos Vendidos:</strong> {{ estadistica.numero_asientos_vendidos }}</p>
+                <p><strong>Número de Cancelaciones:</strong> {{ estadistica.numero_cancelaciones }}</p>
+                <p><strong>Feedback de Pasajeros:</strong> {{ estadistica.feedback_pasajeros }}</p>
+            </article>
         {% endfor %}
         <div class="refresh">
-            <a href="{% url 'lista_vuelo' %}">Refrescar la Lista</a>
+            <a href="{% url 'lista_silla' %}">Refrescar la Lista</a>
         </div>
     </div>
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Vuelos por Aerolínea</title>
+    <title>Listado de Reservas</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,18 +100,22 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Vuelos por Aerolínea</h1>
-        {% for vuelo_aerolinea in vuelos_aerolineas %}
-        <article>
-            <h2>Vuelo Aerolínea</h2>
-            <p><strong>ID:</strong> {{ vuelo_aerolinea.id }}</p>
-            <p><strong>Aerolinea:</strong> {{vuelo_aerolinea.aerolinea.nombre }}</p>
-            <p><strong>Vuelo:</strong> {{vuelo_aerolinea.vuelo.id }}</p>
-            <p><strong>Fecha Operación:</strong> {{ vuelo_aerolinea.fecha_operacion }}</p>
-            <p><strong>Estado:</strong> {{ vuelo_aerolinea.estado }}</p>
-            <p><strong>Clase:</strong> {{ vuelo_aerolinea.clase }}</p>
-        </article>
+        <h1>Listado de Reservas</h1>
+        {% for reserva in reservas %}
+            <article>
+                <h2>Reserva {{ forloop.counter }}</h2>
+                <p><strong>ID:</strong> {{ reserva.id }}</p>
+                <p><strong>Fecha de Reserva:</strong> {{ reserva.fecha_reserva|date:"d/m/Y H:i" }}</p>
+                <p><strong>Método de Pago:</strong> {{ reserva.metodo_pago }}</p>
+                <p><strong>Estado de Pago:</strong> {{ reserva.estado_de_pago }}</p>
+                <p><strong>Codigo de descuento:</strong> {{ reserva.codigo_descueto }}</p>
+                <p><strong>Pasajero:</strong> {{ reserva.pasajero.nombre }}</p>
+                <p><strong>Vuelo:</strong> {{ reserva.vuelo.id }}</p>
+            </article>
         {% endfor %}
+        <div class="refresh">
+            <a href="{% url 'lista_reserva' %}">Refrescar la Lista</a>
+        </div>
     </div>
 
     <footer>

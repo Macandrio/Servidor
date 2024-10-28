@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Sillas</title>
+    <title>Listado de Servicios</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -100,19 +100,19 @@
     </header>
 
     <div class="container">
-        <h1>Listado de Sillas</h1>
-        {% for silla in sillas %}
+        <h1>Listado de Servicios</h1>
+        {% for servicio in servicios %}
         <article>
-            <h2>Silla</h2>
-            <p><strong>ID:</strong> {{ silla.id }}</p>
-            <p><strong>Número:</strong> {{ silla.numero }}</p>
-            <p><strong>Clase:</strong> {{ silla.clase }}</p>
-            <p><strong>Posicion:</strong> {{ silla.posicion }}</p>
-            <p><strong>Precio:</strong> {{ silla.precio }}</p>
+            <h2>Servicio</h2>
+            <p><strong>ID:</strong> {{ servicio.id }}</p>
+            <p><strong>Tipo de Servicio:</strong> {{ servicio.tipo_servicio }}</p>
+            <p><strong>Costo:</strong> {{ servicio.costo }}</p>
+            <p><strong>Duracion:</strong> {{ servicio.duracion_servicio }}</p>
+            <p><strong>Añadido:</strong> {{ servicio.añadido }}</p>
         </article>
         {% endfor %}
         <div class="refresh">
-            <a href="{% url 'lista_silla' %}">Refrescar la Lista</a>
+            <a href="{% url 'lista_servicio' %}">Refrescar la Lista</a>
         </div>
     </div>
 
