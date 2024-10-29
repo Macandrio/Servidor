@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import F
+from django.db.models import F , Prefetch
 from .models import (
     Usuario,Proyecto,Tarea,
     AsignacionTarea,Etiqueta,Comentario
@@ -11,8 +11,9 @@ def index(request):
 
 # 2. Una url que me muestre información sobre cada Proyectos
 def dame_proyecto(request):
-    proyecto = Proyecto.objects.select_related("creador").prefetch_related("colaboradores")
-    proyecto = proyecto.all()
+    proyecto = (Proyecto.objects.select_related("creador")
+                .prefetch_related("colaboradores" , Prefetch('proyecto_tarea'))
+                ).all()
 
     return render(request, 'Proyecto/proyecto.html',{"dame_proyecto":proyecto})
 
@@ -40,7 +41,7 @@ def tarea_completada(request,fecha_inicio,fecha_final):
 
 # 7. Crear una URL que obtenga el último usuario que ha comentado en una tarea de un proyecto en concreto.
 def usuario_comentario(request,proyecto_id):
-    usuario = usuario.filter(comentarios_creador__tarea__proyecto=proyecto_id).order_by("-comentarios_creador__fecha_comentario")[:1].get()
+    usuario = Usuario.objects.filter(comentarios_creador__tarea__proyecto=proyecto_id).order_by("-comentarios_creador__fecha_comentario")[:1].get()
 
     return render(request, 'usuario/usuario_comentario.html', {'usuario': usuario})
 
@@ -66,10 +67,6 @@ def etiquetas_por_proyecto(request, proyecto_id):
 #def usuarios_no_asignados(request):
 #    usuarios = Usuario.objects.exclude(colaboradores_tarea__isnull=False).all()
 #    return render(request, 'Usuario/usuarios_no_asignados.html', {'usuarios': usuarios})
-
-# ejercicio/views.py
-
-from django.shortcuts import render
 
 def handler_404(request, exception):
     return render(request, '404.html', status=404)
