@@ -183,6 +183,9 @@ Ruta
             destino (muchos a muchos)
             vuelo (muchos a muchos)
 
+
+
+Cosas para ayudarme a seguir el ejercicio 
 -------------------------------------------------------------------------------------------------------------------
 *    Definir en qué consistirá mi página Web
 
@@ -211,9 +214,33 @@ Ruta
     Debe entregarse el enlace de git.
 
 -------------------------------------------------------------------------------------------------------------------
+Modelos 
+
 ManyToOne = Vuelo(origen) , Vuelo(destino) , Equipaje(pasajero) , Reserva(pasajero) , Reserva(Vuelo)
 ManyToMany = Aerolínea(Aeropuerto) , Vuelo(Aerolinea) , Pasajero(vuelo)
 OneToOne = ContactoAeropuerto(Aeropuerto) , EstadisticasVuelo(Vuelo), PerfilPasajero(pasajero)
+
+atributo
+
+CharField, IntegerField, EmailField, DateField, DateTimeField,
+BooleanField, DurationField, TextField, FloatField, DecimalField
+
+parametros
+
+1. max_length = 100  => maximo de caracteres 100
+2. verbose_name="Aeropuerto" => como se ve en el administrador en el formulario
+3. choices=CIUDADES  =>  es para que solo pueda elejir una opcion del array
+4. default='ES'  => por defecto poge ES si no pone nada
+5. blank=True  => puede dejar el campo en blanco
+6. auto_now_add=True  => si no pones nada pone la hora actual
+7. error_messages={'blank': 'Este campo no puede estar vacío.',}  =>  pone un mensaje de error
+8. db_column='Volando' => te cambia el nombre de la columna de la base de datos
+9. editable=False  => no se puede editar en el admin
+10. validators=[ MaxValueValidator(999999999)] => valida si el numero es menor al puesto
+11. unique=True => el valor es unico
+
+Asiento
+
 
 
 
