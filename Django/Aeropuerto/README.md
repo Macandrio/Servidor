@@ -238,6 +238,8 @@ parametros
 9. editable=False  => no se puede editar en el admin
 10. validators=[ MaxValueValidator(999999999)] => valida si el numero es menor al puesto
 11. unique=True => el valor es unico
+12. max_digits=6 => solo puede poner 6 dijitos contando con los dos de decimales
+13. decimal_places=2 => solo puede poner 2 decimales.
 
 Asiento
 
