@@ -167,7 +167,8 @@ class Equipaje(models.Model):
     color = models.CharField(max_length=50)
     pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
 
-
+    def __str__(self):
+        return "Es del pasajero" + self.pasajero.nombre
 
 # Tabla intermedia Vuelo_Aerolinea
 class VueloAerolinea(models.Model):

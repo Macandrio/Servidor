@@ -105,6 +105,9 @@ Equipage
         Relacion: 2
             pasajero (ManyToOne)
 
+        Funcion:
+            str (muestra en el admi una cadena)
+
 
 VueloAerolinea (Tabla intermedia)
     Atributos: 5
