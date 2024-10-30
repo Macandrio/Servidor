@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Aeropuertos</title>
+    <title>Listado de Aerolíneas</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         header {
             background-color: #3498db;
             color: white;
@@ -99,22 +99,23 @@
         <a href="/">Sistema de Aeropuertos</a>
     </header>
 
-    <div class="container">
-        <h1>Listado de Aeropuertos</h1>
-        {% for aeropuerto in aeropuertos %}
+    <main class="container">
+        <h2>Vuelos sin Fecha de Operación para la Aerolínea {{ aerolinea_id }}</h2>
+    
+    {% if vuelos %}
+        {% for vuelo in vuelos %}
             <article>
-                <h2>Aeropuerto {{ forloop.counter }}</h2>
-                <p><strong>ID:</strong> {{ aeropuerto.id }}</p>
-                <p><strong>Nombre:</strong> {{ aeropuerto.nombre }}</p>
-                <p><strong>Ciudad:</strong> {{ aeropuerto.ciudades }}</p>
-                <p><strong>País:</strong> {{ aeropuerto.pais }}</p>
-                <p><strong>Capacidad Máxima:</strong> {{ aeropuerto.capacidad_maxima }}</p>
+                <p><strong>ID del Vuelo:</strong> {{ vuelo.vuelo.id }}</p>
+                <p><strong>Estado:</strong> {{ vuelo.estado }}</p>
+                <p><strong>Clase:</strong> {{ vuelo.clase }}</p>
+                <p><strong>Incidencias:</strong> {{ vuelo.incidencias }}</p>
             </article>
         {% endfor %}
-        <div class="refresh">
-            <a href="{% url 'lista_aeropuerto' %}">Refrescar la Lista</a>
-        </div>
-    </div>
+    {% else %}
+        <p>No hay vuelos sin fecha de operación para esta aerolínea.</p>
+    {% endif %}
+    </main>
+    
 
     <footer>
         &copy; 2024 - Proyecto de Aeropuertos

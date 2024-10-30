@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models import Prefetch, Q, Sum
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
     VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
@@ -73,3 +74,115 @@ def lista_PerfilPasajero(request):
     return render(request, 'paginas/perfilpasajero_list.html', {'perfilpasajero': perfilpasajero})
 
 
+# 1. Todos los pasajeros que esten asociados a un vuelo con una relación reversa
+def pasajeros_vuelo(request , id_vuelo):
+    vuelo = Vuelo.objects.prefetch_related(Prefetch('vuelo_pasajero')).get(id=id_vuelo)
+  
+    return render(request, 'consultas/pasajeros_vuelo.html',{'vuelo': vuelo})
+                         
+# 2. Todos los vuelos que esten volando que tenga una año en concreto
+# si pones Fase serqa los que no estan volando
+
+def vuelo_volando_año(request , anyo):
+    datosvuelo = EstadisticasVuelo.objects.select_related('vuelo')
+
+    datosvuelo = datosvuelo.filter(fecha_estadisticas__year = anyo, vuelo__estado = False).all()
+
+    return render(request, 'consultas/vuelo_volando_año.html',{'datosvuelo': datosvuelo})
+
+# 3. todos los textos que tenga una palabra en concreto de una aerolinea en concreto
+
+def texto_vuelo_aerolinea(request, id_aerolinea, texto_buscar):
+    
+    aerolinea = Aerolinea.objects.get(id=id_aerolinea) # Obtener la aerolínea directamente por su ID
+    vuelo_aerolinea = VueloAerolinea.objects.select_related('vuelo', 'aerolinea') # Filtrar los vuelos asociados a la aerolínea que contienen el texto en feedbacks
+    vuelo_aerolinea = vuelo_aerolinea.filter(aerolinea__id=id_aerolinea, vuelo__vuelo_datos__feedback_pasajeros__icontains=texto_buscar)
+    return render(request, 'consultas/texto_vuelo_aerolinea.html', {'vuelo_aerolinea': vuelo_aerolinea,'aerolinea': aerolinea})
+
+
+
+# 4. Obtener el historial de feedbacks para todos los vuelos de un pasajero específico
+
+def historial_feedbacks_pasajero(request, pasajero_id):
+
+    pasajero = Pasajero.objects.get(id=pasajero_id) # Obtener el pasajero
+    feedbacks = EstadisticasVuelo.objects.filter(vuelo__vuelo_pasajero=pasajero) # Obtener el historial de feedbacks de todos los vuelos del pasajero
+    return render(request, 'consultas/historial_feedbacks_pasajero.html', {'feedbacks': feedbacks, 'pasajero': pasajero})
+
+#5. Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
+
+def vuelos_origen_destino(request, origen_id, destino_id):
+    
+    vuelos = Vuelo.objects.select_related('origen', 'destino') 
+    vuelos = vuelos.filter(origen_id=origen_id,
+                           destino_id=destino_id) # Filtrar vuelos según el aeropuerto de origen y destino
+
+    return render(request, 'consultas/vuelos_origen_destino.html', {'vuelos': vuelos})
+
+
+#6. Listar reservas por método de pago y año
+
+def reservas_por_metodo_y_año(request, metodo_pago, año):
+    # Filtrar las reservas por el método de pago y el año de la fecha de reserva
+    reservas = Reserva.objects.filter(metodo_pago=metodo_pago,fecha_reserva__year=año)
+
+    return render(request, 'consultas/reservas_por_metodo_y_año.html', {'reservas': reservas, 'metodo_pago': metodo_pago, 'año': año})
+
+# 7. Obtener todos los vuelos que están programados para una fecha específica o que tienen un estado de "pendiente" 
+# y que pertenecen a una aerolínea específica
+
+def vuelos_programados(request, fecha, estado, aerolinea_id):
+    # Filtrar vuelos por fecha específica o estado "pendiente" y aerolínea
+    vuelos = Vuelo.objects.filter(Q(hora_salida__date=fecha) | Q(estado=estado) , aerolinea__id=aerolinea_id)
+
+    return render(request, 'consultas/vuelos_programados.html', {
+                                                                    'vuelos': vuelos,
+                                                                    'fecha': fecha,
+                                                                    'estado': estado,
+                                                                    'aerolinea_id': aerolinea_id
+                                                                })
+# 8. Calcular el peso total del equipaje de todos los pasajeros en un vuelo específico y ordenar
+def peso_equipaje_vuelo(request, vuelo_id):
+    
+    equipajes = Equipaje.objects.filter(pasajero__vuelo__id=vuelo_id).order_by('-peso')[:5] # Filtrar el equipaje de los pasajeros en un vuelo específico
+                                                                                            # Lo ordenamos por peso desendientemente con el -
+                                                                                            # Te muestra solo los 5 primeros
+    
+    peso_total = equipajes.aggregate(Sum('peso'))['peso__sum']  # Calcular el peso total de todos los equipajes en el vuelo
+                                                                # ['peso__sum'] te devuelve el peso total de la suma
+
+    # Renderizar la plantilla con los resultados
+    return render(request, 'consultas/peso_equipaje_vuelo.html', {
+                                                                    'equipajes': equipajes,
+                                                                    'peso_total': peso_total,
+                                                                    'vuelo_id': vuelo_id})
+
+#9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
+def vuelos_sin_operacion(request, aerolinea_id):
+    # Filtrar vuelos donde `fecha_operacion` es None para una aerolínea específica
+    vuelos = VueloAerolinea.objects.filter(aerolinea_id=aerolinea_id, fecha_operacion__isnull=True)
+
+    # Renderizar los resultados en una plantilla
+    return render(request, 'consultas/vuelos_sin_operacion.html', {
+        'vuelos': vuelos,
+        'aerolinea_id': aerolinea_id
+    })
+
+
+
+
+# Error 400 - Solicitud Incorrecta
+def error_400(request, exception):
+    return render(request, 'errors/400.html', status=400)
+
+# Error 403 - Prohibido
+def error_403(request, exception):
+    return render(request, 'errors/403.html', status=403)
+
+# Error 404 - No Encontrado
+def error_404(request, exception):
+    return render(request, 'errors/404.html', status=404)
+
+# Error 500 - Error Interno del Servidor
+def error_500(request):
+    return render(request, 'errors/500.html', status=500)

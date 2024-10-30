@@ -17,7 +17,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path , include
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('apaeropuerto.urls')),
+    path("__debug__/", include("debug_toolbar.urls")),   
 ]
+
+from django.conf.urls import handler400, handler404, handler403, handler500
+
+handler400 = 'apaeropuerto.views.error_400'
+handler403 = 'apaeropuerto.views.error_403'
+handler404 = 'apaeropuerto.views.error_404'
+handler500 = 'apaeropuerto.views.error_500'

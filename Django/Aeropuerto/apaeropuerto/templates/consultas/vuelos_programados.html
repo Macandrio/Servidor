@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Aeropuertos</title>
+    <title>Listado de Aerolíneas</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -12,7 +12,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         header {
             background-color: #3498db;
             color: white;
@@ -99,22 +99,21 @@
         <a href="/">Sistema de Aeropuertos</a>
     </header>
 
-    <div class="container">
-        <h1>Listado de Aeropuertos</h1>
-        {% for aeropuerto in aeropuertos %}
-            <article>
-                <h2>Aeropuerto {{ forloop.counter }}</h2>
-                <p><strong>ID:</strong> {{ aeropuerto.id }}</p>
-                <p><strong>Nombre:</strong> {{ aeropuerto.nombre }}</p>
-                <p><strong>Ciudad:</strong> {{ aeropuerto.ciudades }}</p>
-                <p><strong>País:</strong> {{ aeropuerto.pais }}</p>
-                <p><strong>Capacidad Máxima:</strong> {{ aeropuerto.capacidad_maxima }}</p>
-            </article>
-        {% endfor %}
-        <div class="refresh">
-            <a href="{% url 'lista_aeropuerto' %}">Refrescar la Lista</a>
-        </div>
-    </div>
+    <main class="container">    
+        {% if vuelos %}
+        <h2>Vuelos Programados para {{ vuelos.fecha }} o con Estado: {{ vuelos.estado }} de la Aerolínea {{ vuelos.aerolinea.id }}</h2>
+            {% for vuelo in vuelos %}
+                <article>
+                    <p><strong>ID de Vuelo:</strong> {{ vuelo.id }}</p>
+                    <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
+                    <p><strong>Estado:</strong> {{ vuelo.estado }}</p>
+                    <p><strong>Aerolínea:</strong> {{ vuelo.aerolinea.nombre }}</p>
+                </article>
+            {% endfor %}
+        {% else %}
+            <p>No hay vuelos disponibles para los criterios especificados.</p>
+        {% endif %}
+    </main>
 
     <footer>
         &copy; 2024 - Proyecto de Aeropuertos

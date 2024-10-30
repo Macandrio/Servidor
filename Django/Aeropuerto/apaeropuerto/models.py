@@ -81,7 +81,7 @@ class Aerolinea(models.Model):
         max_length=2,
         choices=paises,default='ES'
     )
-    aeropuerto =   models.ManyToManyField(Aeropuerto) # Relación ManytoMany
+    aeropuerto =   models.ManyToManyField(Aeropuerto, related_name='aerolinea_de_aeropuerto') # Relación ManytoMany
 
     def __str__(self):
         return self.nombre    
@@ -96,7 +96,7 @@ class Vuelo(models.Model):
 
     origen = models.ForeignKey(Aeropuerto , on_delete=models.CASCADE ,related_name='vuelos_de_origen') # ManyToOne
     destino = models.ForeignKey(Aeropuerto , on_delete=models.CASCADE ,related_name='vuelos_de_destino') #ManyToOne
-    aerolinea = models.ManyToManyField(Aerolinea , through='VueloAerolinea') # tabla ManyToMany intermedia
+    aerolinea = models.ManyToManyField(Aerolinea , through='VueloAerolinea' , related_name='vuelo_aerolinea') # tabla ManyToMany intermedia
 
     def clean(self):
         # Verificar que el aeropuerto de origen y destino no sean el mismo
@@ -118,7 +118,7 @@ class EstadisticasVuelo(models.Model):
     feedback_pasajeros = models.TextField(blank=True)
 
 
-    vuelo = models.OneToOneField(Vuelo, on_delete=models.CASCADE) #OneToOne
+    vuelo = models.OneToOneField(Vuelo, on_delete=models.CASCADE, related_name='vuelo_datos') #OneToOne
 
 
 # Modelo Pasajero
@@ -153,7 +153,7 @@ class PerfilPasajero(models.Model):
     nacionalidad = models.CharField(max_length=50, blank=True)
     vivienda = models.CharField(max_length=50, blank=True)
 
-    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE)# Relación OneToOne
+    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE, related_name='pasajero_datos')# Relación OneToOne
 
     def __str__(self):
         return "DNI" + self.documento_identidad
@@ -165,7 +165,7 @@ class Equipaje(models.Model):
     dimensiones = models.CharField(max_length=50)
     tipo_material = models.CharField(max_length=30)
     color = models.CharField(max_length=50)
-    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
+    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE , related_name='equipaje_pasajero')  # Relación ManyToOne
 
     def __str__(self):
         return "Es del pasajero" + self.pasajero.nombre
@@ -190,8 +190,8 @@ class VueloAerolinea(models.Model):
     clase = models.CharField(max_length=1,choices=tipos_clase_avion, default='E')
     incidencias = models.CharField(max_length=100)
 
-    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación Many To One
-    aerolinea = models.ForeignKey(Aerolinea, on_delete=models.CASCADE) # Relación Many To One
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE, related_name='vuelo_media_aerolinea')  # Relación Many To One
+    aerolinea = models.ForeignKey(Aerolinea, on_delete=models.CASCADE, related_name='aerolinea_media_aerolinea') # Relación Many To One
   
 
 
@@ -210,8 +210,8 @@ class Reserva(models.Model):
                                    default= 'tarjeta')
     estado_de_pago = models.BooleanField(default=False)
 
-    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE)  # Relación ManyToOne
-    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
+    pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE, related_name='reserva_pasajero')  # Relación ManyToOne
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE, related_name='vuelo_reserva')  # Relación ManyToOne
 
 
 # Modelo Asiento (para Vuelo)
@@ -240,8 +240,8 @@ class Asiento(models.Model):
     posicion = models.CharField(max_length=1, choices=lugar)
     sistema_entretenimiento = models.BooleanField()
 
-    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE)  # Relación ManyToOne
-    pasajero = models.ForeignKey(Pasajero,on_delete=models.CASCADE)  # Relación ManyToOne 
+    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE, related_name='asiento_vuelo')  # Relación ManyToOne
+    pasajero = models.ForeignKey(Pasajero,on_delete=models.CASCADE, related_name='pajarelo_asiento')  # Relación ManyToOne 
 
 
 
@@ -252,7 +252,7 @@ class Servicio(models.Model):
     duracion_servicio = models.TimeField()
     añadido = models.CharField(max_length=100)
 
-    aeropuerto = models.ManyToManyField(Aeropuerto)  # Relación Many To Many
+    aeropuerto = models.ManyToManyField(Aeropuerto, related_name='servicio_aeropuerto')  # Relación Many To Many
 
     def __str__(self):
         return self.tipo_servicio
@@ -270,7 +270,7 @@ class Empleado(models.Model):
     cargo = models.CharField(max_length=2,choices=CARGO,default='EM')
     fecha_contratacion = models.DateField()
     
-    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE , related_name = 'empleado_servicio') #Many To One
+    servicio = models.ForeignKey(Servicio, on_delete=models.CASCADE , related_name = 'empleado_servicio') #ManyToOne
 
 
     def __str__(self):

@@ -124,14 +124,41 @@
             <div class="link-item">
                 <a href="{% url 'lista_PerfilPasajero' %}">Perfil Pasajero</a>
             </div>
+            
         </div>
     </div>
     <div class="container">
         <h2>Consultas de Aeropuerto</h2> <!-- Cambiado de h1 a h2 -->
         <div class="link-list">
             <div class="link-item">
-                <a href="{% url 'lista_aeropuerto' %}">Aeropuertos</a>
+                <a href="{% url 'pasajeros_vuelo' 3 %}">Pasajeros del vuelo 1</a>
             </div>
+            <div class="link-item">
+                <a href="{% url 'vuelo_volando_año' 1990 %}">Pasajeros del vuelo 1990</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'texto_vuelo_aerolinea' 1 'Alejandro' %}">texto de una aerolinea</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'historial_feedbacks_pasajero' 5 %}">feedback de un pasajero</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'vuelos_origen_destino' 17 37 %}">Vuelo especifico entre Aeropuertos</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'reservas_por_metodo_y_año' 'tarjeta' 2024 %}">Reserva por pago y año</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'vuelos_programados' '1978-09-07' '0' 17 %}">Ver Vuelos Programados para 1978-09-07 y Estado Pendiente</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'peso_equipaje_vuelo' 27 %}">Ver Peso del Equipaje para el Vuelo 27</a>
+            </div>
+            <div class="link-item">
+                <a href="{% url 'vuelos_sin_operacion' 1 %}">Ver Vuelos sin Fecha de Operación para la Aerolínea 1</a>
+            </div>
+            
+
         </div>
     </div>
 
