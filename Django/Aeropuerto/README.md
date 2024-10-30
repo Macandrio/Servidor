@@ -268,12 +268,6 @@ python manage.py runserver
 * En las URLs, QuerySet y Views debe utilizarse las funciones vistas en clase e incluir la obtención de datos entre tablas ManytoMany, OnetoOne y ManyToOne
 * Siempre debe incluirse un comentario en cada Vista, indicando lo que hace dicha Vista y en el README.MD detallar todas las URLs y los requisitos que se cumplen!
 
-* Debe incluirse una página de Error personalizada para cada uno de los 4 tipos de errores posible
-* Las urls deben funcionar y mostrar resultados. En el caso de que de error o no muestre resultado alguno no será valida.
+
 * Debe mostrarse siempre toda la información de los modelos relacionados
 * Las querys deben estar optimizadas 
-* Debe  existir al menos una URL con: filtros con AND, filtros con OR, aggregate, usando una relación reversa, order_by, limit, filtro con None en una tabla intermedia.
-* Debe existir un index desde dónde puedo acceder a todas las URLS. 
-* Recordad los archivos que no pueden subirse a GIT.
-* Crear un fixture con los datos para que pueda realizar las pruebas.
-* Poner el proyecto en modo Producción.
