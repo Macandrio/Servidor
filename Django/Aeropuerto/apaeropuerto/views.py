@@ -128,6 +128,7 @@ def reservas_por_metodo_y_año(request, metodo_pago, año):
 
     return render(request, 'consultas/reservas_por_metodo_y_año.html', {'reservas': reservas, 'metodo_pago': metodo_pago, 'año': año})
 
+
 # 7. Obtener todos los vuelos que están programados para una fecha específica o que tienen un estado de "pendiente" 
 # y que pertenecen a una aerolínea específica
 
