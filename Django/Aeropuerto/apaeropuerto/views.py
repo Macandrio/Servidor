@@ -125,29 +125,28 @@ def vuelos_origen_destino(request, origen_id, destino_id):
 #6. Listar reservas por método de pago y año
 
 def reservas_por_metodo_y_año(request, metodo_pago, año):
-    # Filtrar las reservas por el método de pago y el año de la fecha de reserva
-    reservas = Reserva.objects.filter(metodo_pago=metodo_pago,fecha_reserva__year=año)
+    reservas = Reserva.objects.select_related('pasajero', 'vuelo')
+    reservas = reservas.filter(metodo_pago=metodo_pago,fecha_reserva__year=año)
 
-    return render(request, 'consultas/reservas_por_metodo_y_año.html', {'reservas': reservas, 'metodo_pago': metodo_pago, 'año': año})
+    return render(request, 'consultas/reservas_por_metodo_y_año.html', {'reservas': reservas})
 
 
-# 7. Obtener todos los vuelos que están programados para una fecha específica o que tienen un estado de "pendiente" 
-# y que pertenecen a una aerolínea específica
+# 7. Obtener todos los vuelos que tengan un origen y destino en concreto o que el estado sea volando
 
-def vuelos_programados(request, fecha, estado, aerolinea_id):
-    # Filtrar vuelos por fecha específica o estado "pendiente" y aerolínea
-    vuelos = Vuelo.objects.filter(Q(hora_salida__date=fecha) | Q(estado=estado) , aerolinea__id=aerolinea_id)
+def vuelos_cortos_origen_destino(request, origen_id, destino_id, estado):
 
-    return render(request, 'consultas/vuelos_programados.html', {
-                                                                    'vuelos': vuelos,
-                                                                    'fecha': fecha,
-                                                                    'estado': estado,
-                                                                    'aerolinea_id': aerolinea_id
-                                                                })
+    vuelos = Vuelo.objects.select_related('origen', 'destino')
+    vuelos = vuelos.filter(Q(origen_id=origen_id) & Q(destino_id=destino_id) | (~Q(estado=estado)))
+
+    return render(request, 'consultas/vuelos_cortos.html', {'vuelos': vuelos})
+
+
+
 # 8. Calcular el peso total del equipaje de todos los pasajeros en un vuelo específico y ordenar
 def peso_equipaje_vuelo(request, vuelo_id):
     
-    equipajes = Equipaje.objects.filter(pasajero__vuelo__id=vuelo_id).order_by('-peso')[:5] # Filtrar el equipaje de los pasajeros en un vuelo específico
+    equipajes = Equipaje.objects.select_related('pasajero')
+    equipajes = equipajes.filter(pasajero__vuelo__id=vuelo_id).order_by('-peso')[:5] # Filtrar el equipaje de los pasajeros en un vuelo específico
                                                                                             # Lo ordenamos por peso desendientemente con el -
                                                                                             # Te muestra solo los 5 primeros
     
@@ -155,12 +154,9 @@ def peso_equipaje_vuelo(request, vuelo_id):
                                                                 # ['peso__sum'] te devuelve el peso total de la suma
 
     # Renderizar la plantilla con los resultados
-    return render(request, 'consultas/peso_equipaje_vuelo.html', {
-                                                                    'equipajes': equipajes,
-                                                                    'peso_total': peso_total,
-                                                                    'vuelo_id': vuelo_id})
+    return render(request, 'consultas/peso_equipaje_vuelo.html', {'equipajes': equipajes,'peso_total': peso_total})
 
-#9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
+# 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
 def vuelos_sin_operacion(request, aerolinea_id):
     # Filtrar vuelos donde `fecha_operacion` es None para una aerolínea específica
     vuelos = VueloAerolinea.objects.filter(aerolinea_id=aerolinea_id, fecha_operacion__isnull=True)
@@ -189,3 +185,8 @@ def error_404(request, exception):
 # Error 500 - Error Interno del Servidor
 def error_500(request):
     return render(request, 'errors/500.html', status=500)
+
+
+
+
+

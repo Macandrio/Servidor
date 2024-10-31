@@ -169,8 +169,6 @@ Empleado
            str: Devuelve nombre apellido y cargo la f es para concadenar  
 
 
-
-
 Ruta
     Atributos:
         clima (varchar de 100)
@@ -214,9 +212,6 @@ parametros
 12. max_digits=6 => solo puede poner 6 dijitos contando con los dos de decimales
 13. decimal_places=2 => solo puede poner 2 decimales.
 
-Asiento
-
-
 
 
 
@@ -240,6 +235,22 @@ Ejercicio 4. Obtener el feedbacks de todos los vuelos en el que ha estado un pas
     Cojo la tabla estadiscitas para recorrerla y vuelo para coger el id vuelo.
 
 Ejercicio 5.Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
+
+Ejercicio 6. Listar reservas por método de pago y año
+
+Ejercicio 7. Obtener todos los vuelos que tengan un origen y destino en concreto o que el estado sea volando
+    Utilizo Q para las condiciones or y and y para la negacion ~Q.
+
+Ejercicio 8. Calcular el peso total del equipaje de todos los pasajeros en un vuelo específico y ordenar
+    Con el order_by y - delante del atributo ordenamo en descenso solo elijo los 5 primeros que me salgan con [:5].
+    Con el aggregate podemos hacer operaciones de agragacion.
+    sum se utiliza para sumar toda la lista pero tambien hay mas como:  promedio = Avg, 
+                                                                        contar = Count,
+                                                                        maximo y minimo = Max y Min
+    aggregate te devuelve un diccionario con el resultado que en mi caso es esto = ['peso__sum'] 
+
+Ejercicio 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
+
 
 
 -------------------------------------------------------------------------------------------------------------------

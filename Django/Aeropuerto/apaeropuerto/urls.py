@@ -24,7 +24,7 @@ urlpatterns = [
     path('historial-feedbacks-pasajero/<int:pasajero_id>/', views.historial_feedbacks_pasajero, name='historial_feedbacks_pasajero'),
     path('vuelos-origen-destino/<int:origen_id>/<int:destino_id>/', views.vuelos_origen_destino, name='vuelos_origen_destino'),
     re_path(r'^reservas/(?P<metodo_pago>\w+)/(?P<año>\d{4})/$', views.reservas_por_metodo_y_año, name='reservas_por_metodo_y_año'),
-    path('vuelos-programados/<str:fecha>/<str:estado>/<int:aerolinea_id>/', views.vuelos_programados, name='vuelos_programados'),
+    path('vuelos/cortos/<int:origen_id>/<int:destino_id>/<int:estado>/', views.vuelos_cortos_origen_destino, name='vuelos_cortos_origen_destino'),
     path('peso-equipaje-vuelo/<int:vuelo_id>/', views.peso_equipaje_vuelo, name='peso_equipaje_vuelo'),
     path('vuelos-sin-operacion/<int:aerolinea_id>/', views.vuelos_sin_operacion, name='vuelos_sin_operacion'),
 

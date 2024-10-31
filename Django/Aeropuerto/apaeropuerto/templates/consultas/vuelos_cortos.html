@@ -99,20 +99,19 @@
         <a href="/">Sistema de Aeropuertos</a>
     </header>
 
-    <main class="container">    
-        {% if vuelos %}
-        <h2>Vuelos Programados para {{ vuelos.fecha }} o con Estado: {{ vuelos.estado }} de la Aerolínea {{ vuelos.aerolinea.id }}</h2>
-            {% for vuelo in vuelos %}
-                <article>
-                    <p><strong>ID de Vuelo:</strong> {{ vuelo.id }}</p>
-                    <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
-                    <p><strong>Estado:</strong> {{ vuelo.estado }}</p>
-                    <p><strong>Aerolínea:</strong> {{ vuelo.aerolinea.nombre }}</p>
-                </article>
-            {% endfor %}
-        {% else %}
-            <p>No hay vuelos disponibles para los criterios especificados.</p>
-        {% endif %}
+    <main class="container">
+        <h1>Vuelos entre Aeropuertos</h1>
+        {% for vuelo in vuelos %}
+            <article>
+                <p><strong>ID del vuelo:</strong> {{ vuelo.id }}</p>
+                <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
+                <p><strong>Hora de Llegada:</strong> {{ vuelo.hora_llegada }}</p>
+                <p><strong>Duración:</strong> {{ vuelo.duracion }}</p>
+                <p><strong>Estado:</strong> {% if vuelo.estado %} Volando {% else %} Aterrizado {% endif %}</p> 
+                <p><strong>Origen:</strong> {{ vuelo.origen.nombre }}</p>
+                <p><strong>Destino:</strong> {{ vuelo.destino.nombre }}</p>
+            </article>
+        {% endfor %}
     </main>
 
     <footer>

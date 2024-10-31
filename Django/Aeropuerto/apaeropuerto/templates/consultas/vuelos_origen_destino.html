@@ -100,18 +100,18 @@
     </header>
 
     <main class="container">
-        {% if vuelos %}
-            <h2>Vuelos Entre aeropuertos</h2>
+            <h1>Vuelos Entre aeropuertos</h1>
             {% for vuelo in vuelos %}
                 <article>
-                    <p><strong>Vuelo ID:</strong> {{ vuelo.id }}</p>
+                    <p><strong>ID del vuelo:</strong> {{ vuelo.id }}</p>
+                    <p><strong>Hora Salida:</strong> {{ vuelo.hora_salida }}</p>
+                    <p><strong>Hora Salida:</strong> {{ vuelo.hora_llegada }}</p>
+                    <p><strong>Estado:</strong> {% if vuelo.estado %} Volando {% else %} Aterrizado {% endif %}</p> 
+                    <p><strong>Duracion:</strong> {{ vuelo.duracion }}</p>
                     <p><strong>Aeropuerto origen:</strong> {{ vuelo.origen.nombre }}</p>
                     <p><strong>Aeropuerto destino:</strong> {{ vuelo.destino.nombre }}</p>
                 </article>
             {% endfor %}
-        {% else %}
-        <p>No hay vuelos disponibles entre estos aeropuertos.</p>
-    {% endif %}
     </main>
 
     <footer>

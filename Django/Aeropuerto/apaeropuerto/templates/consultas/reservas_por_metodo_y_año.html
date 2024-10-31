@@ -100,19 +100,18 @@
     </header>
 
     <main class="container">
-        {% if reservas %}
-            <h2>Reservas con Método de Pago: {{ metodo_pago }} en el Año: {{ año }}</h2>
+            <h1>Reservas con Método de Pago:</h1>
             {% for reserva in reservas %}
-                <article>
+                
+                    <h2>Pasajero: {{ reserva.pasajero.nombre }} en el vuelo {{ reserva.vuelo.id }}</h2>
+                    <article>
                     <p><strong>ID de Reserva:</strong> {{ reserva.id }}</p>
                     <p><strong>Fecha de Reserva:</strong> {{ reserva.fecha_reserva }}</p>
-                    <p><strong>Estado de Pago:</strong> {{ reserva.estado_de_pago }}</p>
-                    <p><strong>Pasajero:</strong> {{ reserva.pasajero.nombre }} {{ reserva.pasajero.apellido }}</p>
+                    <p><strong>Matodo de pago:</strong> {{ reserva.metodo_pago }}</p>
+                    <p><strong>Estado de Pago:</strong> {% if reserva.estado_de_pago %} Pagado {% else %} Pendiente de pago {% endif %}</p> 
+                    
                 </article>
             {% endfor %}
-        {% else %}
-            <p>No hay reservas disponibles para este método de pago en el año indicado.</p>
-        {% endif %}
     </main>
     
 
