@@ -128,10 +128,8 @@ def validar_dominio_email(email):
     
     # Comprobar si el correo electrónico termina con alguno de los dominios permitidos
         if not any(email.endswith(dominio) for dominio in dominios_permitidos):
-            raise ValidationError(
-                _('El correo electrónico debe tener uno de los siguientes dominios: @gmail.com, @hotmail.com, @polignosur.org.'),
-                code='invalid_domain',
-            )
+            raise ValidationError(('El correo electrónico debe tener uno de los siguientes dominios: @gmail.com, @hotmail.com, @polignosur.org.'),
+                code='invalid_domain',)
         
 class Pasajero(models.Model):
     nombre = models.CharField(max_length=20)
