@@ -100,17 +100,26 @@
     </header>
 
     <main class="container">
-        {% if feedbacks %}
+        <h1>feedbacks de los vuelos que este el pasajero {{ pasajero.id }}</p></h1>
+        <article>
+            <h2>Pasajero</p></h2>
+                <p><strong>Nombre:</strong> {{ pasajero.id }}</p>
+                <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p>
+                <p><strong>Apellido:</strong> {{ pasajero.apellido }}</p>
+                <p><strong>Email:</strong> {{ pasajero.email }}</p>
+                <p><strong>Telefono:</strong> {{ pasajero.telefono }}</p>
+                <p><strong>Fecha Nacimiento:</strong> {{ pasajero.fecha_nacimiento }}</p>
+        </article>
+        <h1>feedbacks</p></h1>
             {% for feedback in feedbacks %}
                 <article>
-                    <p><strong>Pasajero:</strong> {{ feedback.id }}</p>
-                    <p><strong>Feedback:</strong> {{ feedback.feedback_pasajeros }}</p>
+                    <p><strong>Vuelo ID:</strong> {{ feedback.vuelo.id }}</p>
                     <p><strong>Fecha:</strong> {{ feedback.fecha_estadisticas }}</p>
+                    <p><strong>Asientos vendido:</strong> {{ feedback.numero_asientos_vendidos }}</p>
+                    <p><strong>Asientos cancelados:</strong> {{ feedback.numero_cancelaciones }}</p>
+                    <p><strong>feedback:</strong> {{ feedback.feedback_pasajeros }}</p>
                 </article>
             {% endfor %}
-        {% else %}
-        <p>No hay feedbacks disponibles para este pasajero.</p>
-    {% endif %}
     </main>
 
     <footer>

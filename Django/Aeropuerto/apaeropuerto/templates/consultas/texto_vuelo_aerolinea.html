@@ -89,11 +89,19 @@
 
     <main class="container">
         <h1>Todos los texto de la Aerolinea: {{ aerolinea.id }}</h1>
+        <article>
+            <p><strong>Nombre:</strong> {{ aerolinea.nombre }}</p>
+            <p><strong>centerodigo:</strong> {{ aerolinea.codigo }}</p>
+            <p><strong>Fecha_fundacion:</strong> {{ aerolinea.fecha_fundacion }}</p>
+            <p><strong>Pais:</strong> {{ aerolinea.pais }}</p>
+        </article>
 
-        {% for vuelo in vuelo_aerolinea %}
+        <h1>Todos los texto:</h1>
+
+        {% for vuelo_texto in vuelo_aerolinea %}
             <article>
-                <p><strong>ID:</strong> {{ vuelo.vuelo.id }}</p>
-                <p><strong>Texto:</strong> {{ vuelo.vuelo.vuelo_datos.feedback_pasajeros }}</p>
+                <p><strong>ID del vuelo:</strong> {{ vuelo_texto.vuelo.id }}</p>
+                <p><strong>Texto:</strong> {{ vuelo_texto.vuelo.vuelo_datos.feedback_pasajeros }}</p>
             </article>
         {% endfor %}       
     </main>

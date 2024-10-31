@@ -185,35 +185,8 @@ Ruta
 
 
 
-Cosas para ayudarme a seguir el ejercicio 
 -------------------------------------------------------------------------------------------------------------------
-*    Definir en qué consistirá mi página Web
 
-*    Crear repositorio Git de mi página Web
-
-*    Preparar el proyecto Django con nuestra aplicación
-
-*    Definir 10 modelos de mi página Web que cumpla los siguientes requisitos.Al menos 3 relaciones OneToOne, 3 relaciones ManytoOne, 3 relaciones       ManyToMany(Al menos una de ella debe tener una tabla intermedia con atributos extras)
-
-*    Cada modelo debe tener al menos 4 campos.  Y debe exisitr en total 10 atributos de distinto tipo.No son válidos los atributos de relaciones.
-
-*    Debe usasrse al menos 10 parámetros distinto entre todos los atributos creados de todos los modelos.
-
-*    Crear el modelo entidad-relación de la base de datos.
-
-*    En el README.MD debe especificarse en que consiste cada modelo, cada atributo y cada parámetro usado. Y el esquema de modelo entidad-relación.
-
-*    Rellenar las tablas con seeders.
-
-*    Crear un backup de los datos con fixture.
-
-*    No subir a git los archivos que no son necesarios que ya hemos explicado en clase
-
-*    Explicar cualquier código que no se haya visto en clase. Funciones, parámetros, etc..
-
-    Debe entregarse el enlace de git.
-
--------------------------------------------------------------------------------------------------------------------
 Modelos 
 
 ManyToOne = Vuelo(origen) , Vuelo(destino) , Equipaje(pasajero) , Reserva(pasajero) , Reserva(Vuelo)
@@ -245,6 +218,28 @@ Asiento
 
 
 
+
+
+-------------------------------------------------------------------------------------------------------------------
+Ejercicio 1. Todos los pasajeros que esten asociados a un vuelo con una relación reversa
+desde la tabla vuelo cojo los datos y con el Prefetch hago la relacion inversa con el .get cojo el id expecifico de la tabla.
+
+
+Ejercicio 2. Todos los vuelos que esten volando que esten una año en concreto.
+    En el titulo utilizo {{ datosvuelo.0.fecha_estadisticas |date:"Y" }} que el 0 es el primer elemento de la lista y con date:"y" me da solo el año lo que me da es el año si quitara eso me daria el dia mes y año y yo solo quiero el año.
+    En el template en la variable estado uso un if que dice si es true me imnprima vuelo si es false me imprima aterrizado.
+
+
+Ejercicio 3. feedbacks de todos los vuelos que tenga una palabra en concreto de una aerolinea en concreto desde la tabla intermedia
+    Cojo la aerolinea aparte en una variable para luego en la temple usarla sin bucle solo quiero una
+    Con vuelo_aerolinea cojo todas las vuelos de ese erolinea y voy buscando el feedback_pasajeros de la tabla EstadisticasVuelo.
+
+
+Ejercicio 4. Obtener el feedbacks de todos los vuelos en el que ha estado un pasajero específico.
+    Primero obtengo al pasajero porque quiero mostrar solo uno.
+    Cojo la tabla estadiscitas para recorrerla y vuelo para coger el id vuelo.
+
+Ejercicio 5.Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
 
 
 -------------------------------------------------------------------------------------------------------------------

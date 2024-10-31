@@ -1,4 +1,4 @@
-#!/home/ale/Escritorio/entrega_de_trabajos/proyecto/myvenv/bin/python
+#!/home/alumnado/Escritorio/Servidor/Django/Aeropuerto/myvenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

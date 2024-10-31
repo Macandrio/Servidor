@@ -80,34 +80,36 @@ def pasajeros_vuelo(request , id_vuelo):
   
     return render(request, 'consultas/pasajeros_vuelo.html',{'vuelo': vuelo})
                          
-# 2. Todos los vuelos que esten volando que tenga una año en concreto
-# si pones Fase serqa los que no estan volando
+# 2. Todos los vuelos que esten volando que esten una año en concreto
 
 def vuelo_volando_año(request , anyo):
     datosvuelo = EstadisticasVuelo.objects.select_related('vuelo')
-
-    datosvuelo = datosvuelo.filter(fecha_estadisticas__year = anyo, vuelo__estado = False).all()
+    datosvuelo = datosvuelo.filter(fecha_estadisticas__year = anyo, vuelo__estado = False)
 
     return render(request, 'consultas/vuelo_volando_año.html',{'datosvuelo': datosvuelo})
 
-# 3. todos los textos que tenga una palabra en concreto de una aerolinea en concreto
+# 3. feedbacks de todos los vuelos que tenga una palabra en concreto de una aerolinea en concreto desde la tabla intermedia
 
 def texto_vuelo_aerolinea(request, id_aerolinea, texto_buscar):
     
     aerolinea = Aerolinea.objects.get(id=id_aerolinea) # Obtener la aerolínea directamente por su ID
-    vuelo_aerolinea = VueloAerolinea.objects.select_related('vuelo', 'aerolinea') # Filtrar los vuelos asociados a la aerolínea que contienen el texto en feedbacks
-    vuelo_aerolinea = vuelo_aerolinea.filter(aerolinea__id=id_aerolinea, vuelo__vuelo_datos__feedback_pasajeros__icontains=texto_buscar)
+
+    vuelo_aerolinea = VueloAerolinea.objects.select_related('aerolinea','vuelo').prefetch_related(Prefetch('vuelo__vuelo_datos'))
+    vuelo_aerolinea = vuelo_aerolinea.filter(aerolinea_id=id_aerolinea, vuelo__vuelo_datos__feedback_pasajeros__icontains=texto_buscar) # Filtrar los vuelos asociados a la aerolínea que contienen el texto en feedbacks
     return render(request, 'consultas/texto_vuelo_aerolinea.html', {'vuelo_aerolinea': vuelo_aerolinea,'aerolinea': aerolinea})
 
 
 
-# 4. Obtener el historial de feedbacks para todos los vuelos de un pasajero específico
+# 4. Obtener el feedbacks de todos los vuelos en el que ha estado un pasajero específico.
 
 def historial_feedbacks_pasajero(request, pasajero_id):
 
     pasajero = Pasajero.objects.get(id=pasajero_id) # Obtener el pasajero
-    feedbacks = EstadisticasVuelo.objects.filter(vuelo__vuelo_pasajero=pasajero) # Obtener el historial de feedbacks de todos los vuelos del pasajero
+
+    feedbacks = EstadisticasVuelo.objects.select_related('vuelo')
+    feedbacks = feedbacks.filter(vuelo__vuelo_pasajero=pasajero) # Obtener el historial de feedbacks de todos los vuelos del pasajero
     return render(request, 'consultas/historial_feedbacks_pasajero.html', {'feedbacks': feedbacks, 'pasajero': pasajero})
+
 
 #5. Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
 

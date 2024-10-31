@@ -98,20 +98,24 @@
     <header>
         <a href="/">Sistema de Aeropuertos</a>
     </header>
-
+    
     <main class="container">
-        {% if datosvuelo %}
-            <h2>Todos los vuelos del año {{ datosvuelo.0.fecha_estadisticas|date:"Y" }} que están volando:</h2>
-        {% else %}
-            <h2>No hay vuelos registrados para este año.</h2>
-        {% endif %}
-
+        <h1>Todos los vuelos del año {{ datosvuelo.0.fecha_estadisticas |date:"Y" }} que están volando:</h1>
         {% for vuelos in datosvuelo %}
             <article>
-                <p><strong>ID:</strong> {{ vuelos.id }}</p>
-                <td>{% if vuelo.vuelo.estado %} Volando {% else %} Aterrizado {% endif %}</td>
-                <p><strong>Fecha:</strong> {{ vuelos.fecha_estadisticas }}</p>
+                <p><strong>ID del vuelo:</strong> {{ vuelos.vuelo.id }}</p>
+                <p><strong>Hora Salida:</strong> {{ vuelos.vuelo.hora_salida }}</p>
+                <p><strong>Hora Salida:</strong> {{ vuelos.vuelo.hora_llegada }}</p>
+                <p><strong>Estado:</strong> {% if vuelos.vuelo.estado %} Volando {% else %} Aterrizado {% endif %}</p> 
+                <p><strong>Duracion:</strong> {{ vuelos.vuelo.duracion }}</p>
+                <br>
+                    <p><strong>ID de las estadistica:</strong> {{ vuelos.id }}</p>
+                    <p><strong>Fecha de la estadistica del vuelo:</strong> {{ vuelos.fecha_estadisticas }}</p>
+                    <p><strong>Asientos vendidos:</strong> {{ vuelos.numero_asientos_vendidos }}</p>
+                    <p><strong>Asientos Cancelados:</strong> {{ vuelos.numero_cancelaciones }}</p>
+                    <p><strong>feedback :</strong> {{ vuelos.feedback_pasajeros }}</p>
             </article>
+            
         {% endfor %}
 
     </main>
