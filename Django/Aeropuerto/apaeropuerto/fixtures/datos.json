@@ -117,6 +117,97 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 10,
+    "fields": {
+        "action_time": "2024-10-31T15:25:46.270",
+        "user": 1,
+        "content_type": 17,
+        "object_id": "53",
+        "object_repr": "Vuelo object (53)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 11,
+    "fields": {
+        "action_time": "2024-10-31T15:48:32.266",
+        "user": 1,
+        "content_type": 19,
+        "object_id": "3",
+        "object_repr": "Reserva object (3)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 12,
+    "fields": {
+        "action_time": "2024-10-31T15:48:46.752",
+        "user": 1,
+        "content_type": 19,
+        "object_id": "4",
+        "object_repr": "Reserva object (4)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 13,
+    "fields": {
+        "action_time": "2024-10-31T15:48:59.636",
+        "user": 1,
+        "content_type": 19,
+        "object_id": "5",
+        "object_repr": "Reserva object (5)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 14,
+    "fields": {
+        "action_time": "2024-10-31T15:49:13.641",
+        "user": 1,
+        "content_type": 19,
+        "object_id": "6",
+        "object_repr": "Reserva object (6)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 15,
+    "fields": {
+        "action_time": "2024-10-31T17:54:40.203",
+        "user": 1,
+        "content_type": 17,
+        "object_id": "54",
+        "object_repr": "Vuelo object (54)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 16,
+    "fields": {
+        "action_time": "2024-10-31T18:40:20.722",
+        "user": 1,
+        "content_type": 10,
+        "object_id": "51",
+        "object_repr": "pepe alvare<z",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -3521,6 +3612,30 @@
     }
 },
 {
+    "model": "apaeropuerto.vuelo",
+    "pk": 53,
+    "fields": {
+        "hora_salida": "2024-10-01T15:25:37",
+        "hora_llegada": "2024-10-16T15:25:40",
+        "estado": true,
+        "duracion": "15 00:00:03",
+        "origen": 17,
+        "destino": 37
+    }
+},
+{
+    "model": "apaeropuerto.vuelo",
+    "pk": 54,
+    "fields": {
+        "hora_salida": "2024-10-31T17:54:32",
+        "hora_llegada": "2024-10-31T17:54:33",
+        "estado": true,
+        "duracion": "00:00:01",
+        "origen": 1,
+        "destino": 2
+    }
+},
+{
     "model": "apaeropuerto.estadisticasvuelo",
     "pk": 1,
     "fields": {
@@ -5045,6 +5160,20 @@
         "vuelo": [
             9,
             43
+        ]
+    }
+},
+{
+    "model": "apaeropuerto.pasajero",
+    "pk": 51,
+    "fields": {
+        "nombre": "pepe",
+        "apellido": "alvare<z",
+        "email": "pepe@gmail.com",
+        "telefono": 987654321,
+        "fecha_nacimiento": "2024-10-31",
+        "vuelo": [
+            5
         ]
     }
 },
@@ -9927,6 +10056,54 @@
         "estado_de_pago": false,
         "pasajero": 2,
         "vuelo": 2
+    }
+},
+{
+    "model": "apaeropuerto.reserva",
+    "pk": 3,
+    "fields": {
+        "fecha_reserva": "2024-10-31T15:48:21",
+        "codigo_descueto": "grt4gtreetg",
+        "metodo_pago": "efectivo",
+        "estado_de_pago": true,
+        "pasajero": 1,
+        "vuelo": 1
+    }
+},
+{
+    "model": "apaeropuerto.reserva",
+    "pk": 4,
+    "fields": {
+        "fecha_reserva": "2024-10-31T15:48:35",
+        "codigo_descueto": "gtrfegrt",
+        "metodo_pago": "efectivo",
+        "estado_de_pago": false,
+        "pasajero": 9,
+        "vuelo": 5
+    }
+},
+{
+    "model": "apaeropuerto.reserva",
+    "pk": 5,
+    "fields": {
+        "fecha_reserva": "2024-10-31T15:48:49",
+        "codigo_descueto": "grtgbrtbrtg",
+        "metodo_pago": "paypal",
+        "estado_de_pago": true,
+        "pasajero": 14,
+        "vuelo": 11
+    }
+},
+{
+    "model": "apaeropuerto.reserva",
+    "pk": 6,
+    "fields": {
+        "fecha_reserva": "2024-10-31T15:49:01",
+        "codigo_descueto": "gtrhbr",
+        "metodo_pago": "paypal",
+        "estado_de_pago": false,
+        "pasajero": 44,
+        "vuelo": 43
     }
 },
 {

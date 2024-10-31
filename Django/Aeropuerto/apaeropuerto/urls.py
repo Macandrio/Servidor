@@ -27,6 +27,7 @@ urlpatterns = [
     path('vuelos/cortos/<int:origen_id>/<int:destino_id>/<int:estado>/', views.vuelos_cortos_origen_destino, name='vuelos_cortos_origen_destino'),
     path('peso-equipaje-vuelo/<int:vuelo_id>/', views.peso_equipaje_vuelo, name='peso_equipaje_vuelo'),
     path('vuelos-sin-operacion/<int:aerolinea_id>/', views.vuelos_sin_operacion, name='vuelos_sin_operacion'),
+    path('consulta/pasajeros-vuelo/<int:id_vuelo>/', views.cuantos_pasajeros_vuelo, name='cuantos_pasajeros_vuelo'),
 
 
 

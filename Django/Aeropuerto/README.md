@@ -250,7 +250,10 @@ Ejercicio 8. Calcular el peso total del equipaje de todos los pasajeros en un vu
     aggregate te devuelve un diccionario con el resultado que en mi caso es esto = ['peso__sum'] 
 
 Ejercicio 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
+    Con el isnull=true hago que solo coja los nulos
 
+Ejercicio 10. Calcular cuantos pasajeros hay en un vuelo
+    Aqui uso count para contar
 
 
 -------------------------------------------------------------------------------------------------------------------
@@ -270,10 +273,3 @@ python manage.py runserver
 
 ---------------------------------------------------------------------------------------------------------------------------
 
-* 10 URls, con sus vistas correspondientes, usando QuerySet y las plantillas correspondiente
-* En las URLs, QuerySet y Views debe utilizarse las funciones vistas en clase e incluir la obtención de datos entre tablas ManytoMany, OnetoOne y ManyToOne
-* Siempre debe incluirse un comentario en cada Vista, indicando lo que hace dicha Vista y en el README.MD detallar todas las URLs y los requisitos que se cumplen!
-
-
-* Debe mostrarse siempre toda la información de los modelos relacionados
-* Las querys deben estar optimizadas 

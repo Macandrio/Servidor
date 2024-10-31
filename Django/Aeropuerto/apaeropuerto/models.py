@@ -183,7 +183,7 @@ class VueloAerolinea(models.Model):
     ("C", "Charter")
     ]
 
-    fecha_operacion = models.DateTimeField(null=True)
+    fecha_operacion = models.DateTimeField(null=True , blank=True)
     estado = models.TextField()
     clase = models.CharField(max_length=1,choices=tipos_clase_avion, default='E')
     incidencias = models.CharField(max_length=100)

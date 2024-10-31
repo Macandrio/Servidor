@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.db.models import Prefetch, Q, Sum
+from django.db.models import Prefetch, Q, Sum, Count
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
     VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
@@ -159,15 +159,21 @@ def peso_equipaje_vuelo(request, vuelo_id):
 # 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
 def vuelos_sin_operacion(request, aerolinea_id):
     # Filtrar vuelos donde `fecha_operacion` es None para una aerolínea específica
-    vuelos = VueloAerolinea.objects.filter(aerolinea_id=aerolinea_id, fecha_operacion__isnull=True)
+    vuelos = VueloAerolinea.objects.select_related('aerolinea', 'vuelo')
+    vuelos = vuelos.filter(aerolinea_id=aerolinea_id, fecha_operacion__isnull=True)
 
     # Renderizar los resultados en una plantilla
-    return render(request, 'consultas/vuelos_sin_operacion.html', {
-        'vuelos': vuelos,
-        'aerolinea_id': aerolinea_id
-    })
+    return render(request, 'consultas/vuelos_sin_operacion.html', {'vuelos': vuelos})
 
 
+
+# 10. Calcular cuantos pasajeros hay en un vuelo
+def cuantos_pasajeros_vuelo(request, id_vuelo):
+    
+    pasajeros = Pasajero.objects.filter(vuelo__id=id_vuelo)
+    total_pasajeros = pasajeros.aggregate(Count('id'))['id__count']
+    
+    return render(request, 'consultas/total_pasajeros.html', {'total_pasajeros': total_pasajeros, 'pasajeros': pasajeros})
 
 
 # Error 400 - Solicitud Incorrecta

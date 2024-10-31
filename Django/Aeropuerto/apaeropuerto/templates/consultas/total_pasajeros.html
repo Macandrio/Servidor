@@ -100,17 +100,26 @@
     </header>
 
     <main class="container">
-        <h2>Vuelos sin Fecha de Operación para la Aerolínea {{ aerolinea_id }}</h2>
+        <h1>Total de pasajeros</h1>
     
-        {% for vuelo in vuelos %}
-            <article>
-                <p><strong>ID del Vuelo:</strong> {{ vuelo.vuelo.id }}</p>
-                <p><strong>Estado:</strong> {{ vuelo.estado }}</p>
-                <p><strong>Clase:</strong> {{ vuelo.clase }}</p>
-                <p><strong>Incidencias:</strong> {{ vuelo.incidencias }}</p>
-            </article>
-        {% endfor %}
+            <h2>Total:{{ total_pasajeros }} pasajeros</p></h2>
+            
+            <h1>Detalles de los pasajeros:</h1>
 
+                {% for pasajero in pasajeros %}
+                    <article>
+                        <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p>
+                        <p><strong>ID:</strong> {{ pasajero.id }}</p>
+                        <p><strong>Apellido:</strong> {{ pasajero.apellido }}</p>
+                        <p><strong>Correo:</strong> {{ pasajero.email }}</p>
+                        <p><strong>Teléfono:</strong> {{ pasajero.telefono }}</p>
+                        <p><strong>Fecha de nacimiento:</strong> {{ pasajero.fecha_nacimiento }}</p>
+                        <p><strong>Vuelos del pasajero:</strong></p>
+                        {% for vuelo in pasajero.vuelo.all %}
+                            <p><strong>Vuelo ID: </strong>{{ vuelo.id }}</p>
+                        {% endfor %}
+                    </article>
+                {% endfor %}
     </main>
     
 
