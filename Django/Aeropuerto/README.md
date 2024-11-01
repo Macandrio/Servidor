@@ -221,8 +221,11 @@ desde la tabla vuelo cojo los datos y con el Prefetch hago la relacion inversa c
 
 
 Ejercicio 2. Todos los vuelos que esten volando que esten una año en concreto.
-    En el titulo utilizo {{ datosvuelo.0.fecha_estadisticas |date:"Y" }} que el 0 es el primer elemento de la lista y con date:"y" me da solo el año lo que me da es el año si quitara eso me daria el dia mes y año y yo solo quiero el año.
-    En el template en la variable estado uso un if que dice si es true me imnprima vuelo si es false me imprima aterrizado.
+    Template:
+    En el titulo utilizo {{ datosvuelo.0.fecha_estadisticas |date:"Y" }} que el 0 es el primer elemento de la lista y con date:"y" me da solo el año pero eso hace que tenga otra queryset adicional si quitas el 0 del titulo se quita la queryset y se queda en una queryset aunque
+    {{ datosvuelo.fecha_estadisticas |date:"Y" }} sin el 0 no te mostraria nada.
+    (Importante: solo es para que lo vieras no me quites puntos por eso que solo lo he hecho en este ejercicio.)
+    En la variable estado uso un if que dice si es true me imnprima vuelo si es false me imprima aterrizado.
 
 
 Ejercicio 3. feedbacks de todos los vuelos que tenga una palabra en concreto de una aerolinea en concreto desde la tabla intermedia
@@ -257,7 +260,25 @@ Ejercicio 10. Calcular cuantos pasajeros hay en un vuelo
 
 
 -------------------------------------------------------------------------------------------------------------------
+* 10 URls, con sus vistas correspondientes, usando QuerySet y las plantillas correspondiente
+* En las URLs, QuerySet y Views debe utilizarse las funciones vistas en clase e incluir la obtención de datos entre tablas ManytoMany, OnetoOne y ManyToOne
+* Siempre debe incluirse un comentario en cada Vista, indicando lo que hace dicha Vista y en el README.MD detallar todas las URLs y los requisitos que se cumplen!
+* Debe incluirse una página de Error personalizada para cada uno de los 4 tipos de errores posible
+* Las urls deben funcionar y mostrar resultados. En el caso de que de error o no muestre resultado alguno no será valida.
+* Debe mostrarse siempre toda la información de los modelos relacionados
+* Las querys deben estar optimizadas 
+* Debe existir al menos una URL con r_path, otra usando dos paramétros, otra usando un parámetro entero y otra usando un parámetro str
+* Debe  existir al menos una URL con: filtros con AND, filtros con OR, aggregate, usando una relación reversa, order_by, limit, filtro con None en una tabla intermedia.
+* Debe existir al menos ua URL con un filtro de aggregate. Esta parte es de investigación porque no se ha visto en clase.
+* Debe existir un index desde dónde puedo acceder a todas las URLS. 
+* Recordad los archivos que no pueden subirse a GIT.
+* Crear un fixture con los datos para que pueda realizar las pruebas.
+* Poner el proyecto en modo Producción.
+* Si el proyecto no me funciona al lanzarlo, no puedo evaluarlo, por lo tanto aseguraros que se puede descargar el proyecto sin problema desde git desde otro sitio, ejecutar los fixtures y probar las URLs.
+* Cualqueir requisito que no se cumpla quitará un punto. Por cada funcionalidad no realizada correctamente también se quita un punto.
 
+
+---------------------------------------------------------------------------------------------------------------------------
 comandos 
 
 source myvenv/bin/activate

@@ -208,6 +208,45 @@
     }
 },
 {
+    "model": "admin.logentry",
+    "pk": 17,
+    "fields": {
+        "action_time": "2024-10-31T20:12:50.279",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "315",
+        "object_repr": "VueloAerolinea object (315)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 18,
+    "fields": {
+        "action_time": "2024-10-31T20:13:28.523",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "316",
+        "object_repr": "VueloAerolinea object (316)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
+    "model": "admin.logentry",
+    "pk": 19,
+    "fields": {
+        "action_time": "2024-10-31T20:14:07.546",
+        "user": 1,
+        "content_type": 16,
+        "object_id": "317",
+        "object_repr": "VueloAerolinea object (317)",
+        "action_flag": 1,
+        "change_message": "[{\"added\": {}}]"
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -10031,6 +10070,42 @@
         "clase": "E",
         "incidencias": "fvefrwev",
         "vuelo": 52,
+        "aerolinea": 1
+    }
+},
+{
+    "model": "apaeropuerto.vueloaerolinea",
+    "pk": 315,
+    "fields": {
+        "fecha_operacion": null,
+        "estado": "prubrueba",
+        "clase": "B",
+        "incidencias": "prueba",
+        "vuelo": 1,
+        "aerolinea": 1
+    }
+},
+{
+    "model": "apaeropuerto.vueloaerolinea",
+    "pk": 316,
+    "fields": {
+        "fecha_operacion": null,
+        "estado": "Ale guapo",
+        "clase": "B",
+        "incidencias": "Soy el mejor",
+        "vuelo": 1,
+        "aerolinea": 10
+    }
+},
+{
+    "model": "apaeropuerto.vueloaerolinea",
+    "pk": 317,
+    "fields": {
+        "fecha_operacion": null,
+        "estado": "Ale guapo",
+        "clase": "R",
+        "incidencias": "Guepo yo",
+        "vuelo": 1,
         "aerolinea": 1
     }
 },

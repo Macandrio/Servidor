@@ -92,11 +92,11 @@ def vuelo_volando_año(request , anyo):
 
 def texto_vuelo_aerolinea(request, id_aerolinea, texto_buscar):
     
-    aerolinea = Aerolinea.objects.get(id=id_aerolinea) # Obtener la aerolínea directamente por su ID
+    aerolinea = Aerolinea.objects.get(id=id_aerolinea)
 
-    vuelo_aerolinea = VueloAerolinea.objects.select_related('aerolinea','vuelo').prefetch_related(Prefetch('vuelo__vuelo_datos'))
-    vuelo_aerolinea = vuelo_aerolinea.filter(aerolinea_id=id_aerolinea, vuelo__vuelo_datos__feedback_pasajeros__icontains=texto_buscar) # Filtrar los vuelos asociados a la aerolínea que contienen el texto en feedbacks
-    return render(request, 'consultas/texto_vuelo_aerolinea.html', {'vuelo_aerolinea': vuelo_aerolinea,'aerolinea': aerolinea})
+    vuelo_aerolinea = VueloAerolinea.objects.select_related('aerolinea','vuelo', 'vuelo__vuelo_datos')
+    vuelo_aerolinea = vuelo_aerolinea.filter(aerolinea_id=id_aerolinea, vuelo__vuelo_datos__feedback_pasajeros__icontains=texto_buscar)
+    return render(request, 'consultas/texto_vuelo_aerolinea.html', {'vuelo_aerolinea': vuelo_aerolinea, 'aerolinea': aerolinea})
 
 
 
@@ -107,7 +107,7 @@ def historial_feedbacks_pasajero(request, pasajero_id):
     pasajero = Pasajero.objects.get(id=pasajero_id) # Obtener el pasajero
 
     feedbacks = EstadisticasVuelo.objects.select_related('vuelo')
-    feedbacks = feedbacks.filter(vuelo__vuelo_pasajero=pasajero) # Obtener el historial de feedbacks de todos los vuelos del pasajero
+    feedbacks = feedbacks.filter(vuelo__vuelo_pasajero=pasajero)
     return render(request, 'consultas/historial_feedbacks_pasajero.html', {'feedbacks': feedbacks, 'pasajero': pasajero})
 
 
@@ -116,8 +116,7 @@ def historial_feedbacks_pasajero(request, pasajero_id):
 def vuelos_origen_destino(request, origen_id, destino_id):
     
     vuelos = Vuelo.objects.select_related('origen', 'destino') 
-    vuelos = vuelos.filter(origen_id=origen_id,
-                           destino_id=destino_id) # Filtrar vuelos según el aeropuerto de origen y destino
+    vuelos = vuelos.filter(origen_id=origen_id, destino_id=destino_id)
 
     return render(request, 'consultas/vuelos_origen_destino.html', {'vuelos': vuelos})
 
@@ -146,23 +145,17 @@ def vuelos_cortos_origen_destino(request, origen_id, destino_id, estado):
 def peso_equipaje_vuelo(request, vuelo_id):
     
     equipajes = Equipaje.objects.select_related('pasajero')
-    equipajes = equipajes.filter(pasajero__vuelo__id=vuelo_id).order_by('-peso')[:5] # Filtrar el equipaje de los pasajeros en un vuelo específico
-                                                                                            # Lo ordenamos por peso desendientemente con el -
-                                                                                            # Te muestra solo los 5 primeros
-    
-    peso_total = equipajes.aggregate(Sum('peso'))['peso__sum']  # Calcular el peso total de todos los equipajes en el vuelo
-                                                                # ['peso__sum'] te devuelve el peso total de la suma
+    equipajes = equipajes.filter(pasajero__vuelo__id=vuelo_id).order_by('-peso')[:5] 
+    peso_total = equipajes.aggregate(Sum('peso'))['peso__sum']  
 
-    # Renderizar la plantilla con los resultados
     return render(request, 'consultas/peso_equipaje_vuelo.html', {'equipajes': equipajes,'peso_total': peso_total})
 
 # 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
 def vuelos_sin_operacion(request, aerolinea_id):
-    # Filtrar vuelos donde `fecha_operacion` es None para una aerolínea específica
+
     vuelos = VueloAerolinea.objects.select_related('aerolinea', 'vuelo')
     vuelos = vuelos.filter(aerolinea_id=aerolinea_id, fecha_operacion__isnull=True)
 
-    # Renderizar los resultados en una plantilla
     return render(request, 'consultas/vuelos_sin_operacion.html', {'vuelos': vuelos})
 
 
@@ -170,7 +163,8 @@ def vuelos_sin_operacion(request, aerolinea_id):
 # 10. Calcular cuantos pasajeros hay en un vuelo
 def cuantos_pasajeros_vuelo(request, id_vuelo):
     
-    pasajeros = Pasajero.objects.filter(vuelo__id=id_vuelo)
+    pasajeros = Pasajero.objects.prefetch_related('vuelo')
+    pasajeros = pasajeros.filter(vuelo__id=id_vuelo)
     total_pasajeros = pasajeros.aggregate(Count('id'))['id__count']
     
     return render(request, 'consultas/total_pasajeros.html', {'total_pasajeros': total_pasajeros, 'pasajeros': pasajeros})
