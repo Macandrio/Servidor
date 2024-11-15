@@ -1,20 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/listas.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Proyectos</title>
-</head>
-<body>
-    <!-- Menú de navegación -->
-    <nav class="navigation-section">
-        {% include 'estructura/menu.html' %}
-    </nav>
+{% extends "principal.html" %}
 
-
+{% block contenido %}
         <div class="container">
             <h1>Listado de Proyectos</h1>
             {% if usuarios %}
@@ -28,11 +14,4 @@
                 <a href="{% url 'dame_proyecto' %}">Refrescar la Lista</a>
             </div>
         </div>
-
-    <!-- Pie de página -->
-    <footer class="footer-section">
-        {% include 'estructura/pie.html' %}
-    </footer>
-
-</body>
-</html>
+{% endblock %}
