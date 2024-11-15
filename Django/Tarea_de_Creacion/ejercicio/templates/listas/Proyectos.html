@@ -1,20 +1,9 @@
-{% extends "principal.html" %}
-    {% block contenido %}
-        <div class="container">
-            <h1>Listado de Proyectos</h1>
-            {<div class="container">
-                <h1>Listado de Proyectos</h1>
-                {% for proyecto in proyectos %}
-                <article>
-                    <h2>Proyecto</h2>
-                    <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
-                    <p><strong>Email:</strong> {{ usuario.email }}</p>
-                    <p><strong>Contraseña:</strong> {{ usuario.password }}</p>
-                    <p><strong>Fecha registro:</strong> {{ usuario.fecha_registro }}</p>
-                </article>
-            {% endfor %}
-                <div class="refresh">
-                    <a href="{% url 'dame_proyecto' %}">Refrescar la Lista</a>
-                </div>
-            </div>
-    {% endblock %}
+{% for proyecto in proyectos %}
+    <article>
+        <h2>Proyecto</h2>
+            <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+            <p><strong>Email:</strong> {{ usuario.email }}</p>
+            <p><strong>Contraseña:</strong> {{ usuario.password }}</p>
+            <p><strong>Fecha registro:</strong> {{ usuario.fecha_registro }}</p>
+     </article>
+{% endfor %}
