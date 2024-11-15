@@ -5,6 +5,9 @@ from .import views
 
 urlpatterns = [
     path('',views.index,name='index'),
+    path("usuario/", views.lista_usuario,name="lista_usuario"),
+
+
     path("proyecto/", views.dame_proyecto,name="dame_proyecto"),
     path('proyectos/<int:proyecto_id>/tareas/', views.tareas_por_proyecto, name='tareas_por_proyecto'),  # Tareas por proyecto
     path('usuario/tareas/', views.tareas_por_proyecto, name='tareas_por_proyecto'),  # Usuarios tarea asignadas

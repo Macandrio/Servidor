@@ -9,6 +9,18 @@ from .models import (
 def index(request):
     return render(request, 'index.html') 
 
+def lista_usuario(request):
+    usuarios = Proyecto.objects.all()
+
+    return render(request, 'listas/Usuario.html',{"usuarios":usuarios})
+
+def lista_proyecto(request):
+    proyectos = Proyecto.objects.all()
+
+    return render(request, 'listas/Proyectos.html',{"proyectos":proyectos})
+
+
+
 # 2. Una url que me muestre información sobre cada Proyectos
 def dame_proyecto(request):
     proyecto = Proyecto.objects.select_related("creador").prefetch_related("colaboradores")

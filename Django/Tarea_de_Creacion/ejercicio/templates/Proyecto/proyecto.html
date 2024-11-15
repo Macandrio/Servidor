@@ -1,17 +1,17 @@
 {% extends "principal.html" %}
 
-{% block contenido %}
-        <div class="container">
-            <h1>Listado de Proyectos</h1>
-            {% if usuarios %}
-            {% for proyectoo in dame_proyecto %}
-                {% include 'listar_proyectos.html' %}
-            {% endfor %}
-            {% else %}
-            <p>No hay proyecto.</p>
-        {% endif %}
-            <div class="refresh">
-                <a href="{% url 'dame_proyecto' %}">Refrescar la Lista</a>
+    {% block contenido %}
+            <div class="container">
+                <h1>Listado de Proyectos</h1>
+                {% if usuarios %}
+                {% for proyectoo in dame_proyecto %}
+                    {% include 'listar_proyectos.html' %}
+                {% endfor %}
+                {% else %}
+                <p>No hay proyecto.</p>
+            {% endif %}
+                <div class="refresh">
+                    <a href="{% url 'dame_proyecto' %}">Refrescar la Lista</a>
+                </div>
             </div>
-        </div>
-{% endblock %}
+    {% endblock %}

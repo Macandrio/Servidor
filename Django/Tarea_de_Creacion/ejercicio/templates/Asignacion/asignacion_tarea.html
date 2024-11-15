@@ -1,38 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/listas.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Proyectos</title>
-</head>
-<body>
-    {% extends "principal.html" %}
-    <!-- Menú de navegación -->
-    <nav class="navigation-section">
-        {% include 'estructura/menu.html' %}
-    </nav>
-    <div class="container">
-        <h2>Tareas Asignadas:</h2>
-        <ul>
-            {% for asignacion in asignaciontarea %}
-            <strong>Proyecto:</strong> {{ asignacion.proyecto.id }}<br>
-                <li>
-                    <strong>Usuario:</strong> {{ asignacion.usuario.nombre }}<br>
-                    <strong>Tarea:</strong> {{ asignacion.tarea.titulo }}<br>
-                    <strong>Fecha de Asignación:</strong> {{ asignacion.fecha_asignacion }}<br>
-                </li>
-            {% empty %}
-                <li>No hay asignaciones para esta tarea.</li>
-            {% endfor %}
-        </ul>
-    </div>
 
-    <!-- Pie de página -->
-    <footer class="footer-section">
-        {% include 'estructura/pie.html' %}
-    </footer>
-</body>
-</html>
+{% extends "principal.html" %}
+    {% block contenido %}
+        <div class="container">
+            <h2>Tareas Asignadas:</h2>
+            <ul>
+                {% for asignacion in asignaciontarea %}
+                <strong>Proyecto:</strong> {{ asignacion.proyecto.id }}<br>
+                    <li>
+                        <strong>Usuario:</strong> {{ asignacion.usuario.nombre }}<br>
+                        <strong>Tarea:</strong> {{ asignacion.tarea.titulo }}<br>
+                        <strong>Fecha de Asignación:</strong> {{ asignacion.fecha_asignacion }}<br>
+                    </li>
+                {% empty %}
+                    <li>No hay asignaciones para esta tarea.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endblock %}

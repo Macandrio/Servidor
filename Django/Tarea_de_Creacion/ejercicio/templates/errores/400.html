@@ -1,16 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Solicitud Incorrecta</title>
-    <style>
-        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
-        h1 { color: #e74c3c; }
-    </style>
-</head>
-<body>
-    <h1>Error 400: Solicitud Incorrecta</h1>
-    <p>La solicitud que hiciste no es válida.</p>
-    <a href="/">Volver a la Página Principal</a>
-</body>
-</html>
+{% extends "principal.html" %}
+    {% block contenido %}
+        <h1>Error 400: Solicitud Incorrecta</h1>
+        <p>La solicitud que hiciste no es válida.</p>
+        <a href="/">Volver a la Página Principal</a>
+    {% endblock %}
