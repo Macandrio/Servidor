@@ -1,0 +1,37 @@
+<html>
+    {% load static %}
+    <head>
+        <title>Gestion de Aeropuerto</title>
+        <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
+        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <script src="{% static 'javascript/menu.js' %}"></script>
+        <script src="https://kit.fontawesome.com/9460c07a8e.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        
+        <!-- Encabezado -->
+        <header class="custom-header">
+            <a href="/"><img src="{% static 'imagenes/logo.jpeg' %}" alt="Logo" class="header-logo"></a>
+            <h1 class="header-title"><a href="/">Sistema de Gestión de Aeropuertos</a></h1>
+            {% include 'Estructura/menu.html' %}
+        </header>
+
+        <!-- Menú de navegación
+        <nav class="navigation-section">
+            {% include 'Estructura/menu2.html' %}
+        </nav>-->
+
+        <!-- Contenido principal -->
+        <main class="content-section">
+            {% block contenido %}
+                <!-- Puedes agregar contenido aquí o sobreescribirlo desde otros templates extendidos -->
+            {% endblock %}
+        </main>
+
+        <!-- Pie de página -->
+        <footer class="footer-section">
+            {% include 'Estructura/pie.html' %}
+        </footer>
+        
+    </body>
+</html>

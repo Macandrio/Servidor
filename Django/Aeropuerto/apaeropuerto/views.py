@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from django.db.models import Prefetch, Q, Sum, Count, Avg
+from django.db.models import Prefetch, Q, Sum, Count
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
-    VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero, Votacion , Banco
+    VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
 )
 
 def index(request):
@@ -170,7 +170,6 @@ def cuantos_pasajeros_vuelo(request, id_vuelo):
     return render(request, 'consultas/total_pasajeros.html', {'total_pasajeros': total_pasajeros, 'pasajeros': pasajeros})
 
 
-
 # Error 400 - Solicitud Incorrecta
 def error_400(request, exception):
     return render(request, 'errors/400.html', status=400)
@@ -189,36 +188,5 @@ def error_500(request):
 
 
 
-# Examen Luis
-
-#Ultimo voto de un aeropuerto especifico
-def ultimo_voto(request, id_aeropuerto):
-    comentario = Votacion.objects.select_related('pasajero', 'aeropuerto')
-    comentario = comentario.filter(aeropuerto__id=id_aeropuerto).order_by('-fecha_voto').first() # solo coje un dato
-
-    return render(request, 'Examenluis/ultimo-voto.html', {'comentario': comentario})
-
-#voto de un pasajero especcifico con mas de 3 puntuacion
-def voto_pasajero(request, id_pasajero):
-    votos = Votacion.objects.select_related('pasajero', 'aeropuerto')
-    votos = votos.filter(pasajero__id = id_pasajero , puntuacion = 3)
-
-    return render(request, 'Examenluis/voto-usuario.html', {'votos': votos})
-
-#pasajero sin votos
-def pasajero_sin_voto(request):
-    pasajeros = Pasajero.objects.prefetch_related(Prefetch('voto_pasajero'))
-    pasajeros = pasajeros.filter(voto_pasajero__isnull = True)
-    return render(request, 'Examenluis/pasajero-sin-votos.html', {'pasajeros': pasajeros})
-
-#pasajero con cuenta en caixa o unicaja y que se llame juan o tenga juan en el nokmbre
-def Cuentas_bancarias(request):
-    cuenta = Banco.objects.select_related('pasajero')
-    cuenta = cuenta.filter(Q(banco = 'CAIXA') | Q(banco = 'U') , pasajero__nombre__icontains = 'Juan')
-    return render(request, 'Examenluis/cuentas-bancaria.html', {'cuenta': cuenta})
 
 
-#media de voto
-def Media_voto(request):
-    aeropuertos = Aeropuerto.objects.annotate(media_puntuacion=Avg('voto_aeropuerto__puntuacion')).filter(media_puntuacion__gt=2.5) #añade un campo adicional a cada objeto del queryset que representa el resultado del cálculo
-    return render(request, 'Examenluis/media.html', {'aeropuertos': aeropuertos})

@@ -30,12 +30,7 @@ urlpatterns = [
     path('consulta/pasajeros-vuelo/<int:id_vuelo>/', views.cuantos_pasajeros_vuelo, name='cuantos_pasajeros_vuelo'),
 
 
-    #Examen Luis
-    path('voto-pasajero/<int:id_aeropuerto>/', views.ultimo_voto, name='ultimo_voto'),
-    path('voto-3/<int:id_pasajero>/', views.voto_pasajero, name='voto_pasajero'),
-    path('pasajero-sin-voto/', views.pasajero_sin_voto, name='pasajero_sin_voto'),
-    path('cuentas-bancarias/', views.Cuentas_bancarias, name='Cuentas_bancarias'),
-    path('media-vuelo/', views.Media_voto, name='Media_voto'),
+
 
 
 ]
