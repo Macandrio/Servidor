@@ -18,6 +18,9 @@ urlpatterns = [
     path('proyecto/<int:proyecto_id>/etiquetas/', views.etiquetas_por_proyecto, name='etiquetas_por_proyecto'),
     #path('usuarios/no-asignados/', views.usuarios_no_asignados, name='usuarios_no_asignados'),
 
+    path('operadores/', views.mostrar_operadores, name='mostrar_operadores'),
+
+
 ]
 
 # Manejar errores

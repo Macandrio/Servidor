@@ -94,3 +94,11 @@ def handler_403(request, exception):
 
 def handler_400(request, exception):
     return render(request, '400.html', status=400)
+
+
+def mostrar_operadores(request):
+    contexto = {
+        'valor1': 10,
+        'valor2': 5
+    }
+    return render(request, 'operadores_template.html', contexto)
