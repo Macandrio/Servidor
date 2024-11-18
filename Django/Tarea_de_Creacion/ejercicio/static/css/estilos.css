@@ -27,23 +27,29 @@ body {
 }
 
 /* Navigation styles */
+
 .navigation-section {
     margin-top: 10px;
     padding: 10px;
     background-color: #4c8abd; /* Fondo opcional */
 }
 
+/* Ajustar tamaño de la fuente y centrar los elementos del menú en la navegación */
 .navigation-section ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: space-around; /* Espacia los elementos uniformemente */
+    flex-direction: column; /* Para centrar los elementos verticalmente */
+    align-items: center; /* Centra los elementos horizontalmente */
 }
 
 .navigation-section li {
-    margin: 0 15px; /* Espaciado horizontal */
+    margin: 10px 0; /* Margen opcional para espaciar cada ítem */
+    font-size: 14px; /* Ajusta el tamaño de la fuente aquí */
+    text-align: center; /* Centra el texto */
 }
+
 
 .navigation-section a {
     text-decoration: none;
@@ -54,9 +60,20 @@ body {
 }
 
 .navigation-section a:hover {
-    background-color: #357ab7; /* Color de fondo al pasar el cursor */
     border-radius: 4px;
 }
+
+
+/* Footer styles */
+.footer-section {
+    text-align: center;
+    background-color: #2c3e50;
+    color: white;
+}
+
+
+
+
 
 
 /* General content styles */
@@ -65,13 +82,6 @@ body {
     padding: 20px;
 }
 
-/* Footer styles */
-.footer-section {
-    text-align: center;
-    padding: 20px;
-    background-color: #2c3e50;
-    color: white;
-}
 
 h1 {
     color: #2980b9;
