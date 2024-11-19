@@ -7,10 +7,14 @@
 {% block contenido %}
     <div class="container">
         <h1>Listado de Aerolíneas</h1>
-        {% for aerolinea in aerolineas %}
-        <article>
-            {% include 'Listas/Aerolinea.html' %}
-        </article>
-        {% endfor %}
+        {% if aerolineas %}
+            {% for aerolinea in aerolineas %}
+            <article>
+                {% include 'Listas/Aerolinea.html' %}
+            </article>
+            {% endfor %}
+        {% else %}
+            <p>No hay aerolíneas disponibles.</p>
+        {% endif %}
         </div>
 {% endblock %}

@@ -16,6 +16,11 @@ python manage.py loaddata apaeropuerto/fixtures/datos.json
 python manage.py createsuperuser
 python manage.py runserver
 
+git add .
+git commit -m 'Completado'
+git push
+git pull
+
 1. date
 Formatea una fecha.
 Ejemplo: {{ fecha|date:"D M Y" }}

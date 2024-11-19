@@ -10,21 +10,21 @@
     </head>
     <body>
         
-        <!-- Encabezado -->
+        {% comment %} Encabezado {% endcomment %}
         <header class="custom-header">
             <a href="/"><img src="{% static 'imagenes/logo.jpeg' %}" alt="Logo" class="header-logo"></a>
             <h1 class="header-title"><a href="/">Sistema de Gestión de Aeropuertos</a></h1>
             {% include 'Estructura/menu.html' %}
         </header>
 
-        <!-- contenido -->
+        {% comment %} Contenido {% endcomment %}
         <main class="content-section">
             {% block contenido %}
                 <!-- Puedes agregar contenido aquí o sobreescribirlo desde otros templates extendidos -->
             {% endblock %}
         </main>
 
-        <!-- Pie de página -->
+        {% comment %} Pie de pagina {% endcomment %}
         <footer class="footer-section">
             {% include 'Estructura/pie.html' %}
         </footer>

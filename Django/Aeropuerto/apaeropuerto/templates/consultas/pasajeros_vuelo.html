@@ -12,11 +12,19 @@
             {% include 'Listas/Vuelo.html' %}
         </article>
         <h2>Datos Pasajeros:</h2>
-            {% for pasajeros in vuelo.vuelo_pasajero.all %}
-            <article>
-                {% include 'Listas/Pasajero.html' %}  
-            </article>
+        {% if vuelo.vuelo_pasajero.count > 0 %}
+            {% for pasajero in vuelo.vuelo_pasajero.all %}
+                <article>
+                    <p>Contador de pasajeros: {{ forloop.counter }}</p>
+                    {% include 'Listas/Pasajero.html' %}
+                    {% if forloop.first %}
+                        <p>Este es el primer pasajero del vuelo.</p>
+                    {% endif %}
+                </article>
             {% endfor %}
+        {% else %}
+            <p>No hay pasajeros registrados para este vuelo.</p>
+        {% endif %}
             
     </div>
 {% endblock %}
