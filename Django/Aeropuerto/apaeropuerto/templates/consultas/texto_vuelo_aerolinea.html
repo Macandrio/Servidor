@@ -7,8 +7,9 @@
 {% block contenido %}
     <div class="container">
         <h1>Todos los texto de la Aerolinea: {{ aerolinea.id }}</h1>
+        <article>
             {% include 'Listas/Aerolinea.html' %}
-
+        </article>
         <h1>Todos los texto:</h1>
 
         {% for vuelo_texto in vuelo_aerolinea %}

@@ -296,3 +296,10 @@ python manage.py runserver
 
 Preguntar jorge:
 En historial_feedbacks_pasajero.html se puede poner {% include 'Listas/Vuelo.html' %} esque no me sale
+vuelo volando año.html no puedo poner {% include 'Listas/Estadistica.html' %}
+
+----------------------------------------------------------------------------------------------------------------------------
+Usar al menos 5 templates tags diferentes: if-else, for..empty,en algunas páginas del proyecto. Indicar  cuales y donde en el README
+Usar al menos 5 operadores diferentes. Indicar cuales y dónde en el README
+Da el formato correcto a las fechas en el proyecto
+Usa al menos 10 template filters en el proyecto

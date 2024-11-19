@@ -8,10 +8,14 @@
     <div class="container">
         <h1>Todos los pasajeros de vuelo: {{ vuelo.id }}</h1>
         <h2>Datos del Vuelo:</h2>
+        <article>
             {% include 'Listas/Vuelo.html' %}
+        </article>
         <h2>Datos Pasajeros:</h2>
             {% for pasajeros in vuelo.vuelo_pasajero.all %}
+            <article>
                 {% include 'Listas/Pasajero.html' %}  
+            </article>
             {% endfor %}
             
     </div>

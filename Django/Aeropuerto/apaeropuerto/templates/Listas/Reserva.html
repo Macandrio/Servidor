@@ -1,5 +1,5 @@
-<article>
-    <h2>Reserva {{ forloop.counter }}</h2>
+
+    <h2>Reserva</h2>
     <p><strong>ID:</strong> {{ reserva.id }}</p>
     <p><strong>Fecha de Reserva:</strong> {{ reserva.fecha_reserva|date:"d/m/Y H:i" }}</p>
     <p><strong>Método de Pago:</strong> {{ reserva.metodo_pago }}</p>
@@ -7,4 +7,3 @@
     <p><strong>Codigo de descuento:</strong> {{ reserva.codigo_descueto }}</p>
     <p><strong>Pasajero:</strong> {{ reserva.pasajero.nombre }}</p>
     <p><strong>Vuelo:</strong> {{ reserva.vuelo.id }}</p>
-</article>

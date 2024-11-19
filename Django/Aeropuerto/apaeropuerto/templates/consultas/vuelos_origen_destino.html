@@ -6,12 +6,10 @@
 
 {% block contenido %}
     <div class="container">
-        <h1>Vuelos Entre aeropuertos</h1>
+        <h1>Vuelos entre Aeropuertos Especificos</h1>
             {% for vuelo in vuelos %}
                 <article>
                     {% include 'Listas/Vuelo.html' %}
-                    <p><strong>Aeropuerto origen:</strong> {{ vuelo.origen.nombre }}</p>
-                    <p><strong>Aeropuerto destino:</strong> {{ vuelo.destino.nombre }}</p>
                 </article>
             {% endfor %}
     </div>

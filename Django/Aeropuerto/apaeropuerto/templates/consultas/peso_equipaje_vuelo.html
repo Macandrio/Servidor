@@ -12,7 +12,9 @@
             <h3>Detalles de los Equipaje:</h3>
             
             {% for equipaje in equipajes %}
+            <article>
                 {% include 'Listas/Equipaje.html' %}
+            </article>
             {% endfor %}
     </div>
 {% endblock %}

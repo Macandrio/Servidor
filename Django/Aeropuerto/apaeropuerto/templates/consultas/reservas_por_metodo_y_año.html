@@ -10,7 +10,9 @@
             {% for reserva in reservas %}
                 
                     <h2>Pasajero: {{ reserva.pasajero.nombre }} en el vuelo {{ reserva.vuelo.id }}</h2>
+                    <article>
                     {% include 'Listas/Reserva.html' %}
+                    </article>
             {% endfor %}
     </div>
 {% endblock %}

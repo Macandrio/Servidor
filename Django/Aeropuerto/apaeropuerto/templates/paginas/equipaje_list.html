@@ -8,7 +8,9 @@
     <div class="container">
         <h1>Listado de Equipajes</h1>
         {% for equipaje in equipajes %}
+        <article>
             {% include 'Listas/Equipaje.html' %}
+        </article>
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_equipaje' %}">Refrescar la Lista</a>

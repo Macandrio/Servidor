@@ -8,7 +8,9 @@
     <div class="container">
         <h1>Listado de Aeropuertos</h1>
         {% for aeropuerto in aeropuertos %}
+        <article>
             {% include 'Listas/Aeropuerto.html' %}
+        </article>
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_aeropuerto' %}">Refrescar la Lista</a>

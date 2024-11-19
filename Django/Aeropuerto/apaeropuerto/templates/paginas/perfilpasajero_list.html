@@ -8,7 +8,9 @@
     <div class="container">
         <h1>Listado de Perfil de los pasajeros</h1>
         {% for pasajero in perfilpasajero %}
+        <article>
             {% include 'Listas/Perfil_Pasajero.html' %}
+        </article>
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_pasajero' %}">Refrescar la Lista</a>

@@ -8,7 +8,9 @@
     <div class="container">
         <h1>Listado de Aerolíneas</h1>
         {% for aerolinea in aerolineas %}
+        <article>
             {% include 'Listas/Aerolinea.html' %}
+        </article>
         {% endfor %}
         </div>
 {% endblock %}

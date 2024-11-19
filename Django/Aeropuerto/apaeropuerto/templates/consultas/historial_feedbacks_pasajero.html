@@ -7,7 +7,9 @@
 {% block contenido %}
     <div class="container">
         <h1>feedbacks de los vuelos que este el pasajero {{ pasajero.id }}</p></h1>
-        {% include 'Listas/Pasajero.html' %}
+        <article>
+            {% include 'Listas/Pasajero.html' %}
+        </article>
         <h1>feedbacks</p></h1>
             {% for feedback in feedbacks %}
                 <article>

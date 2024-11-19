@@ -8,7 +8,9 @@
     <div class="container">
         <h1>Contacto del aeropuerto</h1>
         {% for contactoaero in contactoAero %}
+        <article>
             {% include 'Listas/Contacto_Aeropuerto.html' %}
+        </article>
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_silla' %}">Refrescar la Lista</a>

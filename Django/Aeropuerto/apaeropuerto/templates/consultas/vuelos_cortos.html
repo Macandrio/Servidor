@@ -8,8 +8,9 @@
     <div class="container">
         <h1>Vuelos entre Aeropuertos</h1>
         {% for vuelo in vuelos %}
+        <article>
             {% include 'Listas/Vuelo.html' %}
-
+        </article>
         {% endfor %}
     </div>
 {% endblock %}
