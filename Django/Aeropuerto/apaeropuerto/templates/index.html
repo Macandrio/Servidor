@@ -10,28 +10,28 @@
     <h2>Consultas de Aeropuerto</h2> <!-- Cambiado de h1 a h2 -->
     <div class="link-list">
         <div class="link-item">
-            <a href="{% url 'pasajeros_vuelo' 3 %}">Pasajeros del vuelo 1</a>
+            <a href="{% url 'pasajeros_vuelo' 1 %}">Pasajeros del vuelo 1</a>
         </div>
         <div class="link-item">
             <a href="{% url 'vuelo_volando_año' 1990 %}">Pasajeros del vuelo 1990</a>
         </div>
         <div class="link-item">
-            <a href="{% url 'texto_vuelo_aerolinea' 1 'Alejandro' %}">texto de una aerolinea</a>
+            <a href="{% url 'texto_vuelo_aerolinea' 27 'Alejandro' %}">texto de una aerolinea</a>
         </div>
         <div class="link-item">
             <a href="{% url 'historial_feedbacks_pasajero' 5 %}">feedback de un pasajero</a>
         </div>
         <div class="link-item">
-            <a href="{% url 'vuelos_origen_destino' 17 37 %}">Vuelo especifico entre Aeropuertos</a>
+            <a href="{% url 'vuelos_origen_destino' 1 2 %}">Vuelo especifico entre Aeropuertos</a>
         </div>
         <div class="link-item">
-            <a href="{% url 'reservas_por_metodo_y_año' 'efectivo' 2024 %}">Reserva por pago y año</a>
+            <a href="{% url 'reservas_por_metodo_y_año' 'tarjeta' 2024 %}">Reserva por pago y año</a>
         </div>
         <div class="link-item">
             <a href="{% url 'vuelos_cortos_origen_destino' 1 2 1%}">vuelos entre aeropuertos</a>
         </div>
         <div class="link-item">
-            <a href="{% url 'peso_equipaje_vuelo' 27 %}">Ver Peso de equipaje</a>
+            <a href="{% url 'peso_equipaje_vuelo' 2 %}">Ver Peso de equipaje</a>
         </div>
         <div class="link-item">
             <a href="{% url 'vuelos_sin_operacion' 1 %}">Ver Vuelos sin Fecha de Operación</a>

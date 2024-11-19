@@ -3,7 +3,8 @@
     <head>
         <title>Gestion de Aeropuerto</title>
         <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
-        <link rel="stylesheet" href="{% static 'css/menu.css' %}">
+        <link rel="stylesheet" href="{% static 'css/cabecera.css' %}">
+        <link rel="stylesheet" href="{% static 'css/pie.css' %}">
         <script src="{% static 'javascript/menu.js' %}"></script>
         <script src="https://kit.fontawesome.com/9460c07a8e.js" crossorigin="anonymous"></script>
     </head>
@@ -16,12 +17,7 @@
             {% include 'Estructura/menu.html' %}
         </header>
 
-        <!-- Menú de navegación
-        <nav class="navigation-section">
-            {% include 'Estructura/menu2.html' %}
-        </nav>-->
-
-        <!-- Contenido principal -->
+        <!-- contenido -->
         <main class="content-section">
             {% block contenido %}
                 <!-- Puedes agregar contenido aquí o sobreescribirlo desde otros templates extendidos -->

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block contenido %}
-    <main class="container">
+    <div class="container">
         <h1>Listado de Aerolíneas</h1>
         {% for aerolinea in aerolineas %}
             <article>
@@ -17,5 +17,5 @@
                 <p><strong>Fundado:</strong> {{ aerolinea.fecha_fundacion|date:"d/m/Y" }}</p> <!-- Formato de fecha -->
             </article>
             {% endfor %}
-    </main>
+        </div>
 {% endblock %}
