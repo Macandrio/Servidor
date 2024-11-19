@@ -8,15 +8,7 @@
     <div class="container">
         <h1>Listado de Equipajes</h1>
         {% for equipaje in equipajes %}
-        <article>
-            <h2>Equipaje</h2>
-            <p><strong>ID:</strong> {{ equipaje.id }}</p>
-            <p><strong>Pasajero:</strong> {{ equipaje.pasajero }}</p>
-            <p><strong>Peso:</strong> {{ equipaje.peso }}</p>
-            <p><strong>Dimensiones:</strong> {{ equipaje.dimensiones }}</p>
-            <p><strong>Material:</strong> {{ equipaje.tipo_material }}</p>
-            <p><strong>Color:</strong> {{ equipaje.color }}</p>
-        </article>
+            {% include 'Listas/Equipaje.html' %}
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_equipaje' %}">Refrescar la Lista</a>

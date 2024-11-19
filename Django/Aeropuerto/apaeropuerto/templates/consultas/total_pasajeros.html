@@ -12,16 +12,7 @@
 
                 {% for pasajero in pasajeros %}
                     <article>
-                        <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p>
-                        <p><strong>ID:</strong> {{ pasajero.id }}</p>
-                        <p><strong>Apellido:</strong> {{ pasajero.apellido }}</p>
-                        <p><strong>Correo:</strong> {{ pasajero.email }}</p>
-                        <p><strong>Teléfono:</strong> {{ pasajero.telefono }}</p>
-                        <p><strong>Fecha de nacimiento:</strong> {{ pasajero.fecha_nacimiento }}</p>
-                        <p><strong>Vuelos del pasajero:</strong></p>
-                        {% for vuelo in pasajero.vuelo.all %}
-                            <p><strong>Vuelo ID: </strong>{{ vuelo.id }}</p>
-                        {% endfor %}
+                        {% include 'Listas/Pasajero.html' %}
                     </article>
                 {% endfor %}
     </div>

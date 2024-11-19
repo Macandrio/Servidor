@@ -8,24 +8,10 @@
     <div class="container">
         <h1>Todos los pasajeros de vuelo: {{ vuelo.id }}</h1>
         <h2>Datos del Vuelo:</h2>
-        <article>
-            
-            <p><strong>Hora Salida:</strong> {{ vuelo.hora_salida }}</p>
-            <p><strong>Hora Llegada:</strong> {{ vuelo.hora_llegada }}</p>
-            <p><strong>Estado:</strong> {{ vuelo.estado }}</p>
-            <p><strong>Duracion:</strong> {{ vuelo.duracion }}</p>
-        </article>
+            {% include 'Listas/Vuelo.html' %}
         <h2>Datos Pasajeros:</h2>
             {% for pasajeros in vuelo.vuelo_pasajero.all %}
-            <article>
-                    <p><strong>ID:</strong> {{ pasajeros.id }}</p>
-                    <p><strong>Nombre:</strong> {{ pasajeros.nombre }}</p>
-                    <p><strong>Apellido:</strong> {{ pasajeros.apellido }}</p>
-                    <p><strong>Email:</strong> {{ pasajeros.email }}</p>
-                    <p><strong>Telefono:</strong> {{ pasajeros.telefono }}</p>
-                    <p><strong>Fecha Nacimiento:</strong> {{ pasajeros.fecha_nacimiento }}</p>
-
-            </article>   
+                {% include 'Listas/Pasajero.html' %}  
             {% endfor %}
             
     </div>

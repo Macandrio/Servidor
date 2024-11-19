@@ -7,12 +7,7 @@
 {% block contenido %}
     <div class="container">
         <h1>Todos los texto de la Aerolinea: {{ aerolinea.id }}</h1>
-        <article>
-            <p><strong>Nombre:</strong> {{ aerolinea.nombre }}</p>
-            <p><strong>Codigo:</strong> {{ aerolinea.codigo }}</p>
-            <p><strong>Fecha_fundacion:</strong> {{ aerolinea.fecha_fundacion }}</p>
-            <p><strong>Pais:</strong> {{ aerolinea.pais }}</p>
-        </article>
+            {% include 'Listas/Aerolinea.html' %}
 
         <h1>Todos los texto:</h1>
 

@@ -8,14 +8,7 @@
     <div class="container">
         <h1>Listado de Servicios</h1>
         {% for servicio in servicios %}
-        <article>
-            <h2>Servicio</h2>
-            <p><strong>ID:</strong> {{ servicio.id }}</p>
-            <p><strong>Tipo de Servicio:</strong> {{ servicio.tipo_servicio }}</p>
-            <p><strong>Costo:</strong> {{ servicio.costo }}</p>
-            <p><strong>Duracion:</strong> {{ servicio.duracion_servicio }}</p>
-            <p><strong>Añadido:</strong> {{ servicio.añadido }}</p>
-        </article>
+            {% include 'Listas/Servicio.html' %}
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_servicio' %}">Refrescar la Lista</a>

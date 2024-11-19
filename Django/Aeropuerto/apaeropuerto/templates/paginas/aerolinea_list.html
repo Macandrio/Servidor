@@ -8,14 +8,7 @@
     <div class="container">
         <h1>Listado de Aerolíneas</h1>
         {% for aerolinea in aerolineas %}
-            <article>
-                <h2>Aerolínea {{ forloop.counter }}</h2> <!-- Contador para enumerar aerolíneas -->
-                <p><strong>ID:</strong> {{ aerolinea.id }}</p>
-                <p><strong>Nombre:</strong> {{ aerolinea.nombre }}</p>
-                <p><strong>País:</strong> {{ aerolinea.pais }}</p>
-                <p><strong>Código:</strong> {{ aerolinea.codigo }}</p>
-                <p><strong>Fundado:</strong> {{ aerolinea.fecha_fundacion|date:"d/m/Y" }}</p> <!-- Formato de fecha -->
-            </article>
-            {% endfor %}
+            {% include 'Listas/Aerolinea.html' %}
+        {% endfor %}
         </div>
 {% endblock %}

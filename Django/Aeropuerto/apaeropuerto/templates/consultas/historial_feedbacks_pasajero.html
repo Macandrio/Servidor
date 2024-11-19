@@ -7,15 +7,7 @@
 {% block contenido %}
     <div class="container">
         <h1>feedbacks de los vuelos que este el pasajero {{ pasajero.id }}</p></h1>
-        <article>
-            <h2>Pasajero</p></h2>
-                <p><strong>Id:</strong> {{ pasajero.id }}</p>
-                <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p>
-                <p><strong>Apellido:</strong> {{ pasajero.apellido }}</p>
-                <p><strong>Email:</strong> {{ pasajero.email }}</p>
-                <p><strong>Telefono:</strong> {{ pasajero.telefono }}</p>
-                <p><strong>Fecha Nacimiento:</strong> {{ pasajero.fecha_nacimiento }}</p>
-        </article>
+        {% include 'Listas/Pasajero.html' %}
         <h1>feedbacks</p></h1>
             {% for feedback in feedbacks %}
                 <article>

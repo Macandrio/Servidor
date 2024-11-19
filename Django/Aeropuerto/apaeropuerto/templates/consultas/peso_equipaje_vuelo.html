@@ -12,13 +12,7 @@
             <h3>Detalles de los Equipaje:</h3>
             
             {% for equipaje in equipajes %}
-                <article>
-                    <p><strong>Pasajero de este equipaje:</strong> {{ equipaje.pasajero.nombre }}</p>
-                    <p><strong>ID de Equipaje:</strong> {{ equipaje.id }}</p>
-                    <p><strong>Peso:</strong> {{ equipaje.peso }} kg</p>
-                    <p><strong>Dimensiones:</strong> {{ equipaje.dimensiones }}</p>
-                    <p><strong>Color:</strong> {{ equipaje.color }}</p>
-                </article>
+                {% include 'Listas/Equipaje.html' %}
             {% endfor %}
     </div>
 {% endblock %}

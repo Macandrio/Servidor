@@ -294,3 +294,5 @@ python manage.py runserver
 
 ---------------------------------------------------------------------------------------------------------------------------
 
+Preguntar jorge:
+En historial_feedbacks_pasajero.html se puede poner {% include 'Listas/Vuelo.html' %} esque no me sale

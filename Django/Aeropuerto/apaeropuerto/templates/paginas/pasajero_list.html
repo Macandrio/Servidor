@@ -8,15 +8,7 @@
     <div class="container">
         <h1>Listado de Pasajeros</h1>
         {% for pasajero in pasajeros %}
-            <article>
-                <h2>Pasajero {{ forloop.counter }}</h2>
-                <p><strong>ID:</strong> {{ pasajero.id }}</p>
-                <p><strong>Nombre:</strong> {{ pasajero.nombre }}</p>
-                <p><strong>Apellido:</strong> {{ pasajero.apellido }}</p>
-                <p><strong>Email:</strong> {{ pasajero.email }}</p>
-                <p><strong>Teléfono:</strong> {{ pasajero.telefono }}</p>
-                <p><strong>Fecha de Nacimiento:</strong> {{ pasajero.fecha_nacimiento|date:"d/m/Y" }}</p>
-            </article>
+            {% include 'Listas/Pasajero.html' %}
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_pasajero' %}">Refrescar la Lista</a>

@@ -8,14 +8,7 @@
     <div class="container">
         <h1>Listado de Aeropuertos</h1>
         {% for aeropuerto in aeropuertos %}
-            <article>
-                <h2>Aeropuerto {{ forloop.counter }}</h2>
-                <p><strong>ID:</strong> {{ aeropuerto.id }}</p>
-                <p><strong>Nombre:</strong> {{ aeropuerto.nombre }}</p>
-                <p><strong>Ciudad:</strong> {{ aeropuerto.ciudades }}</p>
-                <p><strong>País:</strong> {{ aeropuerto.pais }}</p>
-                <p><strong>Capacidad Máxima:</strong> {{ aeropuerto.capacidad_maxima }}</p>
-            </article>
+            {% include 'Listas/Aeropuerto.html' %}
         {% endfor %}
         <div class="refresh">
             <a href="{% url 'lista_aeropuerto' %}">Refrescar la Lista</a>

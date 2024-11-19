@@ -8,15 +8,8 @@
     <div class="container">
         <h1>Vuelos entre Aeropuertos</h1>
         {% for vuelo in vuelos %}
-            <article>
-                <p><strong>ID del vuelo:</strong> {{ vuelo.id }}</p>
-                <p><strong>Hora de Salida:</strong> {{ vuelo.hora_salida }}</p>
-                <p><strong>Hora de Llegada:</strong> {{ vuelo.hora_llegada }}</p>
-                <p><strong>Duración:</strong> {{ vuelo.duracion }}</p>
-                <p><strong>Estado:</strong> {% if vuelo.estado %} Volando {% else %} Aterrizado {% endif %}</p> 
-                <p><strong>Origen:</strong> {{ vuelo.origen.nombre }}</p>
-                <p><strong>Destino:</strong> {{ vuelo.destino.nombre }}</p>
-            </article>
+            {% include 'Listas/Vuelo.html' %}
+
         {% endfor %}
     </div>
 {% endblock %}

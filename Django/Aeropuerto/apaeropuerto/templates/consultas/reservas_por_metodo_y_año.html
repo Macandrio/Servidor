@@ -10,13 +10,7 @@
             {% for reserva in reservas %}
                 
                     <h2>Pasajero: {{ reserva.pasajero.nombre }} en el vuelo {{ reserva.vuelo.id }}</h2>
-                    <article>
-                    <p><strong>ID de Reserva:</strong> {{ reserva.id }}</p>
-                    <p><strong>Fecha de Reserva:</strong> {{ reserva.fecha_reserva }}</p>
-                    <p><strong>Matodo de pago:</strong> {{ reserva.metodo_pago }}</p>
-                    <p><strong>Estado de Pago:</strong> {% if reserva.estado_de_pago %} Pagado {% else %} Pendiente de pago {% endif %}</p> 
-                    
-                </article>
+                    {% include 'Listas/Reserva.html' %}
             {% endfor %}
     </div>
 {% endblock %}

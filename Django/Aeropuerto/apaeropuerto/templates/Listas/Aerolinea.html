@@ -1,0 +1,8 @@
+<article>
+    <h2>Aerolínea {{ forloop.counter }}</h2> <!-- Contador para enumerar aerolíneas -->
+    <p><strong>ID:</strong> {{ aerolinea.id }}</p>
+    <p><strong>Nombre:</strong> {{ aerolinea.nombre }}</p>
+    <p><strong>País:</strong> {{ aerolinea.pais }}</p>
+    <p><strong>Código:</strong> {{ aerolinea.codigo }}</p>
+    <p><strong>Fundado:</strong> {{ aerolinea.fecha_fundacion|date:"d/m/Y" }}</p> <!-- Formato de fecha -->
+</article>
