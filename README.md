@@ -99,3 +99,12 @@ Ejemplo: {{ texto|wordwrap:20 }}
 26. make_list
 Convierte una cadena en una lista de caracteres.
 Ejemplo: {{ texto|make_list }}
+
+------------------------------------------------
+1.Crear url de formulario
+2.Crear vista Formulario
+3.Crear Formulario => form.py
+4.Crear Validacion => clean
+5.Crear la plantilla
+6.gestion proceso de crear en view => crear, borrar, modificar
+hasta diapositiva 51
