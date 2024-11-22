@@ -1,0 +1,11 @@
+{% extends 'Principal.html' %}
+{% load static %}
+
+{% block contenido %}
+    <h1>Crear Aeropuerto</h1>
+    <form method="post">
+        {% csrf_token %}  <!-- Protección contra CSRF -->
+        {{ form.as_table }}  <!-- Renderizamos los campos del formulario -->
+        <button type="submit">Guardar</button>
+    </form>
+{% endblock %}

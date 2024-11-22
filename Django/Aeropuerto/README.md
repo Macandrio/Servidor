@@ -270,43 +270,8 @@ Ejercicio 10. Calcular cuantos pasajeros hay en un vuelo
     Aqui uso count para contar
 
 
----------------------------------------------------------------------------------------------------------------------------
-comandos :
-
-python3 -m venv myvenv
-source myvenv/bin/activate
-
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-
-python manage.py migrate
-python manage.py makemigrations apaeropuerto
-python manage.py migrate apaeropuerto
-python manage.py seed apaeropuerto --number=20
-python manage.py dumpdata --indent 4 > apaeropuerto/fixtures/datos.json
-python manage.py loaddata apaeropuerto/fixtures/datos.json
-
-python manage.py createsuperuser
-python manage.py runserver
-
-
-git add .
-git commit -m 'Completado'
-git push
-git pull
 
 ---------------------------------------------------------------------------------------------------------------------------
-# Tema Templates:
-
-
-Preguntar Jorge:
-
-En historial_feedbacks_pasajero.html se puede poner {% include 'Listas/Vuelo.html' %} esque no me sale
-vuelo volando año.html no puedo poner {% include 'Listas/Estadistica.html' %}
-en histortial_feedbacks en consulta el atributo duracion no se le puede añadir |date:"d H:i" 
-preguntar porque en texto vuelo aerolinea no puedo poner |date:"d-m-Y H:i:s"
-
-----------------------------------------------------------------------------------------------------------------------------
 Usar al menos 5 templates tags diferentes: if-else, for..empty,en algunas páginas del proyecto. Indicar  cuales y donde en el README
 
     1.En casi todas las tamplates/paginas uso {% for %}
@@ -340,3 +305,28 @@ Usa al menos 10 template filters en el proyecto
     8.En Listas/Estadisticas => |truncatechars:80 //la cadena solo puede tener maximo 80 caracteres
     9.En Listas/Aeropuerto => |title // pone en mayuscula la primera letra de cada palabra
     10.En Listas/Equipaje => |floatformat:2 // pone 2 numeros detras de la coma
+
+---------------------------------------------------------------------------------------------------------------------------
+# comandos :
+
+python3 -m venv myvenv
+source myvenv/bin/activate
+
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+
+python manage.py migrate
+python manage.py makemigrations apaeropuerto
+python manage.py migrate apaeropuerto
+python manage.py seed apaeropuerto --number=20
+python manage.py dumpdata --indent 4 > apaeropuerto/fixtures/datos.json
+python manage.py loaddata apaeropuerto/fixtures/datos.json
+
+python manage.py createsuperuser
+python manage.py runserver
+
+
+git add .
+git commit -m 'Completado'
+git push
+git pull

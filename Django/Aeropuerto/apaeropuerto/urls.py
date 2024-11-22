@@ -29,6 +29,10 @@ urlpatterns = [
     path('vuelos-sin-operacion/<int:aerolinea_id>/', views.vuelos_sin_operacion, name='vuelos_sin_operacion'),
     path('consulta/pasajeros-vuelo/<int:id_vuelo>/', views.cuantos_pasajeros_vuelo, name='cuantos_pasajeros_vuelo'),
 
+    #Formulario
+    path('aeropuerto/crear/', views.crear_aeropuerto, name='crear_aeropuerto'),
+
+
 
 
 

@@ -1,12 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.db.models import Prefetch, Q, Sum, Count
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
     VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
 )
+from .forms import * # El * Coge todos los modelos es lo mismo que hacer lo de from .models import
 
 def index(request):
     return render(request, 'index.html') 
+
+#--------------------------------------------- Listas -----------------------------------------------------------------
 
 # Vista para listar Aeropuertos
 def lista_aeropuerto(request):
@@ -72,6 +75,8 @@ def lista_EstadisticasVuelo(request):
 def lista_PerfilPasajero(request):
     perfilpasajero = PerfilPasajero.objects.all()
     return render(request, 'paginas/perfilpasajero_list.html', {'perfilpasajero': perfilpasajero})
+
+#--------------------------------------------- Consultas -----------------------------------------------------------------
 
 
 # 1. Todos los pasajeros que esten asociados a un vuelo con una relación reversa
@@ -169,6 +174,39 @@ def cuantos_pasajeros_vuelo(request, id_vuelo):
     
     return render(request, 'consultas/total_pasajeros.html', {'total_pasajeros': total_pasajeros, 'pasajeros': pasajeros})
 
+#--------------------------------------------- Formulario -----------------------------------------------------------------
+
+# Formulario Aeropuerto
+
+def aeropuerto_create(request):
+    datosFormulario = None  # Variable para almacenar los datos del formulario
+    if request.method == "POST":  # Si la solicitud es POST
+        datosFormulario = request.POST  # Obtener los datos enviados por el formulario
+    
+    # Crear una instancia del formulario con o sin datos
+    formulario = AeropuertoForm(datosFormulario)
+    
+    if request.method == "POST":
+        if formulario.is_valid():  # Validar el formulario
+            try:
+                # Guardar el aeropuerto en la base de datos
+                formulario.save()
+                return redirect("lista_aeropuertos")  # Redirigir a una lista de aeropuertos
+            except Exception as error:
+                print(error)  # Manejar errores (puedes agregar más lógica aquí)
+
+    # Renderizar la plantilla con el formulario
+    return render(request, 'aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
+
+
+
+
+
+
+
+
+
+#--------------------------------------------- Errores -----------------------------------------------------------------
 
 # Error 400 - Solicitud Incorrecta
 def error_400(request, exception):
