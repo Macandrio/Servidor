@@ -1,11 +1,54 @@
 {% extends 'Principal.html' %}
-{% load static %}
 
 {% block contenido %}
-    <h1>Crear Aeropuerto</h1>
-    <form method="post">
-        {% csrf_token %}  <!-- Protección contra CSRF -->
-        {{ form.as_table }}  <!-- Renderizamos los campos del formulario -->
-        <button type="submit">Guardar</button>
-    </form>
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white">
+            <h3>{{ aeropuerto.id|default:"Crear Aeropuerto" }}</h3>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <!-- Campo: Nombre -->
+                <div class="mb-3">
+                    <label for="id_nombre" class="form-label">Nombre del Aeropuerto</label>
+                    {{ formulario.nombre }}
+                    {% if formulario.nombre.errors %}
+                        <div class="text-danger">
+                            {{ formulario.nombre.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">{{ formulario.nombre.help_text }}</div>
+                </div>
+                <!-- Campo: Ciudad -->
+                <div class="mb-3">
+                    <label for="id_ciudades" class="form-label">Ciudad</label>
+                    {{ formulario.ciudades }}
+                    <div class="form-text">{{ formulario.ciudades.help_text }}</div>
+                </div>
+                <!-- Campo: País -->
+                <div class="mb-3">
+                    <label for="id_pais" class="form-label">País</label>
+                    {{ formulario.pais }}
+                </div>
+                <!-- Campo: Capacidad máxima -->
+                <div class="mb-3">
+                    <label for="id_capacidad_maxima" class="form-label">Capacidad Máxima</label>
+                    {{ formulario.capacidad_maxima }}
+                    {% if formulario.capacidad_maxima.errors %}
+                        <div class="text-danger">
+                            {{ formulario.capacidad_maxima.errors }}
+                        </div>
+                    {% endif %}
+                    <div class="form-text">{{ formulario.capacidad_maxima.help_text }}</div>
+                </div>
+                <!-- Botones -->
+                <div class="d-flex justify-content-end">
+                    <button type="submit" class="btn btn-success me-2">Guardar</button>
+                    <a href="{% url 'lista_aeropuerto' %}" class="btn btn-secondary">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

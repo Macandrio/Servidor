@@ -31,7 +31,8 @@ urlpatterns = [
 
     #Formulario
     path('aeropuerto/crear/', views.crear_aeropuerto, name='crear_aeropuerto'),
-
+    path('aeropuerto/editar/<int:id>/', views.editar_aeropuerto, name='editar_aeropuerto'),
+    path('aeropuerto/eliminar/<int:id>/', views.eliminar_aeropuerto, name='eliminar_aeropuerto'),
 
 
 
