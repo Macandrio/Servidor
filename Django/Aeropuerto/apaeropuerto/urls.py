@@ -30,10 +30,23 @@ urlpatterns = [
     path('consulta/pasajeros-vuelo/<int:id_vuelo>/', views.cuantos_pasajeros_vuelo, name='cuantos_pasajeros_vuelo'),
 
     #Formulario
+
+    #Aeropuerto
     path('aeropuerto/crear/', views.crear_aeropuerto, name='crear_aeropuerto'),
+    path('aeropuerto/busqueda/', views.busqueda_aeropuerto, name='busqueda_aeropuerto'),
     path('aeropuerto/editar/<int:id>/', views.editar_aeropuerto, name='editar_aeropuerto'),
     path('aeropuerto/eliminar/<int:id>/', views.eliminar_aeropuerto, name='eliminar_aeropuerto'),
 
+    #contacto aeropuerto
+    path('contacto_aeropuerto/crear/', views.crear_contacto_ae, name='crear_contacto_ae'),
+
+    #Aerolinea
+
+    #Vuelo
+
+    #contacto aeropuerto
+
+    #EstadisticasVuelo
 
 
 

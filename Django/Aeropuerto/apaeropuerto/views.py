@@ -195,7 +195,7 @@ def crear_aeropuerto(request):
     else:
         formulario = AeropuertoForm()
 
-    return render(request, 'Formularios/crear_aeropuerto.html', {"formulario": formulario})
+    return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
 
 def editar_aeropuerto(request, id):
@@ -208,15 +208,44 @@ def editar_aeropuerto(request, id):
     else:
         formulario = AeropuertoForm(instance=aeropuerto)
 
-    return render(request, 'aeropuerto/editar_aeropuerto.html', {'formulario': formulario, 'aeropuerto': aeropuerto})
+    return render(request, 'Formulario/Aeropuerto/editar_aeropuerto.html', {'formulario': formulario, 'aeropuerto': aeropuerto})
 
 def eliminar_aeropuerto(request, id):
     aeropuerto = Aeropuerto.objects.get(id=id)
     if request.method == 'POST':
         aeropuerto.delete()
         return redirect('lista_aeropuerto')  # Redirige a la lista después de eliminar
-    return render(request, 'aeropuerto/eliminar_aeropuerto.html', {'aeropuerto': aeropuerto})
+    return render(request, 'Formulario/Aeropuerto/eliminar_aeropuerto.html', {'aeropuerto': aeropuerto})
 
+def busqueda_aeropuerto(request):
+    if len(request.GET)>0: # Formulario con datos
+        form = AeropuertoBusqueda(request.GET)  
+
+        # Aplicar filtros si el formulario es válido
+        if form.is_valid():
+            aeropuertos = Aeropuerto.objects
+            nombre = form.cleaned_data.get('nombre')
+            ciudades = form.cleaned_data.get('ciudades')
+            pais = form.cleaned_data.get('pais')
+
+            # Construir filtros dinámicamente
+            if nombre != '':
+                aeropuertos = aeropuertos.filter(nombre__icontains=nombre)
+            if ciudades != '':
+                aeropuertos = aeropuertos.filter(ciudades=ciudades)
+            if pais != '':
+                aeropuertos = aeropuertos.filter(pais=pais)
+
+            aeropuertos = aeropuertos.all()
+
+            return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {
+                'form': form,
+                'aeropuertos': aeropuertos,
+            })
+    else:
+        form = AeropuertoBusqueda(None)
+    return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {'form': form,})
+    
 
 
 
