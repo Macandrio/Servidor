@@ -4,6 +4,7 @@ from .models import *
 from datetime import *
 import re 
 from django.utils import timezone
+from .forms import *
 
 
 
@@ -60,40 +61,39 @@ class AeropuertoForm(ModelForm):
             
             return self.cleaned_data
 
-class AeropuertoBusqueda(forms.Form):
-    nombre = forms.CharField(
-        required=False,
-        label="Nombre",
-        widget=forms.TextInput(attrs={
-            "placeholder": "Introduce el nombre del aeropuerto"
-        })
-    )
-    ciudades = forms.ChoiceField(
-        required=False,
-        label="Ciudad",
-        choices=[("", "Seleccione una ciudad")] + Aeropuerto.CIUDADES,
-        widget=forms.Select(attrs={"class": "form-control"})
-    )
-    pais = forms.ChoiceField(
-        required=False,
-        label="País",
-        choices=[("", "Seleccione un país")] + Aeropuerto.PAISES,
-        widget=forms.Select(attrs={"class": "form-control"})
-    )
+class BusquedaAvanzadaAeropuertoForm(forms.Form):
+    
+    textoBusqueda = forms.CharField(required=False)
 
+    ciudad = forms.MultipleChoiceField(choices=Aeropuerto.CIUDADES,
+                                required=False,
+                                widget=forms.CheckboxSelectMultiple()
+                               )
+    
+    
     def clean(self):
+ 
+        #Validamos con el modelo actual
         super().clean()
-
-        nombre = self.cleaned_data.get('nombre')
-        ciudades = self.cleaned_data.get('ciudades')
-        pais = self.cleaned_data.get('pais')
-
-        # Si todos los campos están vacíos, mostrar un error
-        if nombre == '' and ciudades == '' and pais == '':
-            self.add_error('nombre','El campo no puede estar vacio')
-        if nombre.islower():
-            self.add_error('nombre','El nombre no puede empezar por minuscula')
-
+        
+        #Obtenemos los campos 
+        textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        ciudad = self.cleaned_data.get('ciudad')
+        
+           
+        #Controlamos los campos
+        #Ningún campo es obligatorio, pero al menos debe introducir un valor en alguno para buscar
+        if(textoBusqueda == "" 
+           and len(ciudad) == 0
+           ):
+            self.add_error('textoBusqueda','Debe introducir al menos un valor en un campo del formulario')
+            self.add_error('idiomas','Debe introducir al menos un valor en un campo del formulario')
+        else:
+            #Si introduce un texto al menos que tenga  3 caracteres o más
+            if(textoBusqueda != "" and len(textoBusqueda) < 1):
+                self.add_error('textoBusqueda','Debe introducir al menos 3 caracteres')
+            
+        #Siempre devolvemos el conjunto de datos.
         return self.cleaned_data
     
 #------------------------------------------------------------ContactoAeropuerto---------------------------------------------------------------------------------------

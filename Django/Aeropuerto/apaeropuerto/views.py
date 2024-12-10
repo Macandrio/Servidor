@@ -197,6 +197,56 @@ def crear_aeropuerto(request):
 
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
+from django.db.models import Q, Prefetch
+
+def Aeropuerto_buscar_avanzado(request):
+    if len(request.GET) > 0:
+        formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
+        if formulario.is_valid():
+            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
+            
+            # Obtener el QuerySet base
+            QSaeropuertos = Aeropuerto.objects.prefetch_related(
+                Prefetch('aerolinea_de_aeropuerto'),  # ManyToMany con Aerolínea
+                Prefetch('vuelos_de_origen'),         # ManyToOne reversa con Vuelo (origen)
+                Prefetch('vuelos_de_destino'),        # ManyToOne reversa con Vuelo (destino)
+                Prefetch('servicio_aeropuerto')       # ManyToMany con Servicio
+            )
+            
+            # Obtener los filtros
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            ciudades = formulario.cleaned_data.get('ciudades')
+            
+            # Filtro por texto de búsqueda
+            if textoBusqueda:
+                QSaeropuertos = QSaeropuertos.filter(nombre__icontains=textoBusqueda)
+                mensaje_busqueda += f"Nombre que contiene la palabra '{textoBusqueda}'\n"
+            
+            # Filtro por ciudades
+            if ciudades:
+                mensaje_busqueda += f"Ciudad sea: {', '.join(ciudades)}\n"
+                filtro_ciudades = Q(ciudades=ciudades[0])
+                for ciudad in ciudades[1:]:
+                    filtro_ciudades |= Q(ciudades=ciudad)
+                QSaeropuertos = QSaeropuertos.filter(filtro_ciudades)
+            
+            aeropuertos = QSaeropuertos.all()
+            
+            return render(
+                request,
+                'Formularios/Aeropuerto/lista_busqueda.html',
+                {"aeropuertos_mostrar": aeropuertos, "texto_busqueda": mensaje_busqueda}
+            )
+    else:
+        formulario = BusquedaAvanzadaAeropuertoForm()
+    return render(
+        request,
+        'Formularios/Aeropuerto/busqueda_avanzada.html',
+        {"formulario": formulario}
+    )
+
+
+
 def editar_aeropuerto(request, id):
     aeropuerto = Aeropuerto.objects.get(id=id)  # Obtiene el aeropuerto por ID
     if request.method == 'POST':
@@ -216,34 +266,7 @@ def eliminar_aeropuerto(request, id):
         return redirect('lista_aeropuerto')  # Redirige a la lista después de eliminar
     return render(request, 'Formulario/Aeropuerto/eliminar_aeropuerto.html', {'aeropuerto': aeropuerto})
 
-def busqueda_aeropuerto(request):
-    if len(request.GET)>0: # Formulario con datos
-        form = AeropuertoBusqueda(request.GET)  
-
-        # Aplicar filtros si el formulario es válido
-        if form.is_valid():
-            aeropuertos = Aeropuerto.objects
-            nombre = form.cleaned_data.get('nombre')
-            ciudades = form.cleaned_data.get('ciudades')
-            pais = form.cleaned_data.get('pais')
-
-            # Construir filtros dinámicamente
-            if nombre != '':
-                aeropuertos = aeropuertos.filter(nombre__icontains=nombre)
-            if ciudades != '':
-                aeropuertos = aeropuertos.filter(ciudades=ciudades)
-            if pais != '':
-                aeropuertos = aeropuertos.filter(pais=pais)
-
-            aeropuertos = aeropuertos.all()
-
-            return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {
-                'form': form,
-                'aeropuertos': aeropuertos,
-            })
-    else:
-        form = AeropuertoBusqueda(None)
-    return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {'form': form,})
+  
     
 # Formulario contacto_Aeropuerto
 

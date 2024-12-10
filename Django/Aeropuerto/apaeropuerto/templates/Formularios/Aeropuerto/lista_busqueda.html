@@ -1,0 +1,11 @@
+{% extends 'Principal.html' %}
+
+{% block contenido %}
+<h2>Resultados de la búsqueda</h2>
+<p>{{ texto_busqueda }}</p>
+<ul>
+    {% for aeropuerto in aeropuertos_mostrar %}
+        <li>{{ aeropuerto.nombre }} - {{ aeropuerto.ciudades }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
