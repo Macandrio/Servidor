@@ -247,6 +247,20 @@ def busqueda_aeropuerto(request):
     return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {'form': form,})
     
 
+# Formulario estadisticasvuelo
+
+def procesar_inspeccion(request): 
+    if (request.method == "POST"):
+        formulario=estadisticasvuelo(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("lista_EstadisticasVuelo")
+            except Exception as error:
+                print(error)
+    else:
+        formulario=InspeccionForm()  
+    return render(request,'inspecciones/create.html',{"formulario":formulario})
 
 
 
