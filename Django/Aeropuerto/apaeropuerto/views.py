@@ -175,28 +175,27 @@ def cuantos_pasajeros_vuelo(request, id_vuelo):
     
     return render(request, 'consultas/total_pasajeros.html', {'total_pasajeros': total_pasajeros, 'pasajeros': pasajeros})
 
-#--------------------------------------------- Formulario -----------------------------------------------------------------
+#----------------------------------------------------------------------- Formulario -----------------------------------------------------------------
 
 # Formulario Aeropuerto
-
-from django.contrib import messages
 
 def crear_aeropuerto(request):
     if request.method == "POST":
         formulario = AeropuertoForm(request.POST)
         if formulario.is_valid():
-            formulario.save()
-            # Mensaje de éxito
-            messages.success(request, "¡El aeropuerto" + formulario.cleaned_data.get('nombre') + "se creó exitosamente!")
-            return redirect('lista_aeropuerto')  # Redirige después de guardar
+            try:
+                formulario.save()
+                messages.success(request, "El aeropuerto se creó exitosamente.")
+                return redirect("lista_aeropuerto")
+            except Exception as error:
+                messages.error(request, f"Error inesperado al guardar el aeropuerto: {error}")
         else:
             # Mensaje de error si el formulario no es válido
-            messages.error(request, "Ocurrió un error al crear el aeropuerto. Por favor, verifica los datos.")
+            messages.error(request, "Ya existe un aeropuerto con el mismo nombre. Verifica los datos ingresados.")
     else:
         formulario = AeropuertoForm()
 
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
-
 
 def editar_aeropuerto(request, id):
     aeropuerto = Aeropuerto.objects.get(id=id)  # Obtiene el aeropuerto por ID
@@ -246,24 +245,84 @@ def busqueda_aeropuerto(request):
         form = AeropuertoBusqueda(None)
     return render(request, 'Formularios/Aeropuerto/buscar_aeropuerto.html', {'form': form,})
     
+# Formulario contacto_Aeropuerto
 
-# Formulario estadisticasvuelo
-
-def procesar_inspeccion(request): 
+def crear_contacto_aeropuerto(request): 
     if (request.method == "POST"):
-        formulario=estadisticasvuelo(request.POST)
+        formulario=ContactoAeropuertoform(request.POST)
         if formulario.is_valid():
             try:
                 formulario.save()
+                messages.success(request, "El contacto se creó exitosamente.")
+                return redirect("lista_ContactoAeropuerto")
+            except Exception as error:
+                print(error)
+    else:
+        formulario=ContactoAeropuertoform()  
+    return render(request,'Formularios/Contacto_Aeropuerto/crear_Contacto.html',{"formulario":formulario})
+
+# Formulario estadisticasvuelo
+
+def crear_estadisticasvuelo(request): 
+    if (request.method == "POST"):
+        formulario=estadisticasvueloform(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                messages.success(request, "La Estasdistica se creó exitosamente.")
                 return redirect("lista_EstadisticasVuelo")
             except Exception as error:
                 print(error)
     else:
-        formulario=InspeccionForm()  
-    return render(request,'inspecciones/create.html',{"formulario":formulario})
+        formulario=estadisticasvueloform()  
+    return render(request,'Formularios/Estadisticas_vuelo/crear_Estadisticasvuelo.html',{"formulario":formulario})
 
+# Formulario Aerolinea
 
+def crear_Aerolinea(request): 
+    if (request.method == "POST"):
+        formulario=Aerolineaform(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                messages.success(request, "La Aerolinea se creó exitosamente.")
+                return redirect("lista_aerolineas")
+            except Exception as error:
+                print(error)
+    else:
+        formulario=Aerolineaform()  
+    return render(request,'Formularios/Aerolinea/crear_aerolinea.html',{"formulario":formulario})
 
+# Formulario Vuelo
+
+def crear_Vuelo(request): 
+    if (request.method == "POST"):
+        formulario=VueloForm(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                messages.success(request, "El vuelo se creó exitosamente.")
+                return redirect("lista_vuelo")
+            except Exception as error:
+                print(error)
+    else:
+        formulario=VueloForm()  
+    return render(request,'Formularios/Vuelo/crear_vuelo.html',{"formulario":formulario})
+
+#Formulario Pasajero
+
+def crear_pasajero(request): 
+    if (request.method == "POST"):
+        formulario=PasajeroForm(request.POST)
+        if formulario.is_valid():
+            try:
+                formulario.save()
+                return redirect("lista_pasajero")
+            except Exception as error:
+                print(error)
+    else:
+        formulario=PasajeroForm    
+    return render(request,'Formularios/Pasajero/crear_pasajero.html',{"formulario":formulario})
 
 #--------------------------------------------- Errores -----------------------------------------------------------------
 

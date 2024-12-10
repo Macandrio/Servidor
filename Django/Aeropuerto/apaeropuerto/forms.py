@@ -1,62 +1,70 @@
 from django import forms
-from .models import *
 from django.forms import ModelForm
+from .models import *
+from datetime import *
+import re 
+from django.utils import timezone
 
 
-#----------------------------------------------------------------------------------------------------
-class AeropuertoForm(forms.ModelForm):
+
+#------------------------------------------------------------Aeropuerto---------------------------------------------------------------------------------------
+
+class AeropuertoForm(ModelForm):
     class Meta:
         model = Aeropuerto  # Asociamos el formulario con el modelo Aeropuerto
-        fields = ['nombre', 'ciudades', 'pais', 'capacidad_maxima']  # Campos del modelo que queremos incluir en el formulario
+        fields='__all__'
+
+        #Como se muestra en el formulario
+        labels= {
+            "nombre" : ("Nombre del Aeropuerto"),
+            "ciudades" : ("Ciudad del aeropuerto"),
+            "pais" : ("Pais del aeropuerto"),
+            "capacidad_maxima" : ("Capacidad del aeropuerto"),
+        }
 
         widgets = {
+
             "nombre": forms.TextInput(attrs={
-                "class": "form-control",
-                "placeholder": "Introduce el nombre del aeropuerto"
+                "placeholder": "Introduce el nombre del aeropuerto",  # Ayuda al usuario
+                "maxlength": 100  # Limita la cantidad de caracteres
             }),
-            "ciudades": forms.Select(attrs={"class": "form-control"}),
-            "pais": forms.Select(attrs={"class": "form-control"}),
-            "capacidad_maxima": forms.NumberInput(attrs={"class": "form-control"}),
-            "fecha_inauguracion": forms.DateInput(attrs={"class": "form-control", "type": "date"}),
+
+            "ciudades": forms.Select(),
+            "pais": forms.Select(),
+
+            "capacidad_maxima": forms.NumberInput(attrs={
+                "placeholder": "Introduce la capacidad máxima",  # Texto de ayuda
+                "min": 0,  # Valor mínimo permitido
+                "max": 150  # Valor máximo permitido
+            })
+            
         }
 
-        # Textos de ayuda
-        help_texts = {
-            "nombre": "Maximo 100 caracteres.",
-            "capacidad_maxima": "Especifica la capacidad del aeropuerto.",
-        }
+    def clean(self):
+            super().clean()
+            
+            nombre = self.cleaned_data.get('nombre') 
+            capacidad_maxima = self.cleaned_data.get('capacidad_maxima') 
+            
+            #Comprobamos que no exista un libro con ese nombre
+            encontrar_aeropuerto = Aeropuerto.objects.filter(nombre=nombre).first()
 
-    # Validación para el campo "nombre"
-    def clean_nombre(self):
-        nombre = self.cleaned_data.get("nombre")
+            if(encontrar_aeropuerto):
+                self.add_error('nombre','Ya existe un Aeropuerto con ese nombre')
 
-        if Aeropuerto.objects.filter(nombre__iexact=nombre).exists():
-            raise ValidationError("Ya existe un aeropuerto con este nombre.")
-        if Aeropuerto.objects.filter(nombre__iexact=nombre).exists():
-                    raise ValidationError("Ya existe un aeropuerto con este nombre.")
-
-        if len(nombre) > 200:
-            raise forms.ValidationError("El nombre del aeropuerto no puede exceder los 200 caracteres.")
-        if not nombre.isalpha():
-            raise forms.ValidationError("El nombre del aeropuerto solo puede contener letras.")
-        return nombre
-
-    # Validación para el campo "capacidad_maxima"
-    def clean_capacidad_maxima(self):
-        capacidad = self.cleaned_data.get("capacidad_maxima")
-        if capacidad <= 0:
-            raise forms.ValidationError("La capacidad máxima debe ser un número positivo.")
-        if capacidad > 100:
-            raise forms.ValidationError("La capacidad máxima no puede exceder los 100 millones de pasajeros.")
-        return capacidad
-    
+            if(nombre == " "):
+                self.add_error("nombre","El nombre del aeropuerto no puede estar vacio")
+                
+            if(capacidad_maxima > 150):
+                self.add_error("capacidad_maxima","No puede haber mas de 150 mil personas")
+            
+            return self.cleaned_data
 
 class AeropuertoBusqueda(forms.Form):
     nombre = forms.CharField(
         required=False,
         label="Nombre",
         widget=forms.TextInput(attrs={
-            "class": "form-control",
             "placeholder": "Introduce el nombre del aeropuerto"
         })
     )
@@ -88,10 +96,60 @@ class AeropuertoBusqueda(forms.Form):
 
         return self.cleaned_data
     
+#------------------------------------------------------------ContactoAeropuerto---------------------------------------------------------------------------------------
 
-#----------------------------------------------------------------------------------------------------
+class ContactoAeropuertoform(ModelForm):
+    class Meta:
+        model=ContactoAeropuerto
+        fields='__all__'
+        labels = {
+            "nombre_contacto": "Nombre del contacto",
+            "telefono_contacto": "Teléfono de contacto",
+            "email_contacto": "Correo electrónico",
+            "años_trabajados": "Años trabajados en el aeropuerto",
+            "aeropuerto": "Aeropuerto asociado",
+        }
 
-class estadisticasvuelo(ModelForm):
+
+        widgets = {
+            "nombre_contacto": forms.TextInput(attrs={
+                "placeholder": "Introduce el nombre del contacto",
+            }),
+            "telefono_contacto": forms.TextInput(attrs={
+                "placeholder": "Introduce el teléfono",
+                "maxlength": 9,
+            }),
+            "email_contacto": forms.EmailInput(attrs={
+                "placeholder": "Introduce el correo electrónico",
+            }),
+            "años_trabajados": forms.NumberInput(attrs={
+                "placeholder": "Años trabajados",
+                "min": 0,
+            }),
+            "aeropuerto": forms.Select(),
+        }
+
+
+
+    
+    def clean(self):
+        
+        super().clean()
+        
+        telefono = self.cleaned_data.get('telefono_contacto')
+        nombre_contacto = self.cleaned_data.get('nombre_contacto')
+
+        if (nombre_contacto == ''):
+            raise forms.ValidationError("nombre_contacto","El Nombre no puede estar vacio.")
+        
+        if len(telefono) > 999999999:
+            raise forms.ValidationError("telefono","El teléfono no puede tener más de 9 dígitos.")
+
+        return self.cleaned_data    
+
+#------------------------------------------------------------Estadisticas vuelo---------------------------------------------------------------------------------------
+
+class estadisticasvueloform(ModelForm):
     class Meta:
         model=EstadisticasVuelo
         fields='__all__'
@@ -103,9 +161,9 @@ class estadisticasvuelo(ModelForm):
         }
         widgets = {
             "fecha_estadisticas" : forms.SelectDateWidget(),
-            "numero_asientos_vendidos" : forms.TextInput(),
-            "numero_cancelaciones" : forms.TextInput(),
-            "feedback_pasajeros":forms.SelectDateWidget(),
+            "numero_asientos_vendidos" : forms.NumberInput(),
+            "numero_cancelaciones" : forms.NumberInput(),
+            "feedback_pasajeros":forms.TextInput(),
         }
     
     def clean(self):
@@ -114,13 +172,192 @@ class estadisticasvuelo(ModelForm):
         
         numero_asientos_vendidos =self.cleaned_data.get('numero_asientos_vendidos') 
         numero_cancelaciones = self.cleaned_data.get('numero_cancelaciones') 
-        feedback_pasajeros = self.cleaned_data.get('feedback_pasajeros') 
         
         
         if(numero_cancelaciones > numero_asientos_vendidos):
             self.add_error("numero_cancelaciones","No puede ver mas asientos cancelados que vendidos")
             
-        if(feedback_pasajeros < 200):
-            self.add_error("feedback_pasajeros","Tiene que ser menor a 200 caracteres")
+        if(numero_asientos_vendidos < 0):
+            self.add_error("numero_asientos_vendidos","Tiene que ser mayor a 0")
             
         return self.cleaned_data
+
+#------------------------------------------------------------Aerolínea---------------------------------------------------------------------------------------
+
+class Aerolineaform(ModelForm):
+    class Meta:
+        model=Aerolinea
+        fields='__all__'
+        labels = {
+            "nombre": "Nombre de la aerolínea",
+            "codigo_aerolinea": "Código de la aerolínea",
+            "pais_origen": "País de origen",
+            "numero_aviones": "Número de aviones",
+        }
+
+        widgets = {
+            "nombre": forms.TextInput(attrs={
+                "placeholder": "Introduce el nombre de la aerolínea",
+                "maxlength": 100,
+            }),
+            "codigo_aerolinea": forms.TextInput(attrs={
+                "placeholder": "Introduce el código de la aerolínea",
+                "maxlength": 10,
+            }),
+            "pais_origen": forms.Select(),
+
+            "numero_aviones": forms.NumberInput(attrs={
+                "placeholder": "Introduce el número de aviones",
+                "min": 0,
+            }),
+        }
+
+    
+    def clean(self):
+        
+        super().clean()
+        
+        nombre =self.cleaned_data.get('nombre') 
+        codigo_aerolinea = self.cleaned_data.get('codigo_aerolinea') 
+
+        #Comprobamos que no exista un libro con ese nombre
+        encontrar_aerolinea = Aeropuerto.objects.filter(nombre=nombre).first()
+
+        if(encontrar_aerolinea):
+            self.add_error('nombre','Ya existe una Aerolinea con ese nombre')
+        
+        if(nombre == ""):
+            self.add_error("nombre","No puede dejar el campo vacio")
+            
+        if(codigo_aerolinea == ""):
+            self.add_error("codigo_aerolinea","No puede dejar el campo vacio")
+            
+        return self.cleaned_data
+
+#------------------------------------------------------------Vuelo---------------------------------------------------------------------------------------
+
+class VueloForm(ModelForm):
+    class Meta:
+        model = Vuelo
+        fields = '__all__'  # Incluir todos los campos del modelo
+
+        labels = {
+            "codigo_vuelo": "Código del vuelo",
+            "origen": "Aeropuerto de origen",
+            "destino": "Aeropuerto de destino",
+            "hora_salida": "Hora de salida",
+            "hora_llegada": "Hora de llegada",
+            "estado": "Estado del vuelo",
+            "capacidad_maxima": "Capacidad máxima",
+        }
+
+        widgets = {
+            "codigo_vuelo": forms.TextInput(attrs={
+                "placeholder": "Introduce el código del vuelo",
+                "maxlength": 10,
+            }),
+
+            "origen": forms.Select(),
+            "destino": forms.Select(),
+            "hora_salida": forms.DateTimeInput(attrs={
+                "type": "datetime-local",  # Input para fecha y hora
+            }),
+
+            "hora_llegada": forms.DateTimeInput(attrs={
+                "type": "datetime-local",  # Input para fecha y hora
+            }),
+
+            "estado": forms.CheckboxInput(),
+            "capacidad_maxima": forms.NumberInput(attrs={
+                "placeholder": "Introduce la capacidad máxima",
+                "min": 1,
+            }),
+        }
+
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        origen = cleaned_data.get('origen')
+        destino = cleaned_data.get('destino')
+        hora_salida = cleaned_data.get('hora_salida')
+        hora_llegada = cleaned_data.get('hora_llegada')
+
+        # Validar que el origen y destino no sean iguales
+        if origen == destino:
+            self.add_error('destino', "El aeropuerto de destino no puede ser el mismo que el de origen.")
+
+        # Validar que la hora de llegada sea posterior a la hora de salida
+        if hora_salida and hora_llegada and hora_llegada <= hora_salida:
+            self.add_error('hora_llegada', "La hora de llegada debe ser posterior a la hora de salida.")
+
+        return cleaned_data
+
+#------------------------------------------------------------Pasajero---------------------------------------------------------------------------------------
+
+class PasajeroForm(ModelForm):
+    class Meta:
+        model = Pasajero
+        fields = '__all__'  # Incluir todos los campos del modelo
+
+        labels = {
+            "nombre": "Nombre del pasajero",
+            "apellido": "Apellido del pasajero",
+            "email": "Correo electrónico",
+            "telefono": "Teléfono",
+            "fecha_nacimiento": "Fecha de nacimiento",
+        }
+
+        widgets = {
+            "nombre": forms.TextInput(attrs={
+                "placeholder": "Introduce el nombre del pasajero",
+                "maxlength": 50,
+            }),
+            "apellido": forms.TextInput(attrs={
+                "placeholder": "Introduce el apellido del pasajero",
+                "maxlength": 50,
+            }),
+            "email": forms.EmailInput(attrs={
+                "placeholder": "Introduce el correo electrónico",
+            }),
+            "telefono": forms.TextInput(attrs={
+                "placeholder": "Introduce el número de teléfono",
+                "maxlength": 9,
+            }),
+            "fecha_nacimiento": forms.DateInput(attrs={
+                "type": "date",
+            }),
+        }
+
+    
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        telefono = cleaned_data.get('telefono')
+        fecha_nacimiento = cleaned_data.get('fecha_nacimiento')
+
+        # Validar que el teléfono tenga exactamente 9 dígitos
+        if telefono:
+            telefonostr = str(telefono)
+            if len(telefonostr) != 9 or not telefonostr.isdigit():
+                self.add_error('telefono', "El número de teléfono debe tener exactamente 9 dígitos y contener solo números.")
+        else:
+            self.add_error('telefono', "El número de teléfono es obligatorio.")
+
+        # Validar que la fecha de nacimiento no sea nula
+        if not fecha_nacimiento:
+            raise forms.ValidationError("La fecha de nacimiento es obligatoria.")
+
+        # Validar que la fecha de nacimiento no sea más de 100 años en el pasado
+        hoy = date.today()
+        anios_diferencia = hoy.year - fecha_nacimiento.year
+
+        if anios_diferencia > 100:
+            raise forms.ValidationError("El año de nacimiento no puede ser mayor a 100 años en el pasado.")
+
+        # Validar que la fecha de nacimiento no sea futura
+        if fecha_nacimiento > hoy:
+            raise forms.ValidationError("La fecha de nacimiento no puede ser una fecha futura.")
+
+        return cleaned_data
