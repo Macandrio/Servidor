@@ -425,7 +425,7 @@ def Aerolinea_buscar_avanzado(request):
                 aerolineas = aerolineas.filter(codigo=codigo)
 
             if pais:
-                aerolineas = aerolineas.filter(pais= pais)
+                aerolineas = aerolineas.filter(pais = pais)
         else:
             return render (request, 'Formularios/Aerolinea/buscar.html', {
                 'formulario': formulario,
