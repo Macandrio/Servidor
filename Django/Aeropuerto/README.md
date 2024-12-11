@@ -330,3 +330,84 @@ git add .
 git commit -m 'Completado'
 git push
 git pull
+
+-----------------------------------------------------------------------------------
+from django.db.models import Prefetch
+
+# Aeropuerto
+Aeropuerto.objects.prefetch_related(
+    Prefetch('aerolinea_de_aeropuerto'),  # ManyToMany con Aerolínea
+    Prefetch('vuelos_de_origen'),         # ManyToOne reversa con Vuelo (origen)
+    Prefetch('vuelos_de_destino'),        # ManyToOne reversa con Vuelo (destino)
+    Prefetch('servicio_aeropuerto')       # ManyToMany con Servicio
+)
+
+# ContactoAeropuerto
+ContactoAeropuerto.objects.select_related(
+    'aeropuerto'                          # OneToOne con Aeropuerto
+)
+
+# Aerolínea
+Aerolinea.objects.prefetch_related(
+    Prefetch('aeropuerto'),               # ManyToMany con Aeropuerto
+    Prefetch('vuelo_aerolinea')           # ManyToMany con Vuelo
+)
+
+# Vuelo
+Vuelo.objects.prefetch_related(
+    Prefetch('vuelo_pasajero'),           # ManyToMany con Pasajero
+    Prefetch('asiento_vuelo'),            # ManyToOne con Asiento
+    Prefetch('vuelo_reserva'),            # ManyToOne con Reserva
+    Prefetch('vuelo_media_aerolinea'),    # ManyToOne con VueloAerolinea
+    Prefetch('vuelo_datos')               # OneToOne con EstadisticasVuelo
+).select_related(
+    'origen',                             # ManyToOne con Aeropuerto (origen)
+    'destino'                             # ManyToOne con Aeropuerto (destino)
+)
+
+# EstadisticasVuelo
+EstadisticasVuelo.objects.select_related(
+    'vuelo'                               # OneToOne con Vuelo
+)
+
+# Pasajero
+Pasajero.objects.prefetch_related(
+    Prefetch('vuelo_pasajero'),           # ManyToMany con Vuelo
+    Prefetch('equipaje_pasajero'),        # ManyToOne con Equipaje
+    Prefetch('reserva_pasajero'),         # ManyToOne con Reserva
+    Prefetch('pajarelo_asiento'),         # ManyToOne con Asiento
+    Prefetch('pasajero_datos')            # OneToOne con PerfilPasajero
+)
+
+# PerfilPasajero
+PerfilPasajero.objects.select_related(
+    'pasajero'                            # OneToOne con Pasajero
+)
+
+# Equipaje
+Equipaje.objects.select_related(
+    'pasajero'                            # ManyToOne con Pasajero
+)
+
+# Reserva
+Reserva.objects.select_related(
+    'pasajero',                           # ManyToOne con Pasajero
+    'vuelo'                               # ManyToOne con Vuelo
+)
+
+# Asiento
+Asiento.objects.select_related(
+    'vuelo',                              # ManyToOne con Vuelo
+    'pasajero'                            # ManyToOne con Pasajero
+)
+
+# Servicio
+Servicio.objects.prefetch_related(
+    Prefetch('aeropuerto'),               # ManyToMany con Aeropuerto
+    Prefetch('empleado_servicio')         # ManyToOne con Empleado
+)
+
+# Empleado
+Empleado.objects.select_related(
+    'servicio'                            # ManyToOne con Servicio
+)

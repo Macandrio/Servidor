@@ -14,21 +14,21 @@
 <div class="card shadow p-4">
     <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
     <form method="GET" class="mb-4">
-        {{ formulario.nombre_contacto.label_tag }}
-        {{ formulario.nombre_contacto }}
-        {% for error in formulario.nombre_contacto.errors %}
+        {{ formulario.nombre.label_tag }}
+        {{ formulario.nombre }}
+        {% for error in formulario.nombre.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
-        {{ formulario.telefono_contacto.label_tag }}
-        {{ formulario.telefono_contacto }}
-        {% for error in formulario.telefono_contacto.errors %}
+        {{ formulario.codigo.label_tag }}
+        {{ formulario.codigo }}
+        {% for error in formulario.codigo.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
-        {{ formulario.años_trabajados.label_tag }}
-        {{ formulario.años_trabajados }}
-        {% for error in formulario.años_trabajados.errors %}
+        {{ formulario.pais.label_tag }}
+        {{ formulario.pais }}
+        {% for error in formulario.pais.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
@@ -39,15 +39,15 @@
 <h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
 
 <div class="row">
-    {% if contactos %}
-        {% for contacto in contactos %}
+    {% if aerolineas %}
+        {% for Aerolinea in aerolineas %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">{{ contacto.nombre_contacto }}</h5>
+                    <h5 class="card-title">{{ Aerolinea.nombre }}</h5>
                     <p class="card-text">
-                        <strong>Años trabajados:</strong> {{ contacto.años_trabajados }}<br>
-                        <strong>telefono_contacto:</strong> {{ contacto.telefono_contacto }}<br>
+                        <strong>Codigo:</strong> {{ Aerolinea.codigo }}<br>
+                        <strong>Paises:</strong> {{ Aerolinea.pais }}<br>
                     </p>
                 </div>
                 <div class="card-footer text-center">

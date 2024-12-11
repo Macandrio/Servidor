@@ -85,10 +85,10 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
         #Ningún campo es obligatorio, pero al menos debe introducir un valor en alguno para buscar
         if(textoBusqueda == "" and len(ciudad) == 0):
             self.add_error('textoBusqueda','Debe introducir al menos un valor en un campo del formulario')
-            self.add_error('idiomas','Debe introducir al menos un valor en un campo del formulario')
+            self.add_error('ciudad','Debe introducir al menos un valor en un campo del formulario')
         else:
             #Si introduce un texto al menos que tenga  1 caracteres o más
-            if(textoBusqueda != "" and len(textoBusqueda) < 1):
+            if(textoBusqueda != "" and len(textoBusqueda) < 2):
                 self.add_error('textoBusqueda','Debe introducir al menos 1 caracteres')
             
         #Siempre devolvemos el conjunto de datos.
@@ -145,6 +145,52 @@ class ContactoAeropuertoform(ModelForm):
 
         return self.cleaned_data    
 
+class BusquedaAvanzadaContacto(forms.Form):
+    
+    nombre_contacto = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+    telefono_contacto = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+    años_trabajados = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+
+    def clean(self):
+        super().clean()
+
+        nombre_contacto = self.cleaned_data.get('nombre_contacto')
+        telefono_contacto = self.cleaned_data.get('telefono_contacto')
+        años_trabajados = self.cleaned_data.get('años_trabajados')
+
+        # Validación: Al menos un campo debe estar rellenado
+        if not nombre_contacto and not telefono_contacto and not años_trabajados:
+            self.add_error('nombre_contacto', 'Se debe rellenar minimo un campo')
+            self.add_error('telefono_contacto', 'Se debe rellenar minimo un campo')
+            self.add_error('años_trabajados', 'Se debe rellenar minimo un campo')
+
+        # Validación de puntuación
+        if años_trabajados is not None and años_trabajados < 0:
+            self.add_error('años_trabajados', 'Los años trabajado no puede ser menor a 0.')
+
+        return self.cleaned_data
+    
 #------------------------------------------------------------Estadisticas vuelo---------------------------------------------------------------------------------------
 
 class estadisticasvueloform(ModelForm):
@@ -180,7 +226,52 @@ class estadisticasvueloform(ModelForm):
             
         return self.cleaned_data
 
-#------------------------------------------------------------Aerolínea---------------------------------------------------------------------------------------
+class BusquedaAvanzadaEstadisticas(forms.Form):
+    
+    fecha_estadisticas = forms.DateField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Fecha y Hora',
+            'type' : 'date'
+        })
+    )
+
+    numero_asientos_vendidos = forms.IntegerField(
+        required=False,
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+    vuelo = forms.ModelChoiceField(
+        queryset= Vuelo.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    def clean(self):
+        super().clean()
+
+        fecha_estadisticas = self.cleaned_data.get('fecha_estadisticas')
+        numero_asientos_vendidos = self.cleaned_data.get('numero_asientos_vendidos')
+        vuelo = self.cleaned_data.get('vuelo')
+
+        # Validación: Al menos un campo debe estar rellenado
+        if not fecha_estadisticas and not numero_asientos_vendidos and not vuelo:
+            self.add_error('fecha_estadisticas', 'Se debe rellenar minimo un campo')
+            self.add_error('numero_asientos_vendidos', 'Se debe rellenar minimo un campo')
+            self.add_error('vuelo', 'Se debe rellenar minimo un campo')
+
+        # Validación de puntuación
+        if numero_asientos_vendidos is not None and numero_asientos_vendidos < 0:
+            self.add_error('numero_asientos_vendidos', 'Los asientos no puede ser menor a 0.')
+
+        return self.cleaned_data
+#------------------------------------------------------------Aerolínea----------------------------------------------------------------------------------------------
 
 class Aerolineaform(ModelForm):
     class Meta:
@@ -232,7 +323,55 @@ class Aerolineaform(ModelForm):
             
         return self.cleaned_data
 
-#------------------------------------------------------------Vuelo---------------------------------------------------------------------------------------
+# class BusquedaAvanzadaAerolinea(forms.Form):
+    
+#     nombre = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(attrs={
+#             'class': 'form-control',
+#             'placeholder': 'Contenido...',
+#         })
+#     )
+
+#     codigo = forms.CharField(
+#         required=False,
+#         widget=forms.TextInput(attrs={
+#             'class': 'form-control',
+#             'placeholder': 'Contenido...',
+#         })
+#     )
+
+#     pais = forms.ChoiceField(
+#         choices=Perfil.REDES,
+#         required=False,
+#         widget=forms.Select(attrs={
+#             'class': 'form-control',
+#         })
+#     )
+
+
+
+
+#     def clean(self):
+#         super().clean()
+
+#         nombre = self.cleaned_data.get('nombre')
+#         codigo = self.cleaned_data.get('codigo')
+#         pais = self.cleaned_data.get('pais')
+
+#         # Validación: Al menos un campo debe estar rellenado
+#         if not nombre and not codigo and not pais:
+#             self.add_error('nombre', 'Se debe rellenar minimo un campo')
+#             self.add_error('codigo', 'Se debe rellenar minimo un campo')
+#             self.add_error('pais', 'Se debe rellenar minimo un campo')
+
+#         # Validación de puntuación
+#         if nombre is not None and len(nombre) < 3:
+#             self.add_error('nombre', 'El nombre debe de tener minimo 3 caracteres.')
+
+#         return self.cleaned_data
+    
+#------------------------------------------------------------Vuelo---------------------------------------------------------------------------------------------------
 
 class VueloForm(ModelForm):
     class Meta:
@@ -291,7 +430,7 @@ class VueloForm(ModelForm):
 
         return cleaned_data
 
-#------------------------------------------------------------Pasajero---------------------------------------------------------------------------------------
+#------------------------------------------------------------Pasajero-----------------------------------------------------------------------------------------------
 
 class PasajeroForm(ModelForm):
     class Meta:

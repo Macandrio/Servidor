@@ -39,9 +39,14 @@ urlpatterns = [
 
     #contacto aeropuerto
     path('contacto_aeropuerto/crear/', views.crear_contacto, name='crear_contacto'),
+    path('contacto_aeropuerto/buscar/', views.contacto_Aeropuerto_buscar_avanzado, name='contacto_Aeropuerto_buscar_avanzado'),
+    path('contacto_aeropuerto/modificar/<int:contacto_id>', views.contacto_Aeropuert_modificar, name='contacto_Aeropuert_modificar'),
+    path('contacto/eliminar/<int:contacto_id>',views.contacto_Aeropuert_eliminar,name='contacto_Aeropuert_eliminar'),
+
 
     #Aerolinea
     path('Aerolinea/crear/', views.crear_Aerolinea, name='crear_Aerolinea'),
+    path('Aerolinea/buscar/', views.Aerolinea_buscar_avanzado, name='Aerolinea_buscar_avanzado'),
     
     #Vuelo
     path('Vuelo/crear/', views.crear_Vuelo, name='crear_Vuelo'),
@@ -51,6 +56,7 @@ urlpatterns = [
 
     #EstadisticasVuelo
     path('estadisticasvuelo/crear/', views.crear_estadisticasvuelo, name='crear_estadisticasvuelo'),
+    path('estadisticasvuelo/buscar/', views.Estadisticas_buscar_avanzado, name='Estadisticas_buscar_avanzado'),
 
 
 

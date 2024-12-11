@@ -1,0 +1,55 @@
+{% extends 'Principal.html' %}
+
+{% block contenido %}
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+    <form method="GET" class="mb-4">
+        {{ formulario.fecha_estadisticas.label_tag }}
+        {{ formulario.fecha_estadisticas }}
+        {% for error in formulario.fecha_estadisticas.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        {{ formulario.numero_asientos_vendidos.label_tag }}
+        {{ formulario.numero_asientos_vendidos }}
+        {% for error in formulario.numero_asientos_vendidos.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        {{ formulario.vuelo.label_tag }}
+        {{ formulario.vuelo }}
+        {% for error in formulario.vuelo.errors %}
+            <div class="text-danger"><small>{{ error }}</small></div>
+        {% endfor %}
+    
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </form>
+</div>
+
+<h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+
+<div class="row">
+    {% if estadisticas %}
+        {% for comentario in estadisticas %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ comentario.id }}</h5>
+                    <p class="card-text">
+                        <strong>Asientos vendidos:</strong> {{ comentario.numero_asientos_vendidos }}<br>
+                    </p>
+                </div>
+                <div class="card-footer text-center">
+                    <a href="#" class="btn btn-sm btn-primary disabled">Modificar</a>
+                    <a href="#" class="btn btn-sm btn-danger disabled">Eliminar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p class="text-center text-danger">No se encontraron resultados.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,16 +1,45 @@
 {% extends 'Principal.html' %}
 
 {% block contenido %}
-<form method="GET" action="{% url 'Aeropuerto_buscar_avanzado' %}">
-    {% csrf_token %}
-    <div class="mb-3">
-        {{ formulario.textoBusqueda.label_tag }}
-        {{ formulario.textoBusqueda }}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Búsqueda Avanzada de Aeropuertos</h3>
+                </div>
+                <div class="card-body">
+                    <form method="GET" action="{% url 'Aeropuerto_buscar_avanzado' %}">
+                        {% csrf_token %}
+
+                        <!-- Campo para texto de búsqueda -->
+                        <div class="mb-4">
+                            <label for="{{ formulario.textoBusqueda.id_for_label }}" class="form-label">
+                                {{ formulario.textoBusqueda.label }}
+                            </label>
+                            {{ formulario.textoBusqueda }}
+                        </div>
+
+                        <!-- Campo para seleccionar ciudades -->
+                        <div class="mb-4">
+                            <label for="{{ formulario.ciudad.id_for_label }}" class="form-label">
+                                {{ formulario.ciudad.label }}
+                            </label>
+                            {{ formulario.ciudad}}
+                        </div>
+
+                        <!-- Botón de envío -->
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success px-5">Buscar</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer text-muted text-center">
+                    Utiliza los filtros para encontrar los aeropuertos que necesitas.
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        {{ formulario.ciudad.label_tag }}
-        {{ formulario.ciudad }}
-    </div>
-    <button type="submit" class="btn btn-primary">Buscar</button>
-</form>
+</div>
 {% endblock %}
+
