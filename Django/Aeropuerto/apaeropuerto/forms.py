@@ -89,7 +89,7 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
         else:
             #Si introduce un texto al menos que tenga  1 caracteres o más
             if(textoBusqueda != "" and len(textoBusqueda) < 1):
-                self.add_error('textoBusqueda','Debe introducir al menos 3 caracteres')
+                self.add_error('textoBusqueda','Debe introducir al menos 1 caracteres')
             
         #Siempre devolvemos el conjunto de datos.
         return self.cleaned_data

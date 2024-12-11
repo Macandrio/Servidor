@@ -197,8 +197,6 @@ def crear_aeropuerto(request):
 
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
-from django.db.models import Q, Prefetch
-
 def Aeropuerto_buscar_avanzado(request):
     if len(request.GET) > 0:
         formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
@@ -245,8 +243,6 @@ def Aeropuerto_buscar_avanzado(request):
         {"formulario": formulario}
     )
 
-
-
 def editar_aeropuerto(request, id):
     aeropuerto = Aeropuerto.objects.get(id=id)  # Obtiene el aeropuerto por ID
     if request.method == 'POST':
@@ -270,7 +266,7 @@ def eliminar_aeropuerto(request, id):
     
 # Formulario contacto_Aeropuerto
 
-def crear_contacto_aeropuerto(request): 
+def crear_contacto(request): 
     if (request.method == "POST"):
         formulario=ContactoAeropuertoform(request.POST)
         if formulario.is_valid():
@@ -283,6 +279,7 @@ def crear_contacto_aeropuerto(request):
     else:
         formulario=ContactoAeropuertoform()  
     return render(request,'Formularios/Contacto_Aeropuerto/crear_Contacto.html',{"formulario":formulario})
+
 
 # Formulario estadisticasvuelo
 

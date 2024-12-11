@@ -4,8 +4,8 @@
 <h2>Resultados de la búsqueda</h2>
 <p>{{ texto_busqueda }}</p>
 <ul>
-    {% for aeropuerto in aeropuertos_mostrar %}
-        <li>{{ aeropuerto.nombre }} - {{ aeropuerto.ciudades }}</li>
+    {% for contacto in contacto_mostrar %}
+        <li>{{ contacto.nombre }} - {{ contacto.años_trabajados }}</li>
     {% endfor %}
 </ul>
 {% endblock %}

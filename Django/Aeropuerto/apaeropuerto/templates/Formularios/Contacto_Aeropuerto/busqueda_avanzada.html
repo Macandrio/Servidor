@@ -1,0 +1,16 @@
+{% extends 'Principal.html' %}
+
+{% block contenido %}
+<form method="GET" action="{% url 'Aeropuerto_buscar_avanzado' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        {{ formulario.nombreBusqueda.label_tag }}
+        {{ formulario.nombreBusqueda }}
+    </div>
+    <div class="mb-3">
+        {{ formulario.anio.label_tag }}
+        {{ formulario.anio }}
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+{% endblock %}
