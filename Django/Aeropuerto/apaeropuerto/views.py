@@ -437,6 +437,37 @@ def Aerolinea_buscar_avanzado(request):
         'aerolineas': aerolineas
     })
 
+def Aerolinea_modificar(request,aerolinea_id):
+    aerolinea = Aerolinea.objects.get(id=aerolinea_id)
+    
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    
+    formulario = Aerolineaform(datosFormulario,instance = aerolinea)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                messages.success(request, 'Se ha editado el aerolinea '+formulario.cleaned_data.get('nombre')+" correctamente")
+                return redirect('Aerolinea_buscar_avanzado')  
+            except Exception as error:
+                print(error)
+    return render(request, 'Formularios/Aerolinea/modificar.html',{"formulario":formulario,"aerolinea":aerolinea})
+
+def Aerolinea_eliminar(request,aerolinea_id):
+    aerolinea = Aerolinea.objects.get(id=aerolinea_id)
+    try:
+        aerolinea.delete()
+        messages.success(request, "Se ha elimnado el contacto "+aerolinea.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('Aerolinea_buscar_avanzado')
+
 # Formulario Vuelo
 
 def crear_Vuelo(request): 

@@ -47,6 +47,8 @@ urlpatterns = [
     #Aerolinea
     path('Aerolinea/crear/', views.crear_Aerolinea, name='crear_Aerolinea'),
     path('Aerolinea/buscar/', views.Aerolinea_buscar_avanzado, name='Aerolinea_buscar_avanzado'),
+    path('Aerolinea/modificar/<int:aerolinea_id>', views.Aerolinea_modificar, name='Aerolinea_modificar'),
+    path('Aerolinea/eliminar/<int:aerolinea_id>',views.Aerolinea_eliminar,name='Aerolinea_eliminar'),
     
     #Vuelo
     path('Vuelo/crear/', views.crear_Vuelo, name='crear_Vuelo'),

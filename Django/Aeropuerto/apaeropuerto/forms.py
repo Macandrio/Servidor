@@ -323,53 +323,55 @@ class Aerolineaform(ModelForm):
             
         return self.cleaned_data
 
-# class BusquedaAvanzadaAerolinea(forms.Form):
+class BusquedaAvanzadaAerolinea(forms.Form):
     
-#     nombre = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(attrs={
-#             'class': 'form-control',
-#             'placeholder': 'Contenido...',
-#         })
-#     )
+    nombre = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
 
-#     codigo = forms.CharField(
-#         required=False,
-#         widget=forms.TextInput(attrs={
-#             'class': 'form-control',
-#             'placeholder': 'Contenido...',
-#         })
-#     )
+    codigo = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
 
-#     pais = forms.ChoiceField(
-#         choices=Perfil.REDES,
-#         required=False,
-#         widget=forms.Select(attrs={
-#             'class': 'form-control',
-#         })
-#     )
-
-
+    pais = forms.ChoiceField(
+        choices=Aerolinea.paises,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
 
 
-#     def clean(self):
-#         super().clean()
 
-#         nombre = self.cleaned_data.get('nombre')
-#         codigo = self.cleaned_data.get('codigo')
-#         pais = self.cleaned_data.get('pais')
 
-#         # Validación: Al menos un campo debe estar rellenado
-#         if not nombre and not codigo and not pais:
-#             self.add_error('nombre', 'Se debe rellenar minimo un campo')
-#             self.add_error('codigo', 'Se debe rellenar minimo un campo')
-#             self.add_error('pais', 'Se debe rellenar minimo un campo')
 
-#         # Validación de puntuación
-#         if nombre is not None and len(nombre) < 3:
-#             self.add_error('nombre', 'El nombre debe de tener minimo 3 caracteres.')
+    def clean(self):
+        super().clean()
 
-#         return self.cleaned_data
+        nombre = self.cleaned_data.get('nombre')
+        codigo = self.cleaned_data.get('codigo')
+        pais = self.cleaned_data.get('pais')
+
+        #Validación: Al menos un campo debe estar rellenado
+        if not nombre and not codigo and not pais:
+            self.add_error('nombre', 'Se debe rellenar minimo un campo')
+            self.add_error('codigo', 'Se debe rellenar minimo un campo')
+            self.add_error('pais', 'Se debe rellenar minimo un campo')
+
+        
+        # Validación de puntuación
+        if nombre is not None and len(nombre) < 3:
+            self.add_error('nombre', 'El nombre debe de tener minimo 3 caracteres.')
+
+        return self.cleaned_data
     
 #------------------------------------------------------------Vuelo---------------------------------------------------------------------------------------------------
 
