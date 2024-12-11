@@ -83,13 +83,11 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
            
         #Controlamos los campos
         #Ningún campo es obligatorio, pero al menos debe introducir un valor en alguno para buscar
-        if(textoBusqueda == "" 
-           and len(ciudad) == 0
-           ):
+        if(textoBusqueda == "" and len(ciudad) == 0):
             self.add_error('textoBusqueda','Debe introducir al menos un valor en un campo del formulario')
             self.add_error('idiomas','Debe introducir al menos un valor en un campo del formulario')
         else:
-            #Si introduce un texto al menos que tenga  3 caracteres o más
+            #Si introduce un texto al menos que tenga  1 caracteres o más
             if(textoBusqueda != "" and len(textoBusqueda) < 1):
                 self.add_error('textoBusqueda','Debe introducir al menos 3 caracteres')
             

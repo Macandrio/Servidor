@@ -215,7 +215,7 @@ def Aeropuerto_buscar_avanzado(request):
             
             # Obtener los filtros
             textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
-            ciudades = formulario.cleaned_data.get('ciudades')
+            ciudades = formulario.cleaned_data.get('ciudad')
             
             # Filtro por texto de búsqueda
             if textoBusqueda:
@@ -224,7 +224,7 @@ def Aeropuerto_buscar_avanzado(request):
             
             # Filtro por ciudades
             if ciudades:
-                mensaje_busqueda += f"Ciudad sea: {', '.join(ciudades)}\n"
+                mensaje_busqueda += f"Ciudad que sea: {', '.join(ciudades)}\n"
                 filtro_ciudades = Q(ciudades=ciudades[0])
                 for ciudad in ciudades[1:]:
                     filtro_ciudades |= Q(ciudades=ciudad)
