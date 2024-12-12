@@ -425,6 +425,7 @@ class VueloForm(ModelForm):
         # Validar que el origen y destino no sean iguales
         if origen == destino:
             self.add_error('destino', "El aeropuerto de destino no puede ser el mismo que el de origen.")
+            self.add_error('origen', "El aeropuerto de origen no puede ser el mismo que el de destino.")
 
         # Validar que la hora de llegada sea posterior a la hora de salida
         if hora_salida and hora_llegada and hora_llegada <= hora_salida:
@@ -432,6 +433,79 @@ class VueloForm(ModelForm):
 
         return cleaned_data
 
+class BusquedaAvanzadaVuelo(forms.Form):
+    
+    hora_salida = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+            'type': 'date'  # Campo para fecha y hora
+        })
+    )
+
+    hora_llegada = forms.DateTimeField(
+        required=False,
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+            'type': 'date'  # Campo para fecha y hora
+        })
+    )
+
+    pais = forms.ChoiceField(
+        choices=Aerolinea.paises,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+
+    origen = forms.ModelChoiceField(
+        queryset= Aeropuerto.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    destino = forms.ModelChoiceField(
+        queryset= Aeropuerto.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    aerolinea = forms.ModelChoiceField(
+        queryset= Aerolinea.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    
+
+
+    def clean(self):
+        super().clean()
+
+        hora_salida = self.cleaned_data.get('hora_salida')
+        hora_llegada = self.cleaned_data.get('hora_llegada')
+        origen = self.cleaned_data.get('origen')
+        destino = self.cleaned_data.get('destino')
+
+        #Validación: Al menos un campo debe estar rellenado
+        if hora_salida and hora_llegada:
+            if hora_salida > hora_llegada:
+                self.add_error('hora_llegada', 'No puede ser menor a la hora de salida')
+
+        if origen == destino:
+            self.add_error('destino', 'No puede ser menor el mismo lugar de origen')
+
+        return self.cleaned_data
+    
 #------------------------------------------------------------Pasajero-----------------------------------------------------------------------------------------------
 
 class PasajeroForm(ModelForm):
@@ -500,3 +574,43 @@ class PasajeroForm(ModelForm):
             raise forms.ValidationError("La fecha de nacimiento no puede ser una fecha futura.")
 
         return cleaned_data
+
+class BusquedaAvanzadaPasajero(forms.Form):
+    
+    nombre = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+    apellido = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+    vuelo = forms.ModelChoiceField(
+        queryset= Vuelo.objects.all(),
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'
+        })
+    )
+
+    def clean(self):
+        super().clean()
+
+        nombre = self.cleaned_data.get('nombre')
+        apellido = self.cleaned_data.get('apellido')
+
+        if(nombre == " "):
+                self.add_error("nombre","El nombre del aeropuerto no puede estar vacio")
+
+        if(len(apellido) < 3):
+                self.add_error("apellido","tiene que tener mas de 3 caracteres")
+
+        return self.cleaned_data

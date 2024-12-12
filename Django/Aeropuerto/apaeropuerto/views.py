@@ -376,7 +376,7 @@ def Estadisticas_buscar_avanzado(request):
                 estadisticas = estadisticas.filter(numero_asientos_vendidos=numero_asientos_vendidos)
 
             if vuelo:
-                vuelo = estadisticas.filter(vuelo = vuelo)
+                estadisticas = estadisticas.filter(vuelo = vuelo)
         else:
             return render (request, 'Formularios/Estadisticas_vuelo/busqueda_avanzada.html', {
                 'formulario': formulario,
@@ -484,6 +484,46 @@ def crear_Vuelo(request):
         formulario=VueloForm()  
     return render(request,'Formularios/Vuelo/crear_vuelo.html',{"formulario":formulario})
 
+def Vuelo_buscar_avanzado(request):
+    formulario = BusquedaAvanzadaVuelo(request.GET)
+    vuelos = Vuelo.objects.all()
+    aeropuerto = Aeropuerto.objects.all()
+
+    if request.GET:
+        if formulario.is_valid():
+            hora_salida = formulario.cleaned_data.get('hora_salida')
+            hora_llegada = formulario.cleaned_data.get('hora_llegada')
+            estado = formulario.cleaned_data.get('estado')
+            origen = formulario.cleaned_data.get('origen')
+            destino = formulario.cleaned_data.get('destino')
+
+
+            if hora_salida:
+                vuelos = vuelos.filter(hora_salida=hora_salida)
+
+            if hora_llegada:
+                vuelos = vuelos.filter(hora_llegada=hora_llegada)
+
+            if estado:
+                vuelos = vuelos.filter(estado=estado)
+
+            if origen:
+                aeropuerto = aeropuerto.filter(origen = origen)
+
+            if destino:
+                aeropuerto = aeropuerto.filter(destino = destino)
+
+        else:
+            return render (request, 'Formularios/Vuelo/buscar.html', {
+                'formulario': formulario,
+                'vuelos': []
+            })
+
+    return render (request, 'Formularios/Vuelo/buscar.html', {
+        'formulario': formulario,
+        'vuelos': vuelos
+    })
+
 #Formulario Pasajero
 
 def crear_pasajero(request): 
@@ -499,6 +539,35 @@ def crear_pasajero(request):
         formulario=PasajeroForm    
     return render(request,'Formularios/Pasajero/crear_pasajero.html',{"formulario":formulario})
 
+def Pasajero_buscar_avanzado(request):
+    formulario = BusquedaAvanzadaPasajero(request.GET)
+    pasajeros = Pasajero.objects.all()
+    vuelo = Vuelo.objects.all()
+
+    if request.GET:
+        if formulario.is_valid():
+            nombre = formulario.cleaned_data.get('nombre')
+            apellido = formulario.cleaned_data.get('apellido')
+            vuelo = formulario.cleaned_data.get('vuelo')
+
+            if nombre:
+                pasajeros = pasajeros.filter(nombre__icontains=nombre)
+
+            if apellido:
+                pasajeros = pasajeros.filter(apellido__icontains=apellido)
+
+            if vuelo:
+                pasajeros = pasajeros.filter(vuelo = vuelo)
+        else:
+            return render (request, 'Formularios/Pasajero/buscar.html', {
+                'formulario': formulario,
+                'pasajeros': []
+            })
+
+    return render (request, 'Formularios/Pasajero/buscar.html', {
+        'formulario': formulario,
+        'pasajeros': pasajeros,
+    })
 #--------------------------------------------- Errores -----------------------------------------------------------------
 
 # Error 400 - Solicitud Incorrecta

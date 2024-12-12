@@ -52,9 +52,11 @@ urlpatterns = [
     
     #Vuelo
     path('Vuelo/crear/', views.crear_Vuelo, name='crear_Vuelo'),
+    path('Vuelo/buscar/', views.Vuelo_buscar_avanzado, name='Vuelo_buscar_avanzado'),
 
     #Pasajero
     path('Pasajero/crear/', views.crear_pasajero, name='crear_pasajero'),
+    path('Pasajero/buscar/', views.Pasajero_buscar_avanzado, name='Pasajero_buscar_avanzado'),
 
     #EstadisticasVuelo
     path('estadisticasvuelo/crear/', views.crear_estadisticasvuelo, name='crear_estadisticasvuelo'),

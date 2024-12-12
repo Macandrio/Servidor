@@ -4,15 +4,15 @@
 <div class="card shadow p-4">
     <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
     <form method="GET" class="mb-4">
-        {{ formulario.fecha_estadisticas.label_tag }}
-        {{ formulario.fecha_estadisticas }}
-        {% for error in formulario.fecha_estadisticas.errors %}
+        {{ formulario.nombre.label_tag }}
+        {{ formulario.nombre }}
+        {% for error in formulario.nombre.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
-        {{ formulario.numero_asientos_vendidos.label_tag }}
-        {{ formulario.numero_asientos_vendidos }}
-        {% for error in formulario.numero_asientos_vendidos.errors %}
+        {{ formulario.apellido.label_tag }}
+        {{ formulario.apellido }}
+        {% for error in formulario.apellido.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
@@ -29,18 +29,17 @@
 <h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
 
 <div class="row">
-    {% if estadisticas %}
-        {% for comentario in estadisticas %}
+    {% if pasajeros %}
+        {% for pasajero in pasajeros %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">{{ comentario.id }}</h5>
+                    <h5 class="card-title">{{ pasajero.id }}</h5>
                     <p class="card-text">
-                        <strong>Fecha estadisticas:</strong> {{ comentario.fecha_estadisticas }}<br>
-                        <strong>Asientos vendidos:</strong> {{ comentario.numero_asientos_vendidos }}<br>
-                        <strong>Asientos Cancelados:</strong> {{ comentario.numero_cancelaciones }}<br>
-                        <strong>feedback pasajeros:</strong> {{ comentario.feedback_pasajeros }}<br>
-                        <strong>vuelo:</strong> {{ comentario.vuelo }}<br>
+                        <strong>nombre:</strong> {{ pasajero.nombre }}<br>
+                        <strong>apellido:</strong> {{ pasajero.apellido }}<br>
+                        <strong>Asientos Cancelados:</strong> {{ pasajero.numero_cancelaciones }}<br>
+                        <strong>vuelo:</strong> {{ pasajero.vuelo }}<br>
                     </p>
                 </div>
                 <div class="card-footer text-center">
