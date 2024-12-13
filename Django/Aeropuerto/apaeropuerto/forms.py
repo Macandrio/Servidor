@@ -245,11 +245,11 @@ class BusquedaAvanzadaEstadisticas(forms.Form):
         })
     )
 
-    vuelo = forms.ModelChoiceField(
-        queryset= Vuelo.objects.all(),
+    numero_cancelaciones = forms.IntegerField(
         required=False,
-        widget=forms.Select(attrs={
-            'class': 'form-control'
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
         })
     )
 
@@ -258,13 +258,13 @@ class BusquedaAvanzadaEstadisticas(forms.Form):
 
         fecha_estadisticas = self.cleaned_data.get('fecha_estadisticas')
         numero_asientos_vendidos = self.cleaned_data.get('numero_asientos_vendidos')
-        vuelo = self.cleaned_data.get('vuelo')
+        numero_cancelaciones = self.cleaned_data.get('numero_cancelaciones')
 
         # Validación: Al menos un campo debe estar rellenado
-        if not fecha_estadisticas and not numero_asientos_vendidos and not vuelo:
+        if not fecha_estadisticas and not numero_asientos_vendidos and not numero_cancelaciones:
             self.add_error('fecha_estadisticas', 'Se debe rellenar minimo un campo')
             self.add_error('numero_asientos_vendidos', 'Se debe rellenar minimo un campo')
-            self.add_error('vuelo', 'Se debe rellenar minimo un campo')
+            self.add_error('numero_cancelaciones', 'Se debe rellenar minimo un campo')
 
         # Validación de puntuación
         if numero_asientos_vendidos is not None and numero_asientos_vendidos < 0:
@@ -398,6 +398,7 @@ class VueloForm(ModelForm):
 
             "origen": forms.Select(),
             "destino": forms.Select(),
+
             "hora_salida": forms.DateTimeInput(attrs={
                 "type": "datetime-local",  # Input para fecha y hora
             }),
@@ -453,13 +454,6 @@ class BusquedaAvanzadaVuelo(forms.Form):
         })
     )
 
-    pais = forms.ChoiceField(
-        choices=Aerolinea.paises,
-        required=False,
-        widget=forms.Select(attrs={
-            'class': 'form-control',
-        })
-    )
 
     origen = forms.ModelChoiceField(
         queryset= Aeropuerto.objects.all(),
@@ -501,8 +495,9 @@ class BusquedaAvanzadaVuelo(forms.Form):
             if hora_salida > hora_llegada:
                 self.add_error('hora_llegada', 'No puede ser menor a la hora de salida')
 
-        if origen == destino:
-            self.add_error('destino', 'No puede ser menor el mismo lugar de origen')
+        if origen and destino:
+            if origen == destino:
+                self.add_error('destino', 'No puede ser menor el mismo lugar de origen')
 
         return self.cleaned_data
     
@@ -553,7 +548,7 @@ class PasajeroForm(ModelForm):
         # Validar que el teléfono tenga exactamente 9 dígitos
         if telefono:
             telefonostr = str(telefono)
-            if len(telefonostr) != 9 or not telefonostr.isdigit():
+            if len(telefonostr) != 9 or not telefonostr.isdigit(): # es para que no pueda introducir menos de 9 cifras (999999999)
                 self.add_error('telefono', "El número de teléfono debe tener exactamente 9 dígitos y contener solo números.")
         else:
             self.add_error('telefono', "El número de teléfono es obligatorio.")
@@ -593,11 +588,11 @@ class BusquedaAvanzadaPasajero(forms.Form):
         })
     )
 
-    vuelo = forms.ModelChoiceField(
-        queryset= Vuelo.objects.all(),
+    telefono = forms.IntegerField(
         required=False,
-        widget=forms.Select(attrs={
-            'class': 'form-control'
+        widget=forms.NumberInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
         })
     )
 

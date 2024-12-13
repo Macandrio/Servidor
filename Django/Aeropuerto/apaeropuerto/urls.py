@@ -53,14 +53,20 @@ urlpatterns = [
     #Vuelo
     path('Vuelo/crear/', views.crear_Vuelo, name='crear_Vuelo'),
     path('Vuelo/buscar/', views.Vuelo_buscar_avanzado, name='Vuelo_buscar_avanzado'),
+    path('Vuelo/modificar/<int:vuelo_id>',views.Vuelo_modificar,name='Vuelo_modificar'),
+    path('Vuelo/eliminar/<int:vuelo_id>',views.Vuelo_eliminar,name='Vuelo_eliminar'),
 
     #Pasajero
     path('Pasajero/crear/', views.crear_pasajero, name='crear_pasajero'),
     path('Pasajero/buscar/', views.Pasajero_buscar_avanzado, name='Pasajero_buscar_avanzado'),
+    path('Pasajero/modificar/<int:pasajero_id>',views.Pasajero_modificar,name='Pasajero_modificar'),
+    path('Pasajero/eliminar/<int:pasajero_id>',views.Pasajero_eliminar,name='Pasajero_eliminar'),
 
     #EstadisticasVuelo
     path('estadisticasvuelo/crear/', views.crear_estadisticasvuelo, name='crear_estadisticasvuelo'),
     path('estadisticasvuelo/buscar/', views.Estadisticas_buscar_avanzado, name='Estadisticas_buscar_avanzado'),
+    path('estadisticasvuelo/modificar/<int:estadisticas_id>',views.Estadisticas_modificar,name='Estadisticas_modificar'),
+    path('estadisticasvuelo/eliminar/<int:estadisticas_id>',views.Estadisticas_eliminar,name='Estadisticas_eliminar'),
 
 
 

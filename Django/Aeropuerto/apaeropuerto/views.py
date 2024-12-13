@@ -361,13 +361,12 @@ def crear_estadisticasvuelo(request):
 def Estadisticas_buscar_avanzado(request):
     formulario = BusquedaAvanzadaEstadisticas(request.GET)
     estadisticas = EstadisticasVuelo.objects.all()
-    vuelo = Vuelo.objects.all()
 
     if request.GET:
         if formulario.is_valid():
             fecha_estadisticas = formulario.cleaned_data.get('fecha_estadisticas')
             numero_asientos_vendidos = formulario.cleaned_data.get('numero_asientos_vendidos')
-            vuelo = formulario.cleaned_data.get('vuelo')
+            numero_cancelaciones = formulario.cleaned_data.get('numero_cancelaciones')
 
             if fecha_estadisticas:
                 estadisticas = estadisticas.filter(fecha_estadisticas=fecha_estadisticas)
@@ -375,20 +374,49 @@ def Estadisticas_buscar_avanzado(request):
             if numero_asientos_vendidos:
                 estadisticas = estadisticas.filter(numero_asientos_vendidos=numero_asientos_vendidos)
 
-            if vuelo:
-                estadisticas = estadisticas.filter(vuelo = vuelo)
+            if numero_cancelaciones:
+                estadisticas = estadisticas.filter(numero_cancelaciones = numero_cancelaciones)
         else:
             return render (request, 'Formularios/Estadisticas_vuelo/busqueda_avanzada.html', {
                 'formulario': formulario,
                 'estadisticas': [],
-                'vuelo' : vuelo
             })
 
     return render (request, 'Formularios/Estadisticas_vuelo/busqueda_avanzada.html', {
         'formulario': formulario,
         'estadisticas': estadisticas,
-        'vuelo' : vuelo
     })
+
+def Estadisticas_modificar(request,estadisticas_id):
+    estadisticas = EstadisticasVuelo.objects.get(id=estadisticas_id)
+    
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    
+    formulario = estadisticasvueloform(datosFormulario,instance = estadisticas)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                messages.success(request, 'Se ha editado la estadisticas de la fecha'+formulario.cleaned_data.get('fecha_estadisticas')+" correctamente")
+                return redirect('Estadisticas_buscar_avanzado')  
+            except Exception as error:
+                print(error)
+    return render(request, 'Formularios/Estadisticas_vuelo/modificar.html',{"formulario":formulario,"estadisticas":estadisticas})
+
+def Estadisticas_eliminar(request,estadisticas_id):
+    estadisticas = EstadisticasVuelo.objects.get(id=estadisticas_id)
+    try:
+        estadisticas.delete()
+        messages.success(request, "Se ha elimnado la estadistica "+estadisticas.id+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('Estadisticas_buscar_avanzado')
 
 
 
@@ -468,6 +496,8 @@ def Aerolinea_eliminar(request,aerolinea_id):
         print(error)
     return redirect('Aerolinea_buscar_avanzado')
 
+
+
 # Formulario Vuelo
 
 def crear_Vuelo(request): 
@@ -508,21 +538,54 @@ def Vuelo_buscar_avanzado(request):
                 vuelos = vuelos.filter(estado=estado)
 
             if origen:
-                aeropuerto = aeropuerto.filter(origen = origen)
+                vuelos = vuelos.filter(origen = origen)
 
             if destino:
-                aeropuerto = aeropuerto.filter(destino = destino)
+                vuelos = vuelos.filter(destino = destino)
 
         else:
             return render (request, 'Formularios/Vuelo/buscar.html', {
                 'formulario': formulario,
-                'vuelos': []
+                'vuelos': [],
+                'aeropuerto': aeropuerto
             })
 
     return render (request, 'Formularios/Vuelo/buscar.html', {
         'formulario': formulario,
-        'vuelos': vuelos
+        'vuelos': vuelos,
+        'aeropuerto': aeropuerto
     })
+
+def Vuelo_modificar(request,vuelo_id):
+    vuelo = Vuelo.objects.get(id=vuelo_id)
+    
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    
+    formulario = VueloForm(datosFormulario,instance = vuelo)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                messages.success(request, 'Se ha editado el vuelo '+formulario.cleaned_data.get('id')+" correctamente")
+                return redirect('Vuelo_buscar_avanzado')  
+            except Exception as error:
+                print(error)
+    return render(request, 'Formularios/Vuelo/modificar.html',{"formulario":formulario,"vuelo":vuelo})
+
+def Vuelo_eliminar(request,vuelo_id):
+    vuelo = Vuelo.objects.get(id=vuelo_id)
+    try:
+        vuelo.delete()
+        messages.success(request, "Se ha elimnado el vuelo "+vuelo.id+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('Vuelo_buscar_avanzado')
 
 #Formulario Pasajero
 
@@ -532,7 +595,7 @@ def crear_pasajero(request):
         if formulario.is_valid():
             try:
                 formulario.save()
-                return redirect("lista_pasajero")
+                return redirect("Pasajero_buscar_avanzado")
             except Exception as error:
                 print(error)
     else:
@@ -542,13 +605,12 @@ def crear_pasajero(request):
 def Pasajero_buscar_avanzado(request):
     formulario = BusquedaAvanzadaPasajero(request.GET)
     pasajeros = Pasajero.objects.all()
-    vuelo = Vuelo.objects.all()
 
     if request.GET:
         if formulario.is_valid():
             nombre = formulario.cleaned_data.get('nombre')
             apellido = formulario.cleaned_data.get('apellido')
-            vuelo = formulario.cleaned_data.get('vuelo')
+            telefono = formulario.cleaned_data.get('telefono')
 
             if nombre:
                 pasajeros = pasajeros.filter(nombre__icontains=nombre)
@@ -556,8 +618,8 @@ def Pasajero_buscar_avanzado(request):
             if apellido:
                 pasajeros = pasajeros.filter(apellido__icontains=apellido)
 
-            if vuelo:
-                pasajeros = pasajeros.filter(vuelo = vuelo)
+            if telefono:
+                pasajeros = pasajeros.filter(telefono = telefono)
         else:
             return render (request, 'Formularios/Pasajero/buscar.html', {
                 'formulario': formulario,
@@ -568,6 +630,40 @@ def Pasajero_buscar_avanzado(request):
         'formulario': formulario,
         'pasajeros': pasajeros,
     })
+
+def Pasajero_modificar(request,pasajero_id):
+    pasajero = Pasajero.objects.get(id=pasajero_id)
+    
+    datosFormulario = None
+    
+    if request.method == "POST":
+        datosFormulario = request.POST
+    
+    
+    formulario = PasajeroForm(datosFormulario,instance = pasajero)
+    
+    if (request.method == "POST"):
+       
+        if formulario.is_valid():
+            try:  
+                formulario.save()
+                messages.success(request, 'Se ha editado el pasajero '+formulario.cleaned_data.get('nombre')+" correctamente")
+                return redirect('Pasajero_buscar_avanzado')  
+            except Exception as error:
+                print(error)
+    return render(request, 'Formularios/Pasajero/modificar.html',{"formulario":formulario,"pasajero":pasajero})
+
+def Pasajero_eliminar(request,pasajero_id):
+    pasajero = Pasajero.objects.get(id=pasajero_id)
+    try:
+        pasajero.delete()
+        messages.success(request, "Se ha elimnado el pasajero "+pasajero.nombre+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('Pasajero_buscar_avanzado')
+
+
+
 #--------------------------------------------- Errores -----------------------------------------------------------------
 
 # Error 400 - Solicitud Incorrecta

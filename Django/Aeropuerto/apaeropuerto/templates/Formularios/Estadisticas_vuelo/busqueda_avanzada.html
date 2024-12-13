@@ -15,10 +15,10 @@
         {% for error in formulario.numero_asientos_vendidos.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
-    
-        {{ formulario.vuelo.label_tag }}
-        {{ formulario.vuelo }}
-        {% for error in formulario.vuelo.errors %}
+
+        {{ formulario.numero_cancelaciones.label_tag }}
+        {{ formulario.numero_cancelaciones }}
+        {% for error in formulario.numero_cancelaciones.errors %}
             <div class="text-danger"><small>{{ error }}</small></div>
         {% endfor %}
     
@@ -30,22 +30,36 @@
 
 <div class="row">
     {% if estadisticas %}
-        {% for comentario in estadisticas %}
+        {% for estadistica in estadisticas %}
         <div class="col-md-4 mb-4">
             <div class="card h-100">
                 <div class="card-body">
-                    <h5 class="card-title">{{ comentario.id }}</h5>
+                    <h5 class="card-title">{{ estadistica.id }}</h5>
                     <p class="card-text">
-                        <strong>Fecha estadisticas:</strong> {{ comentario.fecha_estadisticas }}<br>
-                        <strong>Asientos vendidos:</strong> {{ comentario.numero_asientos_vendidos }}<br>
-                        <strong>Asientos Cancelados:</strong> {{ comentario.numero_cancelaciones }}<br>
-                        <strong>feedback pasajeros:</strong> {{ comentario.feedback_pasajeros }}<br>
-                        <strong>vuelo:</strong> {{ comentario.vuelo }}<br>
+                        <strong>Fecha estadisticas:</strong> {{ estadistica.fecha_estadisticas }}<br>
+                        <strong>Asientos vendidos:</strong> {{ estadistica.numero_asientos_vendidos }}<br>
+                        <strong>Asientos Cancelados:</strong> {{ estadistica.numero_cancelaciones }}<br>
+                        <strong>feedback pasajeros:</strong> {{ estadistica.feedback_pasajeros }}<br>
                     </p>
                 </div>
                 <div class="card-footer text-center">
-                    <a href="#" class="btn btn-sm btn-primary disabled">Modificar</a>
-                    <a href="#" class="btn btn-sm btn-danger disabled">Eliminar</a>
+                    {% load bootstrap_icons %}
+                    <div class="row btn-group">
+                        <div class="mb-2">
+                            <button type="button" 
+                                    class="btn btn-outline-primary"> 
+                                    <a href="{% url 'Estadisticas_modificar' estadistica.id %}" ><span>{% bs_icon 'pencil' %}</span></a>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <form action = "{% url 'Estadisticas_eliminar' estadistica.id %}" method = "post"> 
+                            {% csrf_token %}
+                            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                                <span>{% bs_icon 'trash' %}</span>
+                            </button> 
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
