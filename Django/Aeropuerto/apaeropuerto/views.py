@@ -198,68 +198,54 @@ def crear_aeropuerto(request):
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
 def Aeropuerto_buscar_avanzado(request):
-    if len(request.GET) > 0:
-        formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
-        if formulario.is_valid():
-            mensaje_busqueda = "Se ha buscado por los siguientes valores:\n"
-            
-            # Obtener el QuerySet base
-            QSaeropuertos = Aeropuerto.objects.prefetch_related(
-                Prefetch('aerolinea_de_aeropuerto'),  # ManyToMany con Aerolínea
-                Prefetch('vuelos_de_origen'),         # ManyToOne reversa con Vuelo (origen)
-                Prefetch('vuelos_de_destino'),        # ManyToOne reversa con Vuelo (destino)
-                Prefetch('servicio_aeropuerto')       # ManyToMany con Servicio
-            )
-            
-            # Obtener los filtros
-            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
-            ciudades = formulario.cleaned_data.get('ciudad')
-            
-            # Filtro por texto de búsqueda
-            if textoBusqueda:
-                QSaeropuertos = QSaeropuertos.filter(nombre__icontains=textoBusqueda)
-                mensaje_busqueda += f"Nombre que contiene la palabra '{textoBusqueda}'\n"
-            
-            # Filtro por ciudades
-            if ciudades:
-                mensaje_busqueda += f"Ciudad que sea: {', '.join(ciudades)}\n"
-                filtro_ciudades = Q(ciudades=ciudades[0])
-                for ciudad in ciudades[1:]:
-                    filtro_ciudades |= Q(ciudades=ciudad)
-                QSaeropuertos = QSaeropuertos.filter(filtro_ciudades)
-            
-            aeropuertos = QSaeropuertos.all()
-            
-            return render(
-                request,
-                'Formularios/Aeropuerto/lista_busqueda.html',
-                {"aeropuertos_mostrar": aeropuertos, "texto_busqueda": mensaje_busqueda}
-            )
-    else:
-        formulario = BusquedaAvanzadaAeropuertoForm()
-    return render(
-        request,
-        'Formularios/Aeropuerto/busqueda_avanzada.html',
-        {"formulario": formulario}
-    )
+    formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
+    aeropuerto = Aeropuerto.objects.all()
 
-def editar_aeropuerto(request, id):
-    aeropuerto = Aeropuerto.objects.get(id=id)  # Obtiene el aeropuerto por ID
+    if request.GET:
+        if formulario.is_valid():
+
+            textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
+            ciudades = formulario.cleaned_data.get('ciudades')
+            pais = formulario.cleaned_data.get('pais')
+
+            if textoBusqueda:
+                aeropuerto = aeropuerto.filter(nombre__icontains=textoBusqueda)
+
+            if ciudades:
+                aeropuerto = aeropuerto.filter(ciudades=ciudades)
+
+            if pais:
+                aeropuerto = aeropuerto.filter(pais= pais)
+        else:
+            return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
+                'formulario': formulario,
+                'aeropuerto': []
+            })
+
+    return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
+        'formulario': formulario,
+        'aeropuerto': aeropuerto
+    })
+
+def editar_aeropuerto(request, aeropuerto_id):
+    aeropuerto = Aeropuerto.objects.get(id=aeropuerto_id)  # Obtiene el aeropuerto por ID
+
     if request.method == 'POST':
         formulario = AeropuertoForm(request.POST, instance=aeropuerto)
         if formulario.is_valid():
             formulario.save()
-            return redirect('lista_aeropuerto')  # Redirige a la lista después de actualizar
+            messages.success(request, 'Se ha editado el Aeropuerto '+formulario.cleaned_data.get('nombre')+" correctamente")
+            return redirect('Aeropuerto_buscar_avanzado')  # Redirige a la lista después de actualizar
     else:
         formulario = AeropuertoForm(instance=aeropuerto)
 
-    return render(request, 'Formulario/Aeropuerto/editar_aeropuerto.html', {'formulario': formulario, 'aeropuerto': aeropuerto})
+    return render(request, 'Formularios/Aeropuerto/editar_aeropuerto.html', {'formulario': formulario, 'aeropuerto': aeropuerto})
 
-def eliminar_aeropuerto(request, id):
-    aeropuerto = Aeropuerto.objects.get(id=id)
+def eliminar_aeropuerto(request, aeropuerto_id):
+    aeropuerto = Aeropuerto.objects.get(id=aeropuerto_id)
     if request.method == 'POST':
         aeropuerto.delete()
-        return redirect('lista_aeropuerto')  # Redirige a la lista después de eliminar
+        return redirect('Aeropuerto_buscar_avanzado')  # Redirige a la lista después de eliminar
     return render(request, 'Formulario/Aeropuerto/eliminar_aeropuerto.html', {'aeropuerto': aeropuerto})
 
   
@@ -282,10 +268,11 @@ def crear_contacto(request):
 
 def contacto_Aeropuerto_buscar_avanzado(request):
     formulario = BusquedaAvanzadaContacto(request.GET)
-    contactos = ContactoAeropuerto.objects.all()
-
-    if request.GET:
+    
+    if len(request.GET) > 0:
         if formulario.is_valid():
+            contactos = ContactoAeropuerto.objects
+
             nombre_contacto = formulario.cleaned_data.get('nombre_contacto')
             telefono_contacto = formulario.cleaned_data.get('telefono_contacto')
             años_trabajados = formulario.cleaned_data.get('años_trabajados')
@@ -298,12 +285,15 @@ def contacto_Aeropuerto_buscar_avanzado(request):
 
             if años_trabajados:
                 contactos = contactos.filter(años_trabajados= años_trabajados)
+
+            contactos = contactos.all()
         else:
             return render (request, 'Formularios/Contacto_Aeropuerto/busqueda_avanzada.html', {
                 'formulario': formulario,
                 'contactos': []
             })
-
+    else:
+        contactos = ContactoAeropuerto.objects.all()
     return render (request, 'Formularios/Contacto_Aeropuerto/busqueda_avanzada.html', {
         'formulario': formulario,
         'contactos': contactos

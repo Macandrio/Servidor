@@ -34,8 +34,8 @@ urlpatterns = [
     #Aeropuerto
     path('aeropuerto/crear/', views.crear_aeropuerto, name='crear_aeropuerto'),
     path('aeropuerto/busqueda/', views.Aeropuerto_buscar_avanzado, name='Aeropuerto_buscar_avanzado'),
-    path('aeropuerto/editar/<int:id>/', views.editar_aeropuerto, name='editar_aeropuerto'),
-    path('aeropuerto/eliminar/<int:id>/', views.eliminar_aeropuerto, name='eliminar_aeropuerto'),
+    path('aeropuerto/editar/<int:aeropuerto_id>/', views.editar_aeropuerto, name='editar_aeropuerto'),
+    path('aeropuerto/eliminar/<int:aeropuerto_id>/', views.eliminar_aeropuerto, name='eliminar_aeropuerto'),
 
     #contacto aeropuerto
     path('contacto_aeropuerto/crear/', views.crear_contacto, name='crear_contacto'),

@@ -1,45 +1,75 @@
 {% extends 'Principal.html' %}
 
 {% block contenido %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>Búsqueda Avanzada de Aeropuertos</h3>
-                </div>
+<div class="card shadow p-4">
+    <h2 class="text-secondary mb-4">Filtros de búsqueda</h2>
+    <form method="GET" class="mb-4">
+        <div>
+            {{ formulario.textoBusqueda.label_tag }}
+            {{ formulario.textoBusqueda }}
+            {% for error in formulario.textoBusqueda.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+        </div>
+       <div>
+            {{ formulario.ciudades.label_tag }}
+            {{ formulario.ciudades }}
+            {% for error in formulario.ciudades.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+       </div>
+       <div>
+            {{ formulario.pais.label_tag }}
+            {{ formulario.pais }}
+            {% for error in formulario.pais.errors %}
+                <div class="text-danger"><small>{{ error }}</small></div>
+            {% endfor %}
+       </div>
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </form>
+</div>
+
+<h2 class="text-center text-secondary my-4">Resultados de búsqueda</h2>
+
+<div class="row">
+    {% if aeropuerto %}
+        {% for aeropuertoo in aeropuerto %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
                 <div class="card-body">
-                    <form method="GET" action="{% url 'Aeropuerto_buscar_avanzado' %}">
-                        {% csrf_token %}
-
-                        <!-- Campo para texto de búsqueda -->
-                        <div class="mb-4">
-                            <label for="{{ formulario.textoBusqueda.id_for_label }}" class="form-label">
-                                {{ formulario.textoBusqueda.label }}
-                            </label>
-                            {{ formulario.textoBusqueda }}
-                        </div>
-
-                        <!-- Campo para seleccionar ciudades -->
-                        <div class="mb-4">
-                            <label for="{{ formulario.ciudad.id_for_label }}" class="form-label">
-                                {{ formulario.ciudad.label }}
-                            </label>
-                            {{ formulario.ciudad}}
-                        </div>
-
-                        <!-- Botón de envío -->
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-success px-5">Buscar</button>
-                        </div>
-                    </form>
+                    <h5 class="card-title">{{ aeropuertoo.id }}</h5>
+                    <p class="card-text">
+                        <strong>Nombre:</strong> {{ aeropuertoo.nombre }}<br>
+                        <strong>ciudades:</strong> {{ aeropuertoo.ciudades }}<br>
+                        <strong>pais:</strong> {{ aeropuertoo.pais }}<br>
+                    </p>
                 </div>
-                <div class="card-footer text-muted text-center">
-                    Utiliza los filtros para encontrar los aeropuertos que necesitas.
+                <div class="card-footer text-center">
+                    {% load bootstrap_icons %}
+                    <div class="row btn-group">
+                        <div class="mb-2">
+                            <button type="button" 
+                                    class="btn btn-outline-primary"> 
+                                    <a href="{% url 'editar_aeropuerto' aeropuertoo.id %}" ><span>{% bs_icon 'pencil' %}</span></a>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <form action = "{% url 'eliminar_aeropuerto' aeropuertoo.id %}" method = "post"> 
+                            {% csrf_token %}
+                            <button class="btn btn-danger" onclick="return eliminar();" type="submit">
+                                <span>{% bs_icon 'trash' %}</span>
+                            </button> 
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-12">
+            <p class="text-center text-danger">No se encontraron resultados.</p>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
-

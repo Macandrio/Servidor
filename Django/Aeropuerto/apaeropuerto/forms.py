@@ -63,12 +63,28 @@ class AeropuertoForm(ModelForm):
 
 class BusquedaAvanzadaAeropuertoForm(forms.Form):
     
-    textoBusqueda = forms.CharField(required=False)
+    textoBusqueda = forms.CharField(
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
 
-    ciudad = forms.MultipleChoiceField(choices=Aeropuerto.CIUDADES,
-                                required=False,
-                                widget=forms.CheckboxSelectMultiple()
-                               )
+    ciudades = forms.ChoiceField(
+        choices=Aeropuerto.CIUDADES,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+
+    pais = forms.ChoiceField(
+        choices=Aeropuerto.PAISES,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
     
     
     def clean(self):
@@ -78,14 +94,12 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
         
         #Obtenemos los campos 
         textoBusqueda = self.cleaned_data.get('textoBusqueda')
-        ciudad = self.cleaned_data.get('ciudad')
         
            
         #Controlamos los campos
         #Ningún campo es obligatorio, pero al menos debe introducir un valor en alguno para buscar
-        if(textoBusqueda == "" and len(ciudad) == 0):
+        if(textoBusqueda == ""):
             self.add_error('textoBusqueda','Debe introducir al menos un valor en un campo del formulario')
-            self.add_error('ciudad','Debe introducir al menos un valor en un campo del formulario')
         else:
             #Si introduce un texto al menos que tenga  1 caracteres o más
             if(textoBusqueda != "" and len(textoBusqueda) < 2):
