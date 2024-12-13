@@ -186,7 +186,7 @@ def crear_aeropuerto(request):
             try:
                 formulario.save()
                 messages.success(request, "El aeropuerto se creó exitosamente.")
-                return redirect("lista_aeropuerto")
+                return redirect("Aeropuerto_buscar_avanzado")
             except Exception as error:
                 messages.error(request, f"Error inesperado al guardar el aeropuerto: {error}")
         else:
@@ -199,10 +199,15 @@ def crear_aeropuerto(request):
 
 def Aeropuerto_buscar_avanzado(request):
     formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
-    aeropuerto = Aeropuerto.objects.all()
 
-    if request.GET:
+    if len(request.GET) > 0:
         if formulario.is_valid():
+            Aeropuerto.objects.prefetch_related(
+                Prefetch('aerolinea_de_aeropuerto'),  # ManyToMany con Aerolínea
+                Prefetch('vuelos_de_origen'),         # ManyToOne reversa con Vuelo (origen)
+                Prefetch('vuelos_de_destino'),        # ManyToOne reversa con Vuelo (destino)
+                Prefetch('servicio_aeropuerto')       # ManyToMany con Servicio
+            )
 
             textoBusqueda = formulario.cleaned_data.get('textoBusqueda')
             ciudades = formulario.cleaned_data.get('ciudades')
@@ -217,11 +222,13 @@ def Aeropuerto_buscar_avanzado(request):
             if pais:
                 aeropuerto = aeropuerto.filter(pais= pais)
         else:
+            aeropuerto = aeropuerto.all()
             return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
                 'formulario': formulario,
                 'aeropuerto': []
             })
-
+    else:
+        aeropuerto = Aeropuerto.objects.all()
     return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
         'formulario': formulario,
         'aeropuerto': aeropuerto
@@ -259,7 +266,7 @@ def crear_contacto(request):
             try:
                 formulario.save()
                 messages.success(request, "El contacto se creó exitosamente.")
-                return redirect("lista_ContactoAeropuerto")
+                return redirect("contacto_Aeropuerto_buscar_avanzado")
             except Exception as error:
                 print(error)
     else:
@@ -271,7 +278,7 @@ def contacto_Aeropuerto_buscar_avanzado(request):
     
     if len(request.GET) > 0:
         if formulario.is_valid():
-            contactos = ContactoAeropuerto.objects
+            contactos = ContactoAeropuerto.objects.select_related('aeropuerto')
 
             nombre_contacto = formulario.cleaned_data.get('nombre_contacto')
             telefono_contacto = formulario.cleaned_data.get('telefono_contacto')
@@ -341,7 +348,7 @@ def crear_estadisticasvuelo(request):
             try:
                 formulario.save()
                 messages.success(request, "La Estasdistica se creó exitosamente.")
-                return redirect("lista_EstadisticasVuelo")
+                return redirect("Estadisticas_buscar_avanzado")
             except Exception as error:
                 print(error)
     else:
@@ -419,7 +426,7 @@ def crear_Aerolinea(request):
             try:
                 formulario.save()
                 messages.success(request, "La Aerolinea se creó exitosamente.")
-                return redirect("lista_aerolineas")
+                return redirect("Aerolinea_buscar_avanzado")
             except Exception as error:
                 print(error)
     else:
@@ -497,7 +504,7 @@ def crear_Vuelo(request):
             try:
                 formulario.save()
                 messages.success(request, "El vuelo se creó exitosamente.")
-                return redirect("lista_vuelo")
+                return redirect("Vuelo_buscar_avanzado")
             except Exception as error:
                 print(error)
     else:
