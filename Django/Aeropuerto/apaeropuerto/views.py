@@ -198,11 +198,13 @@ def crear_aeropuerto(request):
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
 def Aeropuerto_buscar_avanzado(request):
-    formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
-
+    
     if len(request.GET) > 0:
+        
+        formulario = BusquedaAvanzadaAeropuertoForm(request.GET)
+        
         if formulario.is_valid():
-            Aeropuerto.objects.prefetch_related(
+            aeropuerto = Aeropuerto.objects.prefetch_related(
                 Prefetch('aerolinea_de_aeropuerto'),  # ManyToMany con Aerolínea
                 Prefetch('vuelos_de_origen'),         # ManyToOne reversa con Vuelo (origen)
                 Prefetch('vuelos_de_destino'),        # ManyToOne reversa con Vuelo (destino)
@@ -222,13 +224,14 @@ def Aeropuerto_buscar_avanzado(request):
             if pais:
                 aeropuerto = aeropuerto.filter(pais= pais)
         else:
-            aeropuerto = aeropuerto.all()
             return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
                 'formulario': formulario,
                 'aeropuerto': []
             })
     else:
+        formulario = BusquedaAvanzadaAeropuertoForm(None)
         aeropuerto = Aeropuerto.objects.all()
+        
     return render (request, 'Formularios/Aeropuerto/busqueda_avanzada.html', {
         'formulario': formulario,
         'aeropuerto': aeropuerto
@@ -274,9 +277,10 @@ def crear_contacto(request):
     return render(request,'Formularios/Contacto_Aeropuerto/crear_Contacto.html',{"formulario":formulario})
 
 def contacto_Aeropuerto_buscar_avanzado(request):
-    formulario = BusquedaAvanzadaContacto(request.GET)
     
     if len(request.GET) > 0:
+        formulario = BusquedaAvanzadaContacto(request.GET)
+        
         if formulario.is_valid():
             contactos = ContactoAeropuerto.objects.select_related('aeropuerto')
 
@@ -300,6 +304,7 @@ def contacto_Aeropuerto_buscar_avanzado(request):
                 'contactos': []
             })
     else:
+        formulario = BusquedaAvanzadaContacto(None)
         contactos = ContactoAeropuerto.objects.all()
     return render (request, 'Formularios/Contacto_Aeropuerto/busqueda_avanzada.html', {
         'formulario': formulario,
@@ -355,12 +360,13 @@ def crear_estadisticasvuelo(request):
         formulario=estadisticasvueloform()  
     return render(request,'Formularios/Estadisticas_vuelo/crear_Estadisticasvuelo.html',{"formulario":formulario})
 
-def Estadisticas_buscar_avanzado(request):
-    formulario = BusquedaAvanzadaEstadisticas(request.GET)
-    estadisticas = EstadisticasVuelo.objects.all()
+def Estadisticas_buscar_avanzado(request):    
 
-    if request.GET:
+    if len(request.GET) > 0:
+        formulario = BusquedaAvanzadaEstadisticas(request.GET)
+        
         if formulario.is_valid():
+            estadisticas = EstadisticasVuelo.objects.select_related('vuelo')
             fecha_estadisticas = formulario.cleaned_data.get('fecha_estadisticas')
             numero_asientos_vendidos = formulario.cleaned_data.get('numero_asientos_vendidos')
             numero_cancelaciones = formulario.cleaned_data.get('numero_cancelaciones')
@@ -378,6 +384,9 @@ def Estadisticas_buscar_avanzado(request):
                 'formulario': formulario,
                 'estadisticas': [],
             })
+    else:
+        formulario = BusquedaAvanzadaEstadisticas(None)
+        estadisticas = EstadisticasVuelo.objects.all()
 
     return render (request, 'Formularios/Estadisticas_vuelo/busqueda_avanzada.html', {
         'formulario': formulario,
@@ -434,11 +443,16 @@ def crear_Aerolinea(request):
     return render(request,'Formularios/Aerolinea/crear_aerolinea.html',{"formulario":formulario})
 
 def Aerolinea_buscar_avanzado(request):
-    formulario = BusquedaAvanzadaAerolinea(request.GET)
-    aerolineas = Aerolinea.objects.all()
 
-    if request.GET:
+    if len(request.GET) > 0:
+        formulario = BusquedaAvanzadaAerolinea(request.GET)
+        
         if formulario.is_valid():
+            aerolineas = Aerolinea.objects.prefetch_related(
+                                                            Prefetch('aeropuerto'),               # ManyToMany con Aeropuerto
+                                                            Prefetch('vuelo_aerolinea')           # ManyToMany con Vuelo
+                                                        )
+
             nombre = formulario.cleaned_data.get('nombre')
             codigo = formulario.cleaned_data.get('codigo')
             pais = formulario.cleaned_data.get('pais')
@@ -456,6 +470,10 @@ def Aerolinea_buscar_avanzado(request):
                 'formulario': formulario,
                 'aerolineas': []
             })
+    else:
+        formulario = BusquedaAvanzadaAerolinea(None)
+        aerolineas = Aerolinea.objects.all()
+
 
     return render (request, 'Formularios/Aerolinea/buscar.html', {
         'formulario': formulario,
@@ -506,7 +524,7 @@ def crear_Vuelo(request):
                 messages.success(request, "El vuelo se creó exitosamente.")
                 return redirect("Vuelo_buscar_avanzado")
             except Exception as error:
-                print(error)
+                messages.error(request, f"Error inesperado al guardar el aeropuerto: {error}")
     else:
         formulario=VueloForm()  
     return render(request,'Formularios/Vuelo/crear_vuelo.html',{"formulario":formulario})
@@ -516,7 +534,7 @@ def Vuelo_buscar_avanzado(request):
     vuelos = Vuelo.objects.all()
     aeropuerto = Aeropuerto.objects.all()
 
-    if request.GET:
+    if len(request.GET) > 0:
         if formulario.is_valid():
             hora_salida = formulario.cleaned_data.get('hora_salida')
             hora_llegada = formulario.cleaned_data.get('hora_llegada')
@@ -556,23 +574,14 @@ def Vuelo_buscar_avanzado(request):
 def Vuelo_modificar(request,vuelo_id):
     vuelo = Vuelo.objects.get(id=vuelo_id)
     
-    datosFormulario = None
-    
     if request.method == "POST":
-        datosFormulario = request.POST
-    
-    
-    formulario = VueloForm(datosFormulario,instance = vuelo)
-    
-    if (request.method == "POST"):
-       
-        if formulario.is_valid():
-            try:  
-                formulario.save()
-                messages.success(request, 'Se ha editado el vuelo '+formulario.cleaned_data.get('id')+" correctamente")
-                return redirect('Vuelo_buscar_avanzado')  
-            except Exception as error:
-                print(error)
+        formulario = VueloForm(request.POST, instance=vuelo_id)
+        if formulario.is_valid():  
+            formulario.save()
+            messages.success(request, 'Se ha editado el vuelo '+formulario.cleaned_data.get('id')+" correctamente")
+            return redirect('Vuelo_buscar_avanzado')  
+    else:
+        formulario = VueloForm(instance=vuelo)
     return render(request, 'Formularios/Vuelo/modificar.html',{"formulario":formulario,"vuelo":vuelo})
 
 def Vuelo_eliminar(request,vuelo_id):
@@ -600,10 +609,11 @@ def crear_pasajero(request):
     return render(request,'Formularios/Pasajero/crear_pasajero.html',{"formulario":formulario})
 
 def Pasajero_buscar_avanzado(request):
-    formulario = BusquedaAvanzadaPasajero(request.GET)
-    pasajeros = Pasajero.objects.all()
 
     if request.GET:
+        formulario = BusquedaAvanzadaPasajero(request.GET)
+        pasajeros = Pasajero.objects.all()
+    
         if formulario.is_valid():
             nombre = formulario.cleaned_data.get('nombre')
             apellido = formulario.cleaned_data.get('apellido')
@@ -622,6 +632,10 @@ def Pasajero_buscar_avanzado(request):
                 'formulario': formulario,
                 'pasajeros': []
             })
+    else:
+        formulario = BusquedaAvanzadaPasajero(None)
+        pasajeros = Pasajero.objects.all()
+    
 
     return render (request, 'Formularios/Pasajero/buscar.html', {
         'formulario': formulario,

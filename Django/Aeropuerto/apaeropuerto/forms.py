@@ -8,6 +8,8 @@ from .forms import *
 
 
 
+
+
 #------------------------------------------------------------Aeropuerto---------------------------------------------------------------------------------------
 
 class AeropuertoForm(ModelForm):
@@ -22,7 +24,7 @@ class AeropuertoForm(ModelForm):
             "pais" : ("Pais del aeropuerto"),
             "capacidad_maxima" : ("Capacidad del aeropuerto"),
         }
-
+        
         widgets = {
 
             "nombre": forms.TextInput(attrs={
@@ -31,6 +33,7 @@ class AeropuertoForm(ModelForm):
             }),
 
             "ciudades": forms.Select(),
+            
             "pais": forms.Select(),
 
             "capacidad_maxima": forms.NumberInput(attrs={
@@ -50,8 +53,13 @@ class AeropuertoForm(ModelForm):
             #Comprobamos que no exista un libro con ese nombre
             encontrar_aeropuerto = Aeropuerto.objects.filter(nombre=nombre).first()
 
-            if(encontrar_aeropuerto):
-                self.add_error('nombre','Ya existe un Aeropuerto con ese nombre')
+            if(not encontrar_aeropuerto is None
+           ):
+             if(not self.instance is None and encontrar_aeropuerto.id == self.instance.id):
+                 pass
+             else:
+                self.add_error('nombre','Ya existe un libro con ese nombre')
+
 
             if(nombre == " "):
                 self.add_error("nombre","El nombre del aeropuerto no puede estar vacio")
@@ -65,10 +73,11 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
     
     textoBusqueda = forms.CharField(
         required=False,
-        widget=forms.Select(attrs={
+        widget=forms.TextInput(attrs={
             'class': 'form-control',
         })
     )
+    Aeropuerto.CIUDADES.insert(0, ("", "Ninguno"))
 
     ciudades = forms.ChoiceField(
         choices=Aeropuerto.CIUDADES,
@@ -78,6 +87,7 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
         })
     )
 
+    Aeropuerto.PAISES.insert(0, ("", "Ninguno"))
     pais = forms.ChoiceField(
         choices=Aeropuerto.PAISES,
         required=False,
@@ -94,16 +104,23 @@ class BusquedaAvanzadaAeropuertoForm(forms.Form):
         
         #Obtenemos los campos 
         textoBusqueda = self.cleaned_data.get('textoBusqueda')
+        ciudades = self.cleaned_data.get('ciudades')
+        pais = self.cleaned_data.get('pais')
         
            
         #Controlamos los campos
         #Ningún campo es obligatorio, pero al menos debe introducir un valor en alguno para buscar
-        if(textoBusqueda == ""):
-            self.add_error('textoBusqueda','Debe introducir al menos un valor en un campo del formulario')
+        if(textoBusqueda == "" and ciudades == "" and pais == ""):
+            self.add_error('textoBusqueda','Debe introducir al menos un campo en un campo del formulario')
         else:
             #Si introduce un texto al menos que tenga  1 caracteres o más
             if(textoBusqueda != "" and len(textoBusqueda) < 2):
                 self.add_error('textoBusqueda','Debe introducir al menos 1 caracteres')
+        
+        if(ciudades == '' and pais == ''):
+            self.add_error('ciudades' , 'Debe introducir una Ciudad')
+            self.add_error('pais' , 'Debe introducir un Pais')
+
             
         #Siempre devolvemos el conjunto de datos.
         return self.cleaned_data
@@ -152,10 +169,10 @@ class ContactoAeropuertoform(ModelForm):
         nombre_contacto = self.cleaned_data.get('nombre_contacto')
 
         if (nombre_contacto == ''):
-            raise forms.ValidationError("nombre_contacto","El Nombre no puede estar vacio.")
+            self.add_error("nombre_contacto","El Nombre no puede estar vacio.")
         
         if len(telefono) > 999999999:
-            raise forms.ValidationError("telefono","El teléfono no puede tener más de 9 dígitos.")
+            self.add_error("telefono","El teléfono no puede tener más de 9 dígitos.")
 
         return self.cleaned_data    
 
@@ -280,9 +297,11 @@ class BusquedaAvanzadaEstadisticas(forms.Form):
             self.add_error('numero_asientos_vendidos', 'Se debe rellenar minimo un campo')
             self.add_error('numero_cancelaciones', 'Se debe rellenar minimo un campo')
 
-        # Validación de puntuación
-        if numero_asientos_vendidos is not None and numero_asientos_vendidos < 0:
-            self.add_error('numero_asientos_vendidos', 'Los asientos no puede ser menor a 0.')
+        
+        # Validar que ambos campos tengan valores válidos antes de compararlos
+        if numero_asientos_vendidos is not None and numero_cancelaciones is not None:
+            if numero_asientos_vendidos < numero_cancelaciones:
+                self.add_error('numero_cancelaciones', 'Los asientos vendidos no pueden ser mayores a los cancelados.')
 
         return self.cleaned_data
 #------------------------------------------------------------Aerolínea----------------------------------------------------------------------------------------------
@@ -354,6 +373,7 @@ class BusquedaAvanzadaAerolinea(forms.Form):
             'placeholder': 'Contenido...',
         })
     )
+    Aerolinea.paises.insert(0, ("", "Ninguno"))
 
     pais = forms.ChoiceField(
         choices=Aerolinea.paises,
@@ -395,20 +415,15 @@ class VueloForm(ModelForm):
         fields = '__all__'  # Incluir todos los campos del modelo
 
         labels = {
-            "codigo_vuelo": "Código del vuelo",
             "origen": "Aeropuerto de origen",
             "destino": "Aeropuerto de destino",
             "hora_salida": "Hora de salida",
             "hora_llegada": "Hora de llegada",
             "estado": "Estado del vuelo",
-            "capacidad_maxima": "Capacidad máxima",
+            "aerolinea" : "Aerolinea elegida"
         }
 
         widgets = {
-            "codigo_vuelo": forms.TextInput(attrs={
-                "placeholder": "Introduce el código del vuelo",
-                "maxlength": 10,
-            }),
 
             "origen": forms.Select(),
             "destino": forms.Select(),
@@ -422,10 +437,8 @@ class VueloForm(ModelForm):
             }),
 
             "estado": forms.CheckboxInput(),
-            "capacidad_maxima": forms.NumberInput(attrs={
-                "placeholder": "Introduce la capacidad máxima",
-                "min": 1,
-            }),
+            
+
         }
 
 
@@ -449,13 +462,12 @@ class VueloForm(ModelForm):
         return cleaned_data
 
 class BusquedaAvanzadaVuelo(forms.Form):
-    
-    hora_salida = forms.DateField(
+    hora_salida = forms.DateTimeField(
         required=False,
-        widget=forms.DateInput(attrs={
+        widget=forms.DateTimeInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Contenido...',
-            'type': 'date'  # Campo para fecha y hora
+            'placeholder': 'Selecciona fecha y hora...',
+            'type': 'datetime-local'  # Campo para fecha y hora
         })
     )
 
@@ -463,14 +475,13 @@ class BusquedaAvanzadaVuelo(forms.Form):
         required=False,
         widget=forms.DateTimeInput(attrs={
             'class': 'form-control',
-            'placeholder': 'Contenido...',
-            'type': 'date'  # Campo para fecha y hora
+            'placeholder': 'Selecciona fecha y hora...',
+            'type': 'datetime-local'  # Campo para fecha y hora
         })
     )
 
-
     origen = forms.ModelChoiceField(
-        queryset= Aeropuerto.objects.all(),
+        queryset=Aeropuerto.objects.all(),
         required=False,
         widget=forms.Select(attrs={
             'class': 'form-control'
@@ -478,7 +489,7 @@ class BusquedaAvanzadaVuelo(forms.Form):
     )
 
     destino = forms.ModelChoiceField(
-        queryset= Aeropuerto.objects.all(),
+        queryset=Aeropuerto.objects.all(),
         required=False,
         widget=forms.Select(attrs={
             'class': 'form-control'
@@ -486,15 +497,12 @@ class BusquedaAvanzadaVuelo(forms.Form):
     )
 
     aerolinea = forms.ModelChoiceField(
-        queryset= Aerolinea.objects.all(),
+        queryset=Aerolinea.objects.all(),
         required=False,
         widget=forms.Select(attrs={
             'class': 'form-control'
         })
     )
-
-    
-
 
     def clean(self):
         super().clean()
@@ -504,16 +512,23 @@ class BusquedaAvanzadaVuelo(forms.Form):
         origen = self.cleaned_data.get('origen')
         destino = self.cleaned_data.get('destino')
 
-        #Validación: Al menos un campo debe estar rellenado
+        
+        if origen == None and destino == None:
+            self.add_error('origen', 'Debe introducir un origen')
+            self.add_error('destino', 'Debe introducir un destino')
+
+        # Validar que ambas fechas existan antes de compararlas
         if hora_salida and hora_llegada:
             if hora_salida > hora_llegada:
-                self.add_error('hora_llegada', 'No puede ser menor a la hora de salida')
+                self.add_error('hora_llegada', 'La hora de llegada no puede ser menor a la hora de salida.')
 
+        # Validar que origen y destino no sean iguales
         if origen and destino:
             if origen == destino:
-                self.add_error('destino', 'No puede ser menor el mismo lugar de origen')
+                self.add_error('destino', 'El destino no puede ser igual al origen.')
 
         return self.cleaned_data
+
     
 #------------------------------------------------------------Pasajero-----------------------------------------------------------------------------------------------
 
@@ -614,12 +629,19 @@ class BusquedaAvanzadaPasajero(forms.Form):
         super().clean()
 
         nombre = self.cleaned_data.get('nombre')
-        apellido = self.cleaned_data.get('apellido')
+        telefono = self.cleaned_data.get('telefono')
 
-        if(nombre == " "):
+
+        if(nombre == ""):
                 self.add_error("nombre","El nombre del aeropuerto no puede estar vacio")
 
-        if(len(apellido) < 3):
-                self.add_error("apellido","tiene que tener mas de 3 caracteres")
+        if telefono:  # Asegurarse de que el teléfono no sea None
+            telefono_str = str(telefono)  # Convertir a cadena para verificar la longitud
+            if len(telefono_str) != 9 or not telefono_str.isdigit():  # Verificar que tenga exactamente 9 dígitos y sea numérico
+                self.add_error("telefono", "El número de teléfono debe tener exactamente 9 dígitos.")
+        else:
+            self.add_error("telefono", "Debe proporcionar un número de teléfono.")
+
+
 
         return self.cleaned_data
