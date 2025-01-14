@@ -131,3 +131,4 @@ STATIC_ROOT = BASE_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com','0.0.0.0']
 INTERNAL_IPS = ["127.0.0.1"]
+AUTH_USER_MODEL = 'apaeropuerto.Usuario'

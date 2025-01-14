@@ -5,7 +5,26 @@ from datetime import *
 import re 
 from django.utils import timezone
 from .forms import *
+from django.contrib.auth.forms import UserCreationForm
 
+
+#------------------------------------------------------------Registro---------------------------------------------------------------------------------------
+
+class RegistroForm(UserCreationForm): 
+    roles = (
+                                ("","NINGUNO"),
+                                (Usuario.PASAJERO, 'cliente'),
+                                (Usuario.GERENTE, 'gerente'),
+            )   
+    
+    
+    
+    rol = forms.ChoiceField(choices=roles)  
+    
+    
+    class Meta:
+        model = Usuario
+        fields = ('username', 'first_name' ,'last_name', 'email', 'password1', 'password2','rol')
 
 
 
@@ -538,31 +557,18 @@ class PasajeroForm(ModelForm):
         fields = '__all__'  # Incluir todos los campos del modelo
 
         labels = {
-            "nombre": "Nombre del pasajero",
-            "apellido": "Apellido del pasajero",
-            "email": "Correo electrónico",
-            "telefono": "Teléfono",
-            "fecha_nacimiento": "Fecha de nacimiento",
+            "direccion": "Direccion del pasajero",
+            "dni": "dni del pasajero",
         }
 
         widgets = {
-            "nombre": forms.TextInput(attrs={
-                "placeholder": "Introduce el nombre del pasajero",
-                "maxlength": 50,
-            }),
-            "apellido": forms.TextInput(attrs={
-                "placeholder": "Introduce el apellido del pasajero",
-                "maxlength": 50,
-            }),
-            "email": forms.EmailInput(attrs={
-                "placeholder": "Introduce el correo electrónico",
-            }),
-            "telefono": forms.TextInput(attrs={
-                "placeholder": "Introduce el número de teléfono",
+            "direccion": forms.TextInput(attrs={
+                "placeholder": "Introduce la direccion",
                 "maxlength": 9,
             }),
-            "fecha_nacimiento": forms.DateInput(attrs={
-                "type": "date",
+            "dni": forms.IntegerField(attrs={
+                "placeholder": "Introduce el DNI",
+                "maxlength": 9,
             }),
         }
 
@@ -571,53 +577,18 @@ class PasajeroForm(ModelForm):
     def clean(self):
         cleaned_data = super().clean()
 
-        telefono = cleaned_data.get('telefono')
-        fecha_nacimiento = cleaned_data.get('fecha_nacimiento')
+        dni = cleaned_data.get('dni')
+        dni_regla = r'^\D{8}[a-z]$'
 
         # Validar que el teléfono tenga exactamente 9 dígitos
-        if telefono:
-            telefonostr = str(telefono)
-            if len(telefonostr) != 9 or not telefonostr.isdigit(): # es para que no pueda introducir menos de 9 cifras (999999999)
-                self.add_error('telefono', "El número de teléfono debe tener exactamente 9 dígitos y contener solo números.")
-        else:
-            self.add_error('telefono', "El número de teléfono es obligatorio.")
-
-        # Validar que la fecha de nacimiento no sea nula
-        if not fecha_nacimiento:
-            raise forms.ValidationError("La fecha de nacimiento es obligatoria.")
-
-        # Validar que la fecha de nacimiento no sea más de 100 años en el pasado
-        hoy = date.today()
-        anios_diferencia = hoy.year - fecha_nacimiento.year
-
-        if anios_diferencia > 100:
-            raise forms.ValidationError("El año de nacimiento no puede ser mayor a 100 años en el pasado.")
-
-        # Validar que la fecha de nacimiento no sea futura
-        if fecha_nacimiento > hoy:
-            raise forms.ValidationError("La fecha de nacimiento no puede ser una fecha futura.")
+        if not re.match(dni_regla,dni):
+            self.add_error('dni','El dni no es valido')
 
         return cleaned_data
 
 class BusquedaAvanzadaPasajero(forms.Form):
     
-    nombre = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Contenido...',
-        })
-    )
-
-    apellido = forms.CharField(
-        required=False,
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Contenido...',
-        })
-    )
-
-    telefono = forms.IntegerField(
+    dni = forms.IntegerField(
         required=False,
         widget=forms.NumberInput(attrs={
             'class': 'form-control',
@@ -625,22 +596,30 @@ class BusquedaAvanzadaPasajero(forms.Form):
         })
     )
 
+    direccion = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Contenido...',
+        })
+    )
+
+
     def clean(self):
         super().clean()
 
-        nombre = self.cleaned_data.get('nombre')
-        telefono = self.cleaned_data.get('telefono')
+        dni = self.cleaned_data.get('nombre')
+        dni_regla = r'^\D{8}[a-z]$'
+        direccion = self.cleaned_data.get('direccion')
 
 
-        if(nombre == ""):
-                self.add_error("nombre","El nombre del aeropuerto no puede estar vacio")
+        # Validar que el teléfono tenga exactamente 9 dígitos
+        if not re.match(dni_regla,dni):
+            self.add_error('dni','El dni no es valido')
 
-        if telefono:  # Asegurarse de que el teléfono no sea None
-            telefono_str = str(telefono)  # Convertir a cadena para verificar la longitud
-            if len(telefono_str) != 9 or not telefono_str.isdigit():  # Verificar que tenga exactamente 9 dígitos y sea numérico
-                self.add_error("telefono", "El número de teléfono debe tener exactamente 9 dígitos.")
-        else:
-            self.add_error("telefono", "Debe proporcionar un número de teléfono.")
+        if (direccion == '' and dni == '' ):  # Asegurarse de que el teléfono no sea None
+            self.add_error('dni', 'Debe introducir un dni')
+            self.add_error('direccion' , 'Debe introducir una direccion')
 
 
 

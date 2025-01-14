@@ -15,8 +15,7 @@ urlpatterns = [
     path('servicio/', views.lista_servicio, name='lista_servicio'),
     path('contactoaeropuerto/', views.lista_ContactoAeropuerto, name='lista_ContactoAeropuerto'),
     path('estadisticasvuelo/', views.lista_EstadisticasVuelo, name='lista_EstadisticasVuelo'),
-    path('datospasajero/', views.lista_PerfilPasajero, name='lista_PerfilPasajero'),
-
+    
     #QuerySet
     path('pasajero-vuelo/<int:id_vuelo>/', views.pasajeros_vuelo, name='pasajeros_vuelo'),
     path('vuelo-volando-año/<int:anyo>/', views.vuelo_volando_año, name='vuelo_volando_año'),
@@ -68,6 +67,8 @@ urlpatterns = [
     path('estadisticasvuelo/modificar/<int:estadisticas_id>',views.Estadisticas_modificar,name='Estadisticas_modificar'),
     path('estadisticasvuelo/eliminar/<int:estadisticas_id>',views.Estadisticas_eliminar,name='Estadisticas_eliminar'),
 
+    #USUARIO
+    path('usuario/listar/<int:usuario_id>',views.registrar_usuario,name='registrar_usuario'),
 
 
 

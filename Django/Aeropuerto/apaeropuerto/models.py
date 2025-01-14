@@ -2,7 +2,25 @@ from django.db import models
 from django.utils  import timezone
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator
+from django.contrib.auth.models import AbstractUser
 
+
+class Usuario(AbstractUser):
+    ADMINISTRADOR = 1
+    PASAJERO = 2
+    GERENTE = 3
+    ROLES = (
+        (ADMINISTRADOR, 'administardor'),
+        (PASAJERO, 'pasajero'),
+        (GERENTE, 'gerente'),
+    )
+    
+    rol  = models.PositiveSmallIntegerField(
+        choices=ROLES,default=1
+    )
+
+    telefono = models.IntegerField()
+    
 
 
 
@@ -117,40 +135,23 @@ class EstadisticasVuelo(models.Model):
 
 
 # Modelo Pasajero
-def validar_dominio_email(email):
-    # Lista de dominios permitidos
-        dominios_permitidos = ['@gmail.com', '@hotmail.com', '@polignosur.org']
-    
-    # Comprobar si el correo electrónico termina con alguno de los dominios permitidos
-        if not any(email.endswith(dominio) for dominio in dominios_permitidos):
-            raise ValidationError(('El correo electrónico debe tener uno de los siguientes dominios: @gmail.com, @hotmail.com, @polignosur.org.'),
-                code='invalid_domain',)
         
 class Pasajero(models.Model):
-    nombre = models.CharField(max_length=20)
-    apellido = models.CharField(max_length=20, blank=True)  # Permitir valores vacíos
-    email = models.EmailField(validators=[validar_dominio_email])
-    telefono = models.IntegerField(validators=[ MaxValueValidator(999999999)],blank=True )
-    fecha_nacimiento = models.DateField(null=True)  
+    usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
+    direccion = models.CharField(max_length=100)
+    dni = models.CharField(max_length=9)
     vuelo = models.ManyToManyField(Vuelo, related_name='vuelo_pasajero') # Relación Many To Many
-    
-
 
     def __str__(self):
-        return f"{self.nombre} {self.apellido}"
+        return f"{self.usuario.username}"
     
-#Modelo PerfilPasajero       
-class PerfilPasajero(models.Model):
-    direccion = models.CharField(max_length=255, blank=True)
-    documento_identidad = models.CharField(max_length=9)
-    nacionalidad = models.CharField(max_length=50, blank=True)
-    vivienda = models.CharField(max_length=50, blank=True)
-
-    pasajero = models.OneToOneField(Pasajero, on_delete=models.CASCADE, related_name='pasajero_datos')# Relación OneToOne
+class Gerente(models.Model):
+    usuario = models.OneToOneField(Usuario, 
+                             on_delete = models.CASCADE)
+    
 
     def __str__(self):
-        return "DNI" + self.documento_identidad
-
+        return f"{self.usuario.username}"
     
 # Modelo Equipaje
 class Equipaje(models.Model):
@@ -268,3 +269,4 @@ class Empleado(models.Model):
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}, {self.cargo}"
+    

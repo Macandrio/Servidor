@@ -2,12 +2,15 @@ from django.shortcuts import render, redirect
 from django.db.models import Prefetch, Q, Sum, Count
 from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
-    VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo , PerfilPasajero
+    VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo ,
 )
 from .forms import * # El * Coge todos los modelos es lo mismo que hacer lo de from .models import
 from django.contrib import messages
 
 def index(request):
+
+    if(not "fecha_inicio" in request.session):
+        request.session["fecha_inicio"] = datetime.now().strftime('%d/%m/%Y %H:%M')
     return render(request, 'index.html') 
 
 #--------------------------------------------- Listas -----------------------------------------------------------------
@@ -72,10 +75,6 @@ def lista_EstadisticasVuelo(request):
     estadisticas = EstadisticasVuelo.objects.all()
     return render(request, 'paginas/estadisticas_list.html', {'estadisticas': estadisticas})
 
-# Vista para listar PerfilPasajero
-def lista_PerfilPasajero(request):
-    perfilpasajero = PerfilPasajero.objects.all()
-    return render(request, 'paginas/perfilpasajero_list.html', {'perfilpasajero': perfilpasajero})
 
 #--------------------------------------------- Consultas -----------------------------------------------------------------
 
@@ -615,18 +614,14 @@ def Pasajero_buscar_avanzado(request):
         pasajeros = Pasajero.objects.all()
     
         if formulario.is_valid():
-            nombre = formulario.cleaned_data.get('nombre')
-            apellido = formulario.cleaned_data.get('apellido')
-            telefono = formulario.cleaned_data.get('telefono')
+            dni = formulario.cleaned_data.get('dni')
+            direccion = formulario.cleaned_data.get('apellido')
 
-            if nombre:
-                pasajeros = pasajeros.filter(nombre__icontains=nombre)
+            if direccion:
+                pasajeros = pasajeros.filter(nombre__icontains=direccion)
 
-            if apellido:
-                pasajeros = pasajeros.filter(apellido__icontains=apellido)
-
-            if telefono:
-                pasajeros = pasajeros.filter(telefono = telefono)
+            if dni:
+                pasajeros = pasajeros.filter(telefono = dni)
         else:
             return render (request, 'Formularios/Pasajero/buscar.html', {
                 'formulario': formulario,
@@ -672,6 +667,30 @@ def Pasajero_eliminar(request,pasajero_id):
     except Exception as error:
         print(error)
     return redirect('Pasajero_buscar_avanzado')
+
+
+#--------------------------------------------- Usuario -----------------------------------------------------------------
+
+
+def registrar_usuario(request):
+    if request.method == 'POST':
+        formulario = RegistroForm(request.POST)
+        if formulario.is_valid():
+            user = formulario.save()
+            rol = int(formulario.cleaned_data.get('rol'))
+            if(rol == Usuario.PASAJERO):
+                pasajero = Pasajero.objects.create( usuario = user)
+                pasajero.save()
+            elif(rol == Usuario.GERENTE):
+                gerente = Gerente.objects.create(usuario = user)
+                gerente.save()
+            
+            return redirect('index')
+    else:
+        formulario = RegistroForm()
+    return render(request, 'registration/signup.html', {'formulario': formulario})
+
+
 
 
 
