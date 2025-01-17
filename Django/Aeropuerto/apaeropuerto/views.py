@@ -6,6 +6,8 @@ from .models import (
 )
 from .forms import * # El * Coge todos los modelos es lo mismo que hacer lo de from .models import
 from django.contrib import messages
+from django.contrib.auth import login
+
 
 def index(request):
 
@@ -685,7 +687,9 @@ def registrar_usuario(request):
                 gerente = Gerente.objects.create(usuario = user)
                 gerente.save()
             
+            login(request, user)
             return redirect('index')
+
     else:
         formulario = RegistroForm()
     return render(request, 'registration/signup.html', {'formulario': formulario})

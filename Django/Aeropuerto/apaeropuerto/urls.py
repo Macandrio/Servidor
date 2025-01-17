@@ -68,7 +68,7 @@ urlpatterns = [
     path('estadisticasvuelo/eliminar/<int:estadisticas_id>',views.Estadisticas_eliminar,name='Estadisticas_eliminar'),
 
     #USUARIO
-    path('usuario/listar/<int:usuario_id>',views.registrar_usuario,name='registrar_usuario'),
+    path('registrar',views.registrar_usuario,name='registrar_usuario'),
 
 
 

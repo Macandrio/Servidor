@@ -19,7 +19,6 @@ class Usuario(AbstractUser):
         choices=ROLES,default=1
     )
 
-    telefono = models.IntegerField()
     
 
 
@@ -140,6 +139,7 @@ class Pasajero(models.Model):
     usuario = models.OneToOneField(Usuario, on_delete = models.CASCADE)
     direccion = models.CharField(max_length=100)
     dni = models.CharField(max_length=9)
+
     vuelo = models.ManyToManyField(Vuelo, related_name='vuelo_pasajero') # Relación Many To Many
 
     def __str__(self):

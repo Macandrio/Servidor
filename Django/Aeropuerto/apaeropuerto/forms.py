@@ -559,6 +559,8 @@ class PasajeroForm(ModelForm):
         labels = {
             "direccion": "Direccion del pasajero",
             "dni": "dni del pasajero",
+            "usuario" : "Introduzca al usuario",
+            "vuelo" : "Introduzca el vuelo",
         }
 
         widgets = {
@@ -566,10 +568,10 @@ class PasajeroForm(ModelForm):
                 "placeholder": "Introduce la direccion",
                 "maxlength": 9,
             }),
-            "dni": forms.IntegerField(attrs={
+            "dni": forms.TextInput(attrs={
                 "placeholder": "Introduce el DNI",
-                "maxlength": 9,
             }),
+
         }
 
     
