@@ -481,3 +481,5 @@ Servicio.objects.prefetch_related(
 Empleado.objects.select_related(
     'servicio'                            # ManyToOne con Servicio
 )
+
+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

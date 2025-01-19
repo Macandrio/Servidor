@@ -67,6 +67,13 @@ urlpatterns = [
     path('estadisticasvuelo/modificar/<int:estadisticas_id>',views.Estadisticas_modificar,name='Estadisticas_modificar'),
     path('estadisticasvuelo/eliminar/<int:estadisticas_id>',views.Estadisticas_eliminar,name='Estadisticas_eliminar'),
 
+    #Reservas
+    path('reservas/crear/', views.crear_reserva, name='crear_reserva'),
+    path('reservas/buscar/', views.Reserva_buscar_avanzado, name='Reserva_buscar_avanzado'),
+    path('reservas/modificar//<int:estadisticas_id>', views.editar_reserva, name='editar_reserva'),
+    path('reservas/eliminar/<int:estadisticas_id>',views.reserva_eliminar,name='reserva_eliminar'),
+
+
     #USUARIO
     path('registrar',views.registrar_usuario,name='registrar_usuario'),
 

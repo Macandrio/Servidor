@@ -626,3 +626,73 @@ class BusquedaAvanzadaPasajero(forms.Form):
 
 
         return self.cleaned_data
+    
+
+#------------------------------------------------------------Reservas---------------------------------------------------------------------------------------
+
+class ReservaForm(ModelForm):
+    class Meta:
+        model = Reserva
+        exclude = ['pasajero']  # Excluir el campo pasajero del formulario
+        fields = '__all__'
+
+        labels = {
+            "fecha_reserva": "Fecha de reserva",
+            "codigo_descueto": "Código de descuento",
+            "metodo_pago": "Método de pago",
+            "estado_de_pago": "Estado del pago",
+        }
+
+        widgets = {
+            "fecha_reserva": forms.DateTimeInput(attrs={
+                "type": "datetime-local",
+                "class": "form-control",
+            }),
+            "codigo_descueto": forms.TextInput(attrs={
+                "placeholder": "Introduce el código de descuento",
+                "class": "form-control",
+            }),
+            "metodo_pago": forms.Select(attrs={
+                "class": "form-control",
+            }),
+            "estado_de_pago": forms.CheckboxInput(attrs={
+                "class": "form-check-input",
+            }),
+        }
+
+class BusquedaAvanzadaReservaForm(forms.Form):
+    fecha_reserva = forms.DateField(
+        required=False,
+        widget=forms.DateInput(attrs={
+            'type': 'date',
+            'class': 'form-control',
+        })
+    )
+    codigo_descueto = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Introduce el código de descuento',
+            'class': 'form-control',
+        })
+    )
+    metodo_pago = forms.ChoiceField(
+        choices=[('', 'Cualquiera')] + Reserva.METODO_PAGO_CHOICES,
+        required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+    estado_de_pago = forms.BooleanField(
+        required=False,
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )
+
+    def clean(self):
+        super().clean()
+        # Al menos un campo debe completarse para que la búsqueda sea válida
+        if not any(self.cleaned_data.values()):
+            raise forms.ValidationError("Debe completar al menos un campo para buscar.")
+
+        return self.cleaned_data

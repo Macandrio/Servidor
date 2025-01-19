@@ -6,7 +6,11 @@ from .models import (
 )
 from .forms import * # El * Coge todos los modelos es lo mismo que hacer lo de from .models import
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+
+
 
 
 def index(request):
@@ -346,7 +350,6 @@ def contacto_Aeropuert_eliminar(request,contacto_id):
 
 
 # Formulario estadisticasvuelo
-
 def crear_estadisticasvuelo(request): 
     if (request.method == "POST"):
         formulario=estadisticasvueloform(request.POST)
@@ -670,6 +673,105 @@ def Pasajero_eliminar(request,pasajero_id):
         print(error)
     return redirect('Pasajero_buscar_avanzado')
 
+#Reservas
+@login_required
+def crear_reserva(request):
+    try:
+        # Obtén la instancia del Pasajero asociada al usuario autenticado
+        pasajero = Pasajero.objects.get(usuario=request.user)
+    except Pasajero.DoesNotExist:
+        # Muestra un mensaje de error si no se encuentra un pasajero asociado
+        messages.error(request, "No se encontró un pasajero asociado a este usuario.")
+        return redirect('index')
+
+    if request.method == 'POST':
+        form = ReservaForm(request.POST)
+        if form.is_valid():
+            reserva = form.save(commit=False)  # No guarda la instancia aún
+            reserva.pasajero = pasajero  # Asigna el pasajero al campo
+            reserva.save()  # Guarda la reserva en la base de datos
+            messages.success(request, "Reserva creada correctamente.")
+            return redirect('Reserva_buscar_avanzado')
+    else:
+        form = ReservaForm()
+
+    return render(request, 'Formularios/Reservas/crear.html', {'form': form})
+
+
+def Reserva_buscar_avanzado(request):
+    try:
+        # Obtén el pasajero asociado al usuario logueado
+        pasajero_logueado = Pasajero.objects.get(usuario=request.user)
+    except Pasajero.DoesNotExist:
+        # Si no hay un pasajero asociado, devuelve un error
+        return render(request, 'error.html', {'mensaje': 'No tienes reservas asociadas.'})
+
+    reservas = Reserva.objects.filter(pasajero=pasajero_logueado)  # Filtra por pasajero logueado
+
+    if request.GET:
+        formulario = BusquedaAvanzadaReservaForm(request.GET)
+        
+        if formulario.is_valid():
+            fecha_reserva = formulario.cleaned_data.get('fecha_reserva')
+            codigo_descueto = formulario.cleaned_data.get('codigo_descueto')
+            metodo_pago = formulario.cleaned_data.get('metodo_pago')
+            estado_de_pago = formulario.cleaned_data.get('estado_de_pago')
+
+            # Aplica los filtros adicionales al queryset
+            if fecha_reserva:
+                reservas = reservas.filter(fecha_reserva=fecha_reserva)
+            
+            if codigo_descueto:
+                reservas = reservas.filter(codigo_descueto__icontains=codigo_descueto)
+            
+            if metodo_pago:
+                reservas = reservas.filter(metodo_pago=metodo_pago)
+            
+            if estado_de_pago is not None:
+                reservas = reservas.filter(estado_de_pago=estado_de_pago)
+        else:
+            reservas = []  # Si el formulario no es válido, no se muestran resultados
+    else:
+        formulario = BusquedaAvanzadaReservaForm()
+
+    return render(request, 'Formularios/Reservas/buscar.html', {
+        'formulario': formulario,
+        'reservas': reservas,
+    })
+
+
+def editar_reserva(request, reserva_id):
+    reserva = Reserva.objects.get(id=reserva_id)  # Obtener la reserva por ID
+
+    if request.method == 'POST':
+        formulario = ReservaForm(request.POST, instance=reserva)
+        if formulario.is_valid():
+            formulario.save()
+            messages.success(request, f"Reserva {reserva.id} actualizada correctamente.")
+            return redirect('Reserva_buscar_avanzado')  # Redirigir tras la edición
+        else:
+            messages.error(request, "Error al actualizar la reserva. Verifica los datos.")
+    else:
+        formulario = ReservaForm(instance=reserva)
+
+    return render(request, 'Formularios/Reservas/editar.html', {
+        'formulario': formulario,
+        'reserva': reserva,
+    })
+
+def reserva_eliminar(request,reserva_id):
+    reserva = Reserva.objects.get(id=reserva_id)
+    try:
+        reserva.delete()
+        messages.success(request, "Se ha elimnado el pasajero "+reserva.id+" correctamente")
+    except Exception as error:
+        print(error)
+    return redirect('Reserva_buscar_avanzado')
+
+
+
+
+
 
 #--------------------------------------------- Usuario -----------------------------------------------------------------
 
@@ -693,6 +795,34 @@ def registrar_usuario(request):
     else:
         formulario = RegistroForm()
     return render(request, 'registration/signup.html', {'formulario': formulario})
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            # Configurar las variables de sesión
+            request.session['username'] = user.username
+            request.session['role'] = getattr(user, 'rol', 'No definido')  # Si tienes un campo de rol
+            request.session['email'] = user.email
+            request.session['custom_message'] = "¡Bienvenido a la plataforma!"
+
+            return redirect('pagina_principal')  # Redirige a la página principal
+        else:
+            return render(request, 'login.html', {'error': 'Credenciales incorrectas.'})
+    return render(request, 'inde.html')
+
+
+
+def logout_view(request):
+    # Limpia las variables de sesión
+    request.session.flush()  # Elimina todas las variables de la sesión
+    logout(request)
+    return redirect('login')  # Redirige a la página de inicio de sesión
 
 
 

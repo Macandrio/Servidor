@@ -205,8 +205,6 @@ class Reserva(models.Model):
     estado_de_pago = models.BooleanField(default=False)
 
     pasajero = models.ForeignKey(Pasajero, on_delete=models.CASCADE, related_name='reserva_pasajero')  # Relación ManyToOne
-    vuelo = models.ForeignKey(Vuelo, on_delete=models.CASCADE, related_name='vuelo_reserva')  # Relación ManyToOne
-
 
 # Modelo Asiento (para Vuelo)
 class Asiento(models.Model):

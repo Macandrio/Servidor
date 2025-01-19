@@ -134,3 +134,10 @@ INTERNAL_IPS = ["127.0.0.1"]
 AUTH_USER_MODEL = 'apaeropuerto.Usuario'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
+
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Usa la base de datos para guardar sesiones
+SESSION_COOKIE_NAME = 'sessionid'  # Nombre de la cookie
+SESSION_COOKIE_AGE = 1209600  # Tiempo de vida de la cookie (en segundos, aquí son 2 semanas)
+SESSION_SAVE_EVERY_REQUEST = True  # Guarda la sesión en cada solicitud
+
