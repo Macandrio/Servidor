@@ -13,8 +13,8 @@ from django.contrib.auth.forms import UserCreationForm
 class RegistroForm(UserCreationForm): 
     roles = (
                                 ("","NINGUNO"),
-                                (Usuario.PASAJERO, 'cliente'),
-                                (Usuario.GERENTE, 'gerente'),
+                                (Usuario.PASAJERO, 'Cliente'),
+                                (Usuario.GERENTE, 'Gerente'),
             )   
     
     
@@ -25,6 +25,13 @@ class RegistroForm(UserCreationForm):
     class Meta:
         model = Usuario
         fields = ('username', 'first_name' ,'last_name', 'email', 'password1', 'password2','rol')
+
+
+    def clean(self):
+        
+        super().clean()
+        
+        return self.cleaned_data
 
 
 

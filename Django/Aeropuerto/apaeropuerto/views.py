@@ -4,79 +4,115 @@ from .models import (
     Aeropuerto, Vuelo, Pasajero, Equipaje, Aerolinea, 
     VueloAerolinea, Reserva, Empleado, Asiento, Servicio ,ContactoAeropuerto , EstadisticasVuelo ,
 )
+
 from .forms import * # El * Coge todos los modelos es lo mismo que hacer lo de from .models import
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
+
+from django.contrib.auth import login
+from django.contrib.auth.decorators import permission_required
+
+from django.contrib.auth.models import Group
 
 
 
 
 
 def index(request):
-
     if(not "fecha_inicio" in request.session):
         request.session["fecha_inicio"] = datetime.now().strftime('%d/%m/%Y %H:%M')
-    return render(request, 'index.html') 
+    if (request.user.is_anonymous == False):       
+        if(not "nombreusuario" in request.session):
+            request.session["nombreusuario"] = request.user.username
+        if(not "email" in request.session):
+            request.session["email"] = request.user.email
+        if(not "rol" in request.session):
+            if (request.user.rol == 1):
+                request.session["rol"] = "Administrador"
+            elif (request.user.rol == 2):
+                request.session["rol"] = "Pasajero"
+            else:
+                request.session["rol"] ="Gerente"
+        if (not "grupo" in request.session):
+            if (request.user.rol == 1):
+                request.session["grupo"] = "Administrador"
+            elif (request.user.rol == 2):
+                request.session["grupo"] = "Pasajero"
+            else:
+                request.session["grupo"] ="Gerente" 
+    return render(request, 'index.html')
+
 
 #--------------------------------------------- Listas -----------------------------------------------------------------
 
+
 # Vista para listar Aeropuertos
+@permission_required('apaeroperto.view_Aeropuerto')
 def lista_aeropuerto(request):
     aeropuertos = Aeropuerto.objects.all()
     return render(request, 'paginas/aeropuerto_list.html', {'aeropuertos': aeropuertos})
 
 # Vista para listar Vuelos
+@permission_required('apaeroperto.view_Vuelo')
 def lista_vuelo(request):
     vuelos = Vuelo.objects.all()
     return render(request, 'paginas/vuelo_list.html', {'vuelos': vuelos})
 
 # Vista para listar Pasajeros
+@permission_required('apaeroperto.view_Pasajero')
 def lista_pasajero(request):
     pasajeros = Pasajero.objects.all()
     return render(request, 'paginas/pasajero_list.html', {'pasajeros': pasajeros})
 
 # Vista para listar Equipajes
+@permission_required('apaeroperto.view_Equipaje')
 def lista_equipaje(request):
     equipajes = Equipaje.objects.all()
     return render(request, 'paginas/equipaje_list.html', {'equipajes': equipajes})
 
 # Vista para listar Aerolíneas
+@permission_required('apaeroperto.view_Aerolinea')
 def lista_aerolineas(request):  # Cambiado aquí
     aerolineas = Aerolinea.objects.all()
     return render(request, 'paginas/aerolinea_list.html', {'aerolineas': aerolineas})
 
 # Vista para listar VueloAerolinea
+@permission_required('apaeroperto.view_VueloAerolinea')
 def lista_vuelos_aerolineas(request):  # Cambiado aquí
     vuelos_aerolineas = VueloAerolinea.objects.all()
     return render(request, 'paginas/vuelo_aerolinea_list.html', {'vuelos_aerolineas': vuelos_aerolineas})
 
 # Vista para listar Reservas
+@permission_required('apaeroperto.view_Reserva')
 def lista_reserva(request):
     reservas = Reserva.objects.all()
     return render(request, 'paginas/reserva_list.html', {'reservas': reservas})
 
 # Vista para listar Empleados
+@permission_required('apaeroperto.view_Empleado')
 def lista_empleado(request):
     empleados = Empleado.objects.all()
     return render(request, 'paginas/empleado_list.html', {'empleados': empleados})
 
 # Vista para listar Asientos
+@permission_required('apaeroperto.view_Asiento')
 def lista_silla(request):
     sillas = Asiento.objects.all()
     return render(request, 'paginas/silla_list.html', {'sillas': sillas})
 
 # Vista para listar Servicios
+@permission_required('apaeroperto.view_Servicio')
 def lista_servicio(request):
     servicios = Servicio.objects.all()
     return render(request, 'paginas/servicio_list.html', {'servicios': servicios})
 
 # Vista para listar ContactoAeropuerto
+@permission_required('apaeroperto.view_ContactoAeropuerto')
 def lista_ContactoAeropuerto(request):
     contactoAero = ContactoAeropuerto.objects.all()
     return render(request, 'paginas/lista_ContactoAeropuerto_listar.html', {'contactoAero': contactoAero})
 
 # Vista para listar EstadisticasVuelo
+@permission_required('apaeroperto.view_EstadisticasVuelo')
 def lista_EstadisticasVuelo(request):
     estadisticas = EstadisticasVuelo.objects.all()
     return render(request, 'paginas/estadisticas_list.html', {'estadisticas': estadisticas})
@@ -86,6 +122,8 @@ def lista_EstadisticasVuelo(request):
 
 
 # 1. Todos los pasajeros que esten asociados a un vuelo con una relación reversa
+
+@permission_required('apaeroperto.view_Vuelo')
 def pasajeros_vuelo(request , id_vuelo):
     vuelo = Vuelo.objects.prefetch_related(Prefetch('vuelo_pasajero')).get(id=id_vuelo)
   
@@ -93,6 +131,7 @@ def pasajeros_vuelo(request , id_vuelo):
                          
 # 2. Todos los vuelos que esten volando que esten una año en concreto
 
+@permission_required('apaeroperto.view_EstadisticasVuelo')
 def vuelo_volando_año(request , anyo):
     datosvuelo = EstadisticasVuelo.objects.select_related('vuelo')
     datosvuelo = datosvuelo.filter(fecha_estadisticas__year = anyo, vuelo__estado = False)
@@ -101,6 +140,7 @@ def vuelo_volando_año(request , anyo):
 
 # 3. feedbacks de todos los vuelos que tenga una palabra en concreto de una aerolinea en concreto desde la tabla intermedia
 
+@permission_required('apaeroperto.view_Aerolinea')
 def texto_vuelo_aerolinea(request, id_aerolinea, texto_buscar):
     
     aerolinea = Aerolinea.objects.get(id=id_aerolinea)
@@ -113,6 +153,7 @@ def texto_vuelo_aerolinea(request, id_aerolinea, texto_buscar):
 
 # 4. Obtener el feedbacks de todos los vuelos en el que ha estado un pasajero específico.
 
+@permission_required('apaeroperto.view_Pasajero')
 def historial_feedbacks_pasajero(request, pasajero_id):
 
     pasajero = Pasajero.objects.get(id=pasajero_id) # Obtener el pasajero
@@ -124,6 +165,7 @@ def historial_feedbacks_pasajero(request, pasajero_id):
 
 #5. Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
 
+@permission_required('apaeroperto.view_Vuelo')
 def vuelos_origen_destino(request, origen_id, destino_id):
     
     vuelos = Vuelo.objects.select_related('origen', 'destino') 
@@ -134,6 +176,7 @@ def vuelos_origen_destino(request, origen_id, destino_id):
 
 #6. Listar reservas por método de pago y año
 
+@permission_required('apaeroperto.view_Reserva')
 def reservas_por_metodo_y_año(request, metodo_pago, año):
     reservas = Reserva.objects.select_related('pasajero', 'vuelo')
     reservas = reservas.filter(metodo_pago=metodo_pago,fecha_reserva__year=año)
@@ -143,6 +186,7 @@ def reservas_por_metodo_y_año(request, metodo_pago, año):
 
 # 7. Obtener todos los vuelos que tengan un origen y destino en concreto o que el estado sea volando
 
+@permission_required('apaeroperto.view_Vuelo')
 def vuelos_cortos_origen_destino(request, origen_id, destino_id, estado):
 
     vuelos = Vuelo.objects.select_related('origen', 'destino')
@@ -153,6 +197,8 @@ def vuelos_cortos_origen_destino(request, origen_id, destino_id, estado):
 
 
 # 8. Calcular el peso total del equipaje de todos los pasajeros en un vuelo específico y ordenar
+
+@permission_required('apaeroperto.view_Equipaje')
 def peso_equipaje_vuelo(request, vuelo_id):
     
     equipajes = Equipaje.objects.select_related('pasajero')
@@ -162,6 +208,8 @@ def peso_equipaje_vuelo(request, vuelo_id):
     return render(request, 'consultas/peso_equipaje_vuelo.html', {'equipajes': equipajes,'peso_total': peso_total})
 
 # 9. Listar todos los vuelos de una aerolínea específica que no tienen registrada una fecha de operación en la tabla intermedia
+
+@permission_required('apaeroperto.view_VueloAerolinea')
 def vuelos_sin_operacion(request, aerolinea_id):
 
     vuelos = VueloAerolinea.objects.select_related('aerolinea', 'vuelo')
@@ -172,6 +220,8 @@ def vuelos_sin_operacion(request, aerolinea_id):
 
 
 # 10. Calcular cuantos pasajeros hay en un vuelo
+
+@permission_required('apaeroperto.view_Pasajero')
 def cuantos_pasajeros_vuelo(request, id_vuelo):
     
     pasajeros = Pasajero.objects.prefetch_related('vuelo')
@@ -184,6 +234,8 @@ def cuantos_pasajeros_vuelo(request, id_vuelo):
 
 # Formulario Aeropuerto
 
+
+@permission_required('apaeropuerto.add_Aeropuerto')
 def crear_aeropuerto(request):
     if request.method == "POST":
         formulario = AeropuertoForm(request.POST)
@@ -202,6 +254,8 @@ def crear_aeropuerto(request):
 
     return render(request, 'Formularios/Aeropuerto/crear_aeropuerto.html', {"formulario": formulario})
 
+
+@permission_required('apaeropuerto.view_Aeropuerto') 
 def Aeropuerto_buscar_avanzado(request):
     
     if len(request.GET) > 0:
@@ -242,6 +296,8 @@ def Aeropuerto_buscar_avanzado(request):
         'aeropuerto': aeropuerto
     })
 
+
+@permission_required('apaeropuerto.change_Aeropuerto') 
 def editar_aeropuerto(request, aeropuerto_id):
     aeropuerto = Aeropuerto.objects.get(id=aeropuerto_id)  # Obtiene el aeropuerto por ID
 
@@ -256,6 +312,8 @@ def editar_aeropuerto(request, aeropuerto_id):
 
     return render(request, 'Formularios/Aeropuerto/editar_aeropuerto.html', {'formulario': formulario, 'aeropuerto': aeropuerto})
 
+
+@permission_required('apaeropuerto.delete_Aeropuerto')
 def eliminar_aeropuerto(request, aeropuerto_id):
     aeropuerto = Aeropuerto.objects.get(id=aeropuerto_id)
     if request.method == 'POST':
@@ -267,6 +325,8 @@ def eliminar_aeropuerto(request, aeropuerto_id):
     
 # Formulario contacto_Aeropuerto
 
+
+@permission_required('apaeropuerto.add_ContactoAeropuerto')
 def crear_contacto(request): 
     if (request.method == "POST"):
         formulario=ContactoAeropuertoform(request.POST)
@@ -281,6 +341,8 @@ def crear_contacto(request):
         formulario=ContactoAeropuertoform()  
     return render(request,'Formularios/Contacto_Aeropuerto/crear_Contacto.html',{"formulario":formulario})
 
+
+@permission_required('apaeropuerto.view_ContactoAeropuerto') 
 def contacto_Aeropuerto_buscar_avanzado(request):
     
     if len(request.GET) > 0:
@@ -316,6 +378,8 @@ def contacto_Aeropuerto_buscar_avanzado(request):
         'contactos': contactos
     })
 
+
+@permission_required('apaeropuerto.change_ContactoAeropuerto') 
 def contacto_Aeropuert_modificar(request,contacto_id):
     contacto = ContactoAeropuerto.objects.get(id=contacto_id)
     
@@ -338,6 +402,8 @@ def contacto_Aeropuert_modificar(request,contacto_id):
                 print(error)
     return render(request, 'Formularios/Contacto_Aeropuerto/modificar.html',{"formulario":formulario,"contacto":contacto})
 
+
+@permission_required('apaeropuerto.delete_ContactoAeropuerto')
 def contacto_Aeropuert_eliminar(request,contacto_id):
     contacto = ContactoAeropuerto.objects.get(id=contacto_id)
     try:
@@ -350,6 +416,9 @@ def contacto_Aeropuert_eliminar(request,contacto_id):
 
 
 # Formulario estadisticasvuelo
+
+
+#@permission_required('apaeropuerto.add_EstadisticasVuelo')
 def crear_estadisticasvuelo(request): 
     if (request.method == "POST"):
         formulario=estadisticasvueloform(request.POST)
@@ -364,6 +433,8 @@ def crear_estadisticasvuelo(request):
         formulario=estadisticasvueloform()  
     return render(request,'Formularios/Estadisticas_vuelo/crear_Estadisticasvuelo.html',{"formulario":formulario})
 
+
+#@permission_required('apaeropuerto.view_add_EstadisticasVuelo') 
 def Estadisticas_buscar_avanzado(request):    
 
     if len(request.GET) > 0:
@@ -397,6 +468,8 @@ def Estadisticas_buscar_avanzado(request):
         'estadisticas': estadisticas,
     })
 
+
+#@permission_required('apaeropuerto.change_EstadisticasVuelo')
 def Estadisticas_modificar(request,estadisticas_id):
     estadisticas = EstadisticasVuelo.objects.get(id=estadisticas_id)
     
@@ -419,6 +492,8 @@ def Estadisticas_modificar(request,estadisticas_id):
                 print(error)
     return render(request, 'Formularios/Estadisticas_vuelo/modificar.html',{"formulario":formulario,"estadisticas":estadisticas})
 
+
+#@permission_required('apaeropuerto.delete_EstadisticasVuelo')
 def Estadisticas_eliminar(request,estadisticas_id):
     estadisticas = EstadisticasVuelo.objects.get(id=estadisticas_id)
     try:
@@ -432,6 +507,8 @@ def Estadisticas_eliminar(request,estadisticas_id):
 
 # Formulario Aerolinea
 
+
+@permission_required('apaeropuerto.add_Aerolinea')
 def crear_Aerolinea(request): 
     if (request.method == "POST"):
         formulario=Aerolineaform(request.POST)
@@ -446,6 +523,8 @@ def crear_Aerolinea(request):
         formulario=Aerolineaform()  
     return render(request,'Formularios/Aerolinea/crear_aerolinea.html',{"formulario":formulario})
 
+
+@permission_required('apaeropuerto.view_add_Aerolinea') 
 def Aerolinea_buscar_avanzado(request):
 
     if len(request.GET) > 0:
@@ -484,6 +563,8 @@ def Aerolinea_buscar_avanzado(request):
         'aerolineas': aerolineas
     })
 
+
+@permission_required('apaeropuerto.change_Aerolinea')
 def Aerolinea_modificar(request,aerolinea_id):
     aerolinea = Aerolinea.objects.get(id=aerolinea_id)
     
@@ -506,6 +587,8 @@ def Aerolinea_modificar(request,aerolinea_id):
                 print(error)
     return render(request, 'Formularios/Aerolinea/modificar.html',{"formulario":formulario,"aerolinea":aerolinea})
 
+
+@permission_required('apaeropuerto.delete_Aerolinea')
 def Aerolinea_eliminar(request,aerolinea_id):
     aerolinea = Aerolinea.objects.get(id=aerolinea_id)
     try:
@@ -519,6 +602,8 @@ def Aerolinea_eliminar(request,aerolinea_id):
 
 # Formulario Vuelo
 
+
+@permission_required('apaeropuerto.add_Vuelo')
 def crear_Vuelo(request): 
     if (request.method == "POST"):
         formulario=VueloForm(request.POST)
@@ -533,6 +618,8 @@ def crear_Vuelo(request):
         formulario=VueloForm()  
     return render(request,'Formularios/Vuelo/crear_vuelo.html',{"formulario":formulario})
 
+
+@permission_required('apaeropuerto.view_add_Vuelo') 
 def Vuelo_buscar_avanzado(request):
     formulario = BusquedaAvanzadaVuelo(request.GET)
     vuelos = Vuelo.objects.all()
@@ -575,6 +662,8 @@ def Vuelo_buscar_avanzado(request):
         'aeropuerto': aeropuerto
     })
 
+
+@permission_required('apaeropuerto.change_Vuelo')
 def Vuelo_modificar(request,vuelo_id):
     vuelo = Vuelo.objects.get(id=vuelo_id)
     
@@ -588,6 +677,8 @@ def Vuelo_modificar(request,vuelo_id):
         formulario = VueloForm(instance=vuelo)
     return render(request, 'Formularios/Vuelo/modificar.html',{"formulario":formulario,"vuelo":vuelo})
 
+
+@permission_required('apaeropuerto.delete_Vuelo')
 def Vuelo_eliminar(request,vuelo_id):
     vuelo = Vuelo.objects.get(id=vuelo_id)
     try:
@@ -597,8 +688,12 @@ def Vuelo_eliminar(request,vuelo_id):
         print(error)
     return redirect('Vuelo_buscar_avanzado')
 
+
+
 #Formulario Pasajero
 
+
+@permission_required('apaeropuerto.add_Pasajero')
 def crear_pasajero(request): 
     if (request.method == "POST"):
         formulario=PasajeroForm(request.POST)
@@ -612,6 +707,8 @@ def crear_pasajero(request):
         formulario=PasajeroForm    
     return render(request,'Formularios/Pasajero/crear_pasajero.html',{"formulario":formulario})
 
+
+@permission_required('apaeropuerto.view_add_Pasajero') 
 def Pasajero_buscar_avanzado(request):
 
     if request.GET:
@@ -642,6 +739,8 @@ def Pasajero_buscar_avanzado(request):
         'pasajeros': pasajeros,
     })
 
+
+@permission_required('apaeropuerto.change_Pasajero')
 def Pasajero_modificar(request,pasajero_id):
     pasajero = Pasajero.objects.get(id=pasajero_id)
     
@@ -664,6 +763,8 @@ def Pasajero_modificar(request,pasajero_id):
                 print(error)
     return render(request, 'Formularios/Pasajero/modificar.html',{"formulario":formulario,"pasajero":pasajero})
 
+
+@permission_required('apaeropuerto.delete_Pasajero')
 def Pasajero_eliminar(request,pasajero_id):
     pasajero = Pasajero.objects.get(id=pasajero_id)
     try:
@@ -673,16 +774,15 @@ def Pasajero_eliminar(request,pasajero_id):
         print(error)
     return redirect('Pasajero_buscar_avanzado')
 
+
+
 #Reservas
-@login_required
+
+
+#@permission_required('apaeropuerto.add_Reserva')
 def crear_reserva(request):
-    try:
-        # Obtén la instancia del Pasajero asociada al usuario autenticado
-        pasajero = Pasajero.objects.get(usuario=request.user)
-    except Pasajero.DoesNotExist:
-        # Muestra un mensaje de error si no se encuentra un pasajero asociado
-        messages.error(request, "No se encontró un pasajero asociado a este usuario.")
-        return redirect('index')
+
+    pasajero = Pasajero.objects.get(usuario=request.user)
 
     if request.method == 'POST':
         form = ReservaForm(request.POST)
@@ -698,13 +798,10 @@ def crear_reserva(request):
     return render(request, 'Formularios/Reservas/crear.html', {'form': form})
 
 
+#@permission_required('apaeropuerto.view_add_Reserva') 
 def Reserva_buscar_avanzado(request):
-    try:
-        # Obtén el pasajero asociado al usuario logueado
-        pasajero_logueado = Pasajero.objects.get(usuario=request.user)
-    except Pasajero.DoesNotExist:
-        # Si no hay un pasajero asociado, devuelve un error
-        return render(request, 'error.html', {'mensaje': 'No tienes reservas asociadas.'})
+
+    pasajero_logueado = Pasajero.objects.get(usuario=request.user)
 
     reservas = Reserva.objects.filter(pasajero=pasajero_logueado)  # Filtra por pasajero logueado
 
@@ -740,6 +837,7 @@ def Reserva_buscar_avanzado(request):
     })
 
 
+#@permission_required('apaeropuerto.change_Reserva')
 def editar_reserva(request, reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)  # Obtener la reserva por ID
 
@@ -754,11 +852,13 @@ def editar_reserva(request, reserva_id):
     else:
         formulario = ReservaForm(instance=reserva)
 
-    return render(request, 'Formularios/Reservas/editar.html', {
+    return render(request, 'Formularios/Reservas/modificar.html', {
         'formulario': formulario,
         'reserva': reserva,
     })
 
+
+#@permission_required('apaeropuerto.delete_Reserva')
 def reserva_eliminar(request,reserva_id):
     reserva = Reserva.objects.get(id=reserva_id)
     try:
@@ -767,8 +867,6 @@ def reserva_eliminar(request,reserva_id):
     except Exception as error:
         print(error)
     return redirect('Reserva_buscar_avanzado')
-
-
 
 
 
@@ -783,11 +881,15 @@ def registrar_usuario(request):
             user = formulario.save()
             rol = int(formulario.cleaned_data.get('rol'))
             if(rol == Usuario.PASAJERO):
-                pasajero = Pasajero.objects.create( usuario = user)
+                grupo = Group.objects.get(name='Pasajero')
+                grupo.user_set.add(user)
+                pasajero = Pasajero.objects.create(usuario = user)
                 pasajero.save()
             elif(rol == Usuario.GERENTE):
-                gerente = Gerente.objects.create(usuario = user)
-                gerente.save()
+                grupo = Group.objects.get(name='Gerente')
+                grupo.user_set.add(user)
+                empleado = Gerente.objects.create(usuario = user)
+                empleado.save()
             
             login(request, user)
             return redirect('index')
@@ -795,36 +897,6 @@ def registrar_usuario(request):
     else:
         formulario = RegistroForm()
     return render(request, 'registration/signup.html', {'formulario': formulario})
-
-
-def login_view(request):
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            login(request, user)
-            # Configurar las variables de sesión
-            request.session['username'] = user.username
-            request.session['role'] = getattr(user, 'rol', 'No definido')  # Si tienes un campo de rol
-            request.session['email'] = user.email
-            request.session['custom_message'] = "¡Bienvenido a la plataforma!"
-
-            return redirect('pagina_principal')  # Redirige a la página principal
-        else:
-            return render(request, 'login.html', {'error': 'Credenciales incorrectas.'})
-    return render(request, 'inde.html')
-
-
-
-def logout_view(request):
-    # Limpia las variables de sesión
-    request.session.flush()  # Elimina todas las variables de la sesión
-    logout(request)
-    return redirect('login')  # Redirige a la página de inicio de sesión
-
-
 
 
 

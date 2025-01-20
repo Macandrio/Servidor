@@ -371,8 +371,34 @@ widgets usados:
 7.datetime-local:  para permitir la selección combinada de fecha y hora.
 
 
+---------------------------------------------------------------------------------------------------------------------------
+# Tema Sesiones y Autenticacion :
+
+* En nuestra aplicación debemos incluir al menos dos tipos de usuarios claramente diferenciados(No cuenta el usuario administrador) (1 puntos).
+
+* En cada vista controlarse los permisos y si el usuario esta logueado o no (1 punto).
+
+* En cada template de vista y formulario controlarse los permisos y si el usuario esta logueado o no (1 punto).
+
+* Incluir al menos 4 variables que se guarden en la sesión y que aparezcan siempre en la cabacera de la página. Y se eliminen cuando se desloguea el usuario. (1 punto).
+
+Debemos hacer un registro de los distintos tipos de usuario, salvo el administrador, con sus validaciones correspondiente, y controlar que dependiendo del tipo de usuario tendrá unos valores u otros (1 punto).
+
+* Debemos hacer un login y logout del usuario (1 punto).
+
+Debe crearse una funcionalidad en algún formulario , que el contenido de algún select ManyToMany o ManyToOne varie dependiendo del usuario que está logueado. (1 punto).
+
+* En los formularios de crear debe incluirse siempre el usuario que crea dicho registro por la sesión del usuario. (1 punto)
+Debe crearse una funcionalidad en algún formulario de búsqueda , que el contenido se filtre por el suario que está logueado. (1 punto).
+
+Implementar funcionalidad de reinicio de contraseña.  Ten en cuenta que tu aplicación en local no permite el envó de email, pero hay una forma en Django para obtener dicho enlace de recuperación de contraseña. Investiga! (1 punto)
 
 
+# Tipos de usuarios:
+
+* ESta el usuario Pasajero que puede hacer reservas del vuelo siempre que reserve sera con su id y si busca la reserva solo se mostrara su id.
+
+Esta el usuario gerente que debe poder hace las estadisticas de vuelo.
 
 
 ---------------------------------------------------------------------------------------------------------------------------

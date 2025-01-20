@@ -70,8 +70,8 @@ urlpatterns = [
     #Reservas
     path('reservas/crear/', views.crear_reserva, name='crear_reserva'),
     path('reservas/buscar/', views.Reserva_buscar_avanzado, name='Reserva_buscar_avanzado'),
-    path('reservas/modificar//<int:estadisticas_id>', views.editar_reserva, name='editar_reserva'),
-    path('reservas/eliminar/<int:estadisticas_id>',views.reserva_eliminar,name='reserva_eliminar'),
+    path('reservas/modificar//<int:reserva_id>', views.editar_reserva, name='editar_reserva'),
+    path('reservas/eliminar/<int:reserva_id>',views.reserva_eliminar,name='reserva_eliminar'),
 
 
     #USUARIO
