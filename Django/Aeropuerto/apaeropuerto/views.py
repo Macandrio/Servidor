@@ -46,13 +46,13 @@ def index(request):
 
 
 # Vista para listar Aeropuertos
-@permission_required('apaeroperto.view_Aeropuerto')
+#@permission_required('apaeroperto.view_Aeropuerto')
 def lista_aeropuerto(request):
     aeropuertos = Aeropuerto.objects.all()
     return render(request, 'paginas/aeropuerto_list.html', {'aeropuertos': aeropuertos})
 
 # Vista para listar Vuelos
-@permission_required('apaeroperto.view_Vuelo')
+#@permission_required('apaeroperto.view_Vuelo')
 def lista_vuelo(request):
     vuelos = Vuelo.objects.all()
     return render(request, 'paginas/vuelo_list.html', {'vuelos': vuelos})
@@ -70,7 +70,7 @@ def lista_equipaje(request):
     return render(request, 'paginas/equipaje_list.html', {'equipajes': equipajes})
 
 # Vista para listar Aerolíneas
-@permission_required('apaeroperto.view_Aerolinea')
+#@permission_required('apaeroperto.view_Aerolinea')
 def lista_aerolineas(request):  # Cambiado aquí
     aerolineas = Aerolinea.objects.all()
     return render(request, 'paginas/aerolinea_list.html', {'aerolineas': aerolineas})
@@ -123,7 +123,7 @@ def lista_EstadisticasVuelo(request):
 
 # 1. Todos los pasajeros que esten asociados a un vuelo con una relación reversa
 
-@permission_required('apaeroperto.view_Vuelo')
+#@permission_required('apaeroperto.view_Vuelo')
 def pasajeros_vuelo(request , id_vuelo):
     vuelo = Vuelo.objects.prefetch_related(Prefetch('vuelo_pasajero')).get(id=id_vuelo)
   
@@ -165,7 +165,7 @@ def historial_feedbacks_pasajero(request, pasajero_id):
 
 #5. Obtener todos los vuelos que salgan desde un aeropuerto específico y lleguen a un destino específico
 
-@permission_required('apaeroperto.view_Vuelo')
+#@permission_required('apaeroperto.view_Vuelo')
 def vuelos_origen_destino(request, origen_id, destino_id):
     
     vuelos = Vuelo.objects.select_related('origen', 'destino') 
@@ -186,7 +186,7 @@ def reservas_por_metodo_y_año(request, metodo_pago, año):
 
 # 7. Obtener todos los vuelos que tengan un origen y destino en concreto o que el estado sea volando
 
-@permission_required('apaeroperto.view_Vuelo')
+#@permission_required('apaeroperto.view_Vuelo')
 def vuelos_cortos_origen_destino(request, origen_id, destino_id, estado):
 
     vuelos = Vuelo.objects.select_related('origen', 'destino')

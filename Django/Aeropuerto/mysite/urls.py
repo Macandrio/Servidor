@@ -23,6 +23,8 @@ urlpatterns = [
     path('', include('apaeropuerto.urls')),
     path("__debug__/", include("debug_toolbar.urls")), 
     path('accounts/', include('django.contrib.auth.urls')),
+    path('api/v1/',include("apaeropuerto.api_urls")),
+
   
 ]
 
