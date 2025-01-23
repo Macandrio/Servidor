@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'django_bootstrap_icons',
     'rest_framework',
+    'oauth2_provider',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,18 @@ AUTH_USER_MODEL = 'apaeropuerto.Usuario'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 
+
+
+OAUTH2_PROVIDER = {
+    'SCOPES': {'read': 'Read scope', 'write': 'Write scope', 'groups': 'Acceso a los grupos'}
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ),
+
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+}

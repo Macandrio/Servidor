@@ -1,5 +1,43 @@
 [
 {
+    "model": "auth.group",
+    "pk": 2,
+    "fields": {
+        "name": "Pasajero",
+        "permissions": [
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52
+        ]
+    }
+},
+{
+    "model": "auth.group",
+    "pk": 3,
+    "fields": {
+        "name": "Gerente",
+        "permissions": [
+            33,
+            34,
+            35,
+            36,
+            57,
+            58,
+            59,
+            60,
+            65,
+            66,
+            67,
+            68
+        ]
+    }
+},
+{
     "model": "auth.permission",
     "pk": 1,
     "fields": {
@@ -684,155 +722,183 @@
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 1,
+    "model": "auth.permission",
+    "pk": 77,
     "fields": {
-        "app_label": "admin",
-        "model": "logentry"
+        "name": "Can add application",
+        "content_type": 20,
+        "codename": "add_application"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 2,
+    "model": "auth.permission",
+    "pk": 78,
     "fields": {
-        "app_label": "auth",
-        "model": "permission"
+        "name": "Can change application",
+        "content_type": 20,
+        "codename": "change_application"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 3,
+    "model": "auth.permission",
+    "pk": 79,
     "fields": {
-        "app_label": "auth",
-        "model": "group"
+        "name": "Can delete application",
+        "content_type": 20,
+        "codename": "delete_application"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 4,
+    "model": "auth.permission",
+    "pk": 80,
     "fields": {
-        "app_label": "contenttypes",
-        "model": "contenttype"
+        "name": "Can view application",
+        "content_type": 20,
+        "codename": "view_application"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 5,
+    "model": "auth.permission",
+    "pk": 81,
     "fields": {
-        "app_label": "sessions",
-        "model": "session"
+        "name": "Can add access token",
+        "content_type": 21,
+        "codename": "add_accesstoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 6,
+    "model": "auth.permission",
+    "pk": 82,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "aeropuerto"
+        "name": "Can change access token",
+        "content_type": 21,
+        "codename": "change_accesstoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 7,
+    "model": "auth.permission",
+    "pk": 83,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "usuario"
+        "name": "Can delete access token",
+        "content_type": 21,
+        "codename": "delete_accesstoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 8,
+    "model": "auth.permission",
+    "pk": 84,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "aerolinea"
+        "name": "Can view access token",
+        "content_type": 21,
+        "codename": "view_accesstoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 9,
+    "model": "auth.permission",
+    "pk": 85,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "contactoaeropuerto"
+        "name": "Can add grant",
+        "content_type": 22,
+        "codename": "add_grant"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 10,
+    "model": "auth.permission",
+    "pk": 86,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "gerente"
+        "name": "Can change grant",
+        "content_type": 22,
+        "codename": "change_grant"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 11,
+    "model": "auth.permission",
+    "pk": 87,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "pasajero"
+        "name": "Can delete grant",
+        "content_type": 22,
+        "codename": "delete_grant"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 12,
+    "model": "auth.permission",
+    "pk": 88,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "equipaje"
+        "name": "Can view grant",
+        "content_type": 22,
+        "codename": "view_grant"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 13,
+    "model": "auth.permission",
+    "pk": 89,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "reserva"
+        "name": "Can add refresh token",
+        "content_type": 23,
+        "codename": "add_refreshtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 14,
+    "model": "auth.permission",
+    "pk": 90,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "servicio"
+        "name": "Can change refresh token",
+        "content_type": 23,
+        "codename": "change_refreshtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 15,
+    "model": "auth.permission",
+    "pk": 91,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "empleado"
+        "name": "Can delete refresh token",
+        "content_type": 23,
+        "codename": "delete_refreshtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 16,
+    "model": "auth.permission",
+    "pk": 92,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "vuelo"
+        "name": "Can view refresh token",
+        "content_type": 23,
+        "codename": "view_refreshtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 17,
+    "model": "auth.permission",
+    "pk": 93,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "estadisticasvuelo"
+        "name": "Can add id token",
+        "content_type": 24,
+        "codename": "add_idtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 18,
+    "model": "auth.permission",
+    "pk": 94,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "asiento"
+        "name": "Can change id token",
+        "content_type": 24,
+        "codename": "change_idtoken"
     }
 },
 {
-    "model": "contenttypes.contenttype",
-    "pk": 19,
+    "model": "auth.permission",
+    "pk": 95,
     "fields": {
-        "app_label": "apaeropuerto",
-        "model": "vueloaerolinea"
+        "name": "Can delete id token",
+        "content_type": 24,
+        "codename": "delete_idtoken"
+    }
+},
+{
+    "model": "auth.permission",
+    "pk": 96,
+    "fields": {
+        "name": "Can view id token",
+        "content_type": 24,
+        "codename": "view_idtoken"
     }
 }
 ]

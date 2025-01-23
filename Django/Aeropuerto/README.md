@@ -416,6 +416,8 @@ python manage.py makemigrations apaeropuerto
 python manage.py migrate apaeropuerto
 python manage.py seed apaeropuerto --number=20
 python manage.py dumpdata --indent 4 > apaeropuerto/fixtures/datos.json
+python manage.py dumpdata auth.group auth.permission --indent 4 > apaeropuerto/fixtures/grupos_permisos.json
+
 python manage.py loaddata apaeropuerto/fixtures/datos2.json
 
 python manage.py createsuperuser
@@ -511,3 +513,5 @@ Empleado.objects.select_related(
     'servicio'                            # ManyToOne con Servicio
 )
 
+
+curl -X POST "http://0.0.0.0:8000/oauth2/token/" -d "grant_type=password&username=ale&password=ale&client_id=mi_aplicacion&client_secret=mi_clave_secreta"
