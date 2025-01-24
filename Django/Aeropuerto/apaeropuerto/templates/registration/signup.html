@@ -1,5 +1,10 @@
 {% extends 'Principal.html' %}
 
+{% block script%}
+    {% load static %}
+    <script type="text/javascript" src="{% static 'scripts/campos.js' %}" ></script>
+{% endblock%}
+
 {% block contenido %}
 
     <form action = "{% url 'registrar_usuario' %}" method = "post"> 

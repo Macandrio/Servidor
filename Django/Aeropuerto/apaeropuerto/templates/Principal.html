@@ -9,11 +9,12 @@
         <link rel="stylesheet" href="{% static 'css/estilos.css' %}">
         <link rel="stylesheet" href="{% static 'css/cabecera.css' %}">
         <link rel="stylesheet" href="{% static 'css/pie.css' %}">
-        {% bootstrap_javascript %}
-        <script src="{% static 'javascript/menu.js' %}"></script>
-        <script src="{% static 'javascript/eliminar.js' %}"></script>
-        <script src="https://kit.fontawesome.com/9460c07a8e.js" crossorigin="anonymous"></script>
         
+        {% block script%}
+            <script src="{% static 'javascript/menu.js' %}"></script>
+            <script src="{% static 'javascript/eliminar.js' %}"></script>
+            <script src="https://kit.fontawesome.com/9460c07a8e.js" crossorigin="anonymous"></script>
+        {% endblock%}
     </head>
     <body>
         
@@ -25,6 +26,7 @@
                     <img src="{% static 'imagenes/logo.jpeg' %}" alt="Logo" height="40" class="me-2">
                     <span>Sistema de Gestión de Aeropuertos</span>
                 </a>
+                {% if user.is_authenticated %}
                   <div class="header-content">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" 
@@ -46,10 +48,11 @@
                 </div>
 
                 <!-- Menú y formulario con márgenes -->
-                <div class="d-flex align-items-center gap-3"> <!-- Añadimos separación -->
-                    {% include 'Estructura/menu.html' %}
-                    {% include 'Estructura/menuformulario.html' %}
-                </div>
+                    <div class="d-flex align-items-center gap-3"> <!-- Añadimos separación -->
+                        {% comment %} {% include 'Estructura/menu.html' %} {% endcomment %} 
+                        {% include 'Estructura/menuformulario.html' %}
+                    </div>
+                {% endif %}
 
                 <div class="ml-2">
                     {% if not request.user.is_authenticated %}

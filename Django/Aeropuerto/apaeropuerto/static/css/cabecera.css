@@ -1,136 +1,74 @@
-/* Header styles */
-.custom-header {
-    position: fixed;
-    top: 0;
-    width: 98%;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 20px;
-    background-color: #4c8abd; /* Cambiar según el color deseado */
+/* Estilo actualizado de la cabecera con mayor prioridad */
+.navbar {
+    background-color: #b71c1c !important; /* Rojo intenso */
+    padding: 1rem !important;
 }
 
-.header-logo {
-    height: 50px; /* Ajusta la altura del logo según tus necesidades */
+.navbar-brand {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
 }
 
-.header-title {
-    flex-grow: 1;
-    text-align: center;
-    font-size: 24px; /* Ajusta el tamaño de la fuente del título */
-    margin: 0;
-    color: white;
+.navbar-brand img {
+    height: 50px !important;
+    border-radius: 8px !important;
 }
 
-.header-title a {
-    color: inherit; /* Mantiene el color del texto del título */
-    text-decoration: none; /* Elimina el subrayado */
+.navbar-brand span {
+    color: white !important;
+    font-size: 1.5rem !important;
+    font-weight: bold !important;
 }
 
-.header-title a:hover {
-    color: inherit; /* Mantiene el color al pasar el ratón */
+.nav-link {
+    color: white !important;
+    font-size: 1rem !important;
+    margin: 0 10px !important;
 }
 
-
-
-.dropdown {
-    position: relative;
-    display: inline-block;
+.nav-link:hover {
+    color: #ffebee !important; /* Rojo más claro */
 }
 
-.dropbtn {
-    background-color: #4c8abd; /* Fondo del botón */
-    color: white;
-    padding: 10px 15px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Añade un espacio entre el icono y el texto */
+.btn-outline-warning {
+    color: white !important;
+    border-color: #ffebee !important;
 }
 
-.dropbtn i {
-    margin-right: 8px; /* Ajusta el margen si necesitas más separación */
-}
-
-
-.dropdown-content {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: white;
-    min-width: 150px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1;
-}
-
-.dropdown-content li {
-    list-style: none;
-    padding: 8px 12px;
-    text-align: left;
-}
-
-.dropdown-content li a {
-    text-decoration: none;
-    color: #333;
-    display: flex;
-    align-items: center; /* Alinea el icono y el texto */
-    gap: 8px; /* Espacio entre el icono y el texto */
-}
-
-.dropdown-content li a i {
-    margin-right: 8px; /* Ajusta el margen si necesitas más separación específica */
-}
-
-
-.dropdown-content li a:hover {
-    background-color: #f1f1f1;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block; /* Mostrar el menú desplegable al pasar el mouse */
-}
-
-.dropdown:hover .dropbtn {
-    background-color: #357ab7; /* Cambia el color cuando se pasa el mouse */
-}
-
-.header-logo {
-    display: block; /* Asegura que la imagen se mantenga como un bloque */
-}
-
-.header-logo + a {
-    text-decoration: none; /* Elimina subrayado en el enlace */
-    color: inherit; /* Mantiene el color del texto si hay más texto dentro del enlace */
-}
-
-.header-logo + a:hover {
-    text-decoration: none; /* Asegura que no se muestre subrayado al pasar el ratón */
-    color: inherit; /* Previene cambios de color al pasar el ratón */
-}
-
-/* Elimina el color de fondo del menú */
-.menu {
-    background-color: transparent; /* Hace el fondo transparente */
-    box-shadow: none; /* Elimina sombras si las hay */
-    border: none; /* Elimina bordes si los tiene */
-}
-
-/* Elimina el color de fondo del formulario */
-.menuformulario {
-    background-color: transparent; /* Hace el fondo transparente */
-    box-shadow: none; /* Elimina sombras si las hay */
-    border: none; /* Elimina bordes si los tiene */
+.btn-outline-warning:hover {
+    background-color: #ffebee !important;
+    color: #b71c1c !important;
 }
 
 .dropdown-menu {
-    border: none; /* Elimina los bordes del menú */
-    box-shadow: none; /* Elimina sombras */
+    background-color: #ffebee !important;
+    border: none !important;
 }
-.dropdown .btn {
-    border: none; /* Elimina cualquier borde del botón */
-    box-shadow: none; /* Elimina sombras si existen */
-    background: transparent; /* Si es necesario, elimina el fondo */
+
+.dropdown-item {
+    color: #b71c1c !important;
+}
+
+.dropdown-item:hover {
+    background-color: #b71c1c !important;
+    color: white !important;
+}
+
+/* Reseteo del margin-top global que afecta la cabecera */
+body {
+    margin-top: 0 !important;
+}
+
+h1 {
+    color: #2980b9;
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 2em;
+    margin-top: 20px;
+}
+
+.content-section {
+    flex: 1; /* Asegura que el contenido ocupe el espacio disponible */
+    margin-top: 70px;
 }

@@ -19,12 +19,12 @@ class RegistroForm(UserCreationForm):
     
     
     
-    rol = forms.ChoiceField(choices=roles)  
-    
+    rol = forms.ChoiceField(choices=roles)
+    codijo_gerente = forms.IntegerField()
     
     class Meta:
         model = Usuario
-        fields = ('username', 'first_name' ,'last_name', 'email', 'password1', 'password2','rol')
+        fields = ('username', 'first_name' ,'last_name', 'email', 'telefono','codijo_gerente' ,'password1', 'password2','rol')
 
 
     def clean(self):

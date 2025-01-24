@@ -19,6 +19,7 @@ class Usuario(AbstractUser):
         choices=ROLES,default=1
     )
 
+    telefono = models.IntegerField()
     
 
 

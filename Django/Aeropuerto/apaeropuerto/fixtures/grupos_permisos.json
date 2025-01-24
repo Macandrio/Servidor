@@ -1,43 +1,5 @@
 [
 {
-    "model": "auth.group",
-    "pk": 2,
-    "fields": {
-        "name": "Pasajero",
-        "permissions": [
-            45,
-            46,
-            47,
-            48,
-            49,
-            50,
-            51,
-            52
-        ]
-    }
-},
-{
-    "model": "auth.group",
-    "pk": 3,
-    "fields": {
-        "name": "Gerente",
-        "permissions": [
-            33,
-            34,
-            35,
-            36,
-            57,
-            58,
-            59,
-            60,
-            65,
-            66,
-            67,
-            68
-        ]
-    }
-},
-{
     "model": "auth.permission",
     "pk": 1,
     "fields": {

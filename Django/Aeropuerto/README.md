@@ -418,7 +418,7 @@ python manage.py seed apaeropuerto --number=20
 python manage.py dumpdata --indent 4 > apaeropuerto/fixtures/datos.json
 python manage.py dumpdata auth.group auth.permission --indent 4 > apaeropuerto/fixtures/grupos_permisos.json
 
-python manage.py loaddata apaeropuerto/fixtures/datos2.json
+python manage.py loaddata apaeropuerto/fixtures/datos_sesion.json
 
 python manage.py createsuperuser
 python manage.py runserver
